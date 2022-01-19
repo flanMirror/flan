@@ -1,14 +1,37 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
-	"random.chars.jp/git/misskey/api"
+	"os"
+	"os/signal"
+	"random.chars.jp/git/misskey/config"
+	"syscall"
 )
 
 func main() {
-	log.Printf("Server started")
+	flag.Parse()
+	config.Parse()
+	webSetup()
+	// TODO: database and stuff
 
-	router := openapi.NewRouter()
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+	go func() {
+		defer func() { cleanup() }()
+		for {
+			s := <-sig
+			switch s {
+			case os.Interrupt:
+				fmt.Println()
+				fallthrough
+			default:
+				log.Print("shutting down")
+				return
+			}
+		}
+	}()
 
-	log.Fatal(router.Run(":8080"))
+	serve()
 }

@@ -1,4 +1,8 @@
+/assets/public
 build/
+.config
 *.conf
+*.yaml
+*.yml
 
 .idea/
