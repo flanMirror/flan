@@ -6,161 +6,32 @@ import (
 )
 
 func init() {
-	route{
-		Method:  http.MethodPost,
-		Pattern: "blocking/create",
-		Handler: blockingCreate,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "blocking/delete",
-		Handler: blockingDelete,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "blocking/list",
-		Handler: blockingList,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "clips/add-note",
-		Handler: clipsAddNote,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "clips/notes",
-		Handler: clipsNotes,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i",
-		Handler: i,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/favorites",
-		Handler: iFavorites,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/gallery/likes",
-		Handler: iGalleryLikes,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/gallery/posts",
-		Handler: iGalleryPosts,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/get-word-muted-notes-count",
-		Handler: iGetWordMutedNotesCount,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/notifications",
-		Handler: iNotifications,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/page-likes",
-		Handler: iPageLikes,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/pages",
-		Handler: iPages,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/pin",
-		Handler: iPin,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/read-all-messaging-messages",
-		Handler: iReadAllMessagingMessages,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/read-all-unread-notes",
-		Handler: iReadAllUnreadNotes,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/read-announcement",
-		Handler: iReadAnnouncement,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/unpin",
-		Handler: iUnpin,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/update",
-		Handler: iUpdate,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "i/user-group-invites",
-		Handler: iUserGroupInvites,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "mute/create",
-		Handler: muteCreate,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "mute/delete",
-		Handler: muteDelete,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "mute/list",
-		Handler: muteList,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "my/apps",
-		Handler: myApps,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "sw/register",
-		Handler: swRegister,
-	}.register()
-
-	route{
-		Method:  http.MethodPost,
-		Pattern: "sw/unregister",
-		Handler: swUnregister,
-	}.register()
+	route{http.MethodPost, "blocking/create", blockingCreate}.register()
+	route{http.MethodPost, "blocking/delete", blockingDelete}.register()
+	route{http.MethodPost, "blocking/list", blockingList}.register()
+	route{http.MethodPost, "clips/add-note", clipsAddNote}.register()
+	route{http.MethodPost, "clips/notes", clipsNotes}.register()
+	route{http.MethodPost, "i", i}.register()
+	route{http.MethodPost, "i/favorites", iFavorites}.register()
+	route{http.MethodPost, "i/gallery/likes", iGalleryLikes}.register()
+	route{http.MethodPost, "i/gallery/posts", iGalleryPosts}.register()
+	route{http.MethodPost, "i/get-word-muted-notes-count", iGetWordMutedNotesCount}.register()
+	route{http.MethodPost, "i/notifications", iNotifications}.register()
+	route{http.MethodPost, "i/page-likes", iPageLikes}.register()
+	route{http.MethodPost, "i/pages", iPages}.register()
+	route{http.MethodPost, "i/pin", iPin}.register()
+	route{http.MethodPost, "i/read-all-messaging-messages", iReadAllMessagingMessages}.register()
+	route{http.MethodPost, "i/read-all-unread-notes", iReadAllUnreadNotes}.register()
+	route{http.MethodPost, "i/read-announcement", iReadAnnouncement}.register()
+	route{http.MethodPost, "i/unpin", iUnpin}.register()
+	route{http.MethodPost, "i/update", iUpdate}.register()
+	route{http.MethodPost, "i/user-group-invites", iUserGroupInvites}.register()
+	route{http.MethodPost, "mute/create", muteCreate}.register()
+	route{http.MethodPost, "mute/delete", muteDelete}.register()
+	route{http.MethodPost, "mute/list", muteList}.register()
+	route{http.MethodPost, "my/apps", myApps}.register()
+	route{http.MethodPost, "sw/register", swRegister}.register()
+	route{http.MethodPost, "sw/unregister", swUnregister}.register()
 }
 
 // blockingCreate - blocking/create
