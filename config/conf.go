@@ -10,6 +10,7 @@ var (
 	Log      logConf
 	System   systemConf
 	Web      webConf
+	Proxy    *proxyConf
 	External externalConf
 )
 
@@ -19,11 +20,13 @@ type conf struct {
 	Log      logConf      `toml:"log"`
 	System   systemConf   `toml:"system"`
 	Web      webConf      `toml:"web"`
+	Proxy    *proxyConf   `toml:"proxy,omitempty"`
 	External externalConf `toml:"external"`
 }
 
 type logConf struct {
 	Verbose bool   `toml:"verbose"`
+	Syslog  bool   `toml:"syslog"`
 	Host    string `toml:"host"`
 	Port    int    `toml:"port"`
 }
@@ -38,9 +41,6 @@ type systemConf struct {
 	//InboxJobPerSec        int    `yaml:"inboxJobPerSec"`
 	//DeliverJobMaxAttempts int    `yaml:"deliverJobMaxAttempts"`
 	//InboxJobMaxAttempts   int    `yaml:"inboxJobMaxAttempts"`
-	//Proxy                  string   `yaml:"proxy"`
-	//ProxyBypassHosts       []string `yaml:"proxyBypassHosts"`
-	//ProxySmtp              string   `yaml:"proxySmtp"`
 	MediaProxy           string `toml:"media_proxy"`
 	MaxFileSize          int    `toml:"max_file_size"`
 	SignToActivityPubGet bool   `toml:"sign_to_activity_pub_get"`
@@ -55,10 +55,16 @@ type webConf struct {
 	HSTS                bool     `toml:"hsts"`
 }
 
+type proxyConf struct {
+	Address     string   `toml:"address"`
+	BypassHosts []string `toml:"bypass_hosts"`
+	SMTP        string   `toml:"smtp"`
+}
+
 type externalConf struct {
 	Postgres      postgresConf      `toml:"postgres"`
 	Redis         redisConf         `toml:"redis"`
-	elasticsearch elasticsearchConf `toml:"elasticsearch"`
+	Elasticsearch elasticsearchConf `toml:"elasticsearch"`
 }
 
 type postgresConf struct {
@@ -80,6 +86,7 @@ type redisConf struct {
 }
 
 type elasticsearchConf struct {
+	Enable   bool   `toml:"enable"`
 	Host     string `toml:"host"`
 	Port     int    `toml:"port"`
 	SSL      bool   `toml:"ssl"`
@@ -93,12 +100,13 @@ var (
 	loaded   = false
 )
 
-func Parse() {
+func Parse() bool {
 	defer func() {
 		loaded = true
 		Log = Config.Log
 		System = Config.System
 		Web = Config.Web
+		Proxy = Config.Proxy
 		External = Config.External
 	}()
 	if loaded {
@@ -111,7 +119,7 @@ func Parse() {
 		}
 
 		if tryCompat() {
-			return
+			return false
 		}
 
 		var file *os.File
@@ -126,8 +134,54 @@ func Parse() {
 			log.Printf("unused key in configuration file: %s", key.String())
 		}
 	}
+	return true
 }
 
 var defConf = conf{
-	// TODO
+	Log: logConf{
+		Verbose: false,
+		Syslog:  false,
+		Host:    "localhost",
+		Port:    514,
+	},
+	System: systemConf{
+		IDGeneration:         "aid",
+		MediaProxy:           "",
+		MaxFileSize:          268435456,
+		SignToActivityPubGet: true,
+	},
+	Web: webConf{
+		URL:                 "",
+		Host:                "127.0.0.1",
+		Port:                3000,
+		ForwardedByClientIP: true,
+		TrustedProxies:      []string{"127.0.0.1/32", "172.16.0.0/12", "10.0.0.0/8"},
+		HSTS:                false,
+	},
+	External: externalConf{
+		Postgres: postgresConf{
+			Host:     "/tmp",
+			Port:     5432,
+			SSL:      false,
+			DB:       "misskey",
+			Username: "misskey",
+			Password: "",
+			Cache:    false,
+		},
+		Redis: redisConf{
+			Host:     "localhost",
+			Port:     6379,
+			DB:       9,
+			Prefix:   "",
+			Password: "",
+		},
+		Elasticsearch: elasticsearchConf{
+			Enable:   false,
+			Host:     "localhost",
+			Port:     9200,
+			SSL:      false,
+			Username: "",
+			Password: "",
+		},
+	},
 }

@@ -1,8 +1,9 @@
 /assets/public
-build/
 .config
 *.conf
 *.yaml
 *.yml
 
+/build
+/TODO
 .idea/

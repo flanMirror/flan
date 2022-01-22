@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/BurntSushi/toml v1.0.0
 	github.com/gin-gonic/gin v1.7.7
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -21,5 +22,4 @@ require (
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/sys v0.0.0-20200116001909-b77594299b42 // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
 )

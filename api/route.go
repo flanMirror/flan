@@ -1,9 +1,8 @@
 package openapi
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 var routes []route
@@ -44,8 +43,4 @@ func RegisterRoutes(router *gin.RouterGroup) {
 			router.DELETE(r.Pattern, r.Handler)
 		}
 	}
-}
-
-func placeholder(context *gin.Context) {
-	context.String(http.StatusNotImplemented, "TODO")
 }
