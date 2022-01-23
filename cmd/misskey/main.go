@@ -6,12 +6,24 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	openapi "random.chars.jp/git/misskey/api"
 	"random.chars.jp/git/misskey/config"
 	"syscall"
 )
 
+var target bool
+
+func init() {
+	flag.BoolVar(&target, "target", false, "display targeted misskey version")
+}
+
 func main() {
 	flag.Parse()
+	if target {
+		fmt.Print(openapi.Target)
+		os.Exit(0)
+	}
+
 	if config.Parse() {
 		log.Print("configuration load complete")
 	} else {
