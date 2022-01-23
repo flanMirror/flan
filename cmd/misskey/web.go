@@ -118,8 +118,12 @@ func serveStatic() func(context *gin.Context) {
 			context.FileFromFS(p, http.FS(public))
 		}
 	} else {
+		//return func(context *gin.Context) {
+		//	context.Data(http.StatusNoContent, gin.MIMEHTML, nil)
+		//}
 		return func(context *gin.Context) {
-			context.Data(http.StatusNoContent, gin.MIMEHTML, nil)
+			// FIXME
+			openapi.Placeholder(context)
 		}
 	}
 }

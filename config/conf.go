@@ -1,6 +1,7 @@
 package config
 
 import (
+	"flag"
 	"github.com/BurntSushi/toml"
 	"log"
 	"os"
@@ -98,11 +99,19 @@ var (
 	ConfPath string
 	Config   = conf{}
 	loaded   = false
+	verbose  bool
 )
+
+func init() {
+	flag.BoolVar(&verbose, "verbose", false, "enable verbose logging")
+}
 
 func Parse() bool {
 	defer func() {
 		loaded = true
+		if verbose {
+			Config.Log.Verbose = true
+		}
 		Log = Config.Log
 		System = Config.System
 		Web = Config.Web
