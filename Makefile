@@ -41,7 +41,7 @@ import-db:
 
 .PHONY: sqlboiler
 sqlboiler:
-	-env PSQL_HOST=$$PWD/build/postgres/sock sqlboiler -c sqlboiler.toml psql
+	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler -c sqlboiler.toml psql
 
 .PHONY: sqlboiler-test
 sqlboiler-test:
