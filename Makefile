@@ -41,6 +41,8 @@ import-db:
 
 .PHONY: sqlboiler
 sqlboiler:
+	-go install github.com/volatiletech/sqlboiler/v4@latest
+	-go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
 	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler -c sqlboiler.toml psql
 
 .PHONY: sqlboiler-test
