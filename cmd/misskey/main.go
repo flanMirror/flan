@@ -11,6 +11,19 @@ import (
 	"syscall"
 )
 
+const banner = `
+  _____ _         _           
+ |     |_|___ ___| |_ ___ _ _ 
+ | | | | |_ -|_ -| '_| -_| | |
+ |_|_|_|_|___|___|_,_|___|_  |
+             ...but fast |___|
+
+ Misskey-fast is a go implementation of Misskey %s.
+ If you like Misskey, please donate to support development. https://www.patreon.com/syuilo
+
+--- %s (PID: %d) ---
+`
+
 var target bool
 
 func init() {
@@ -23,6 +36,8 @@ func main() {
 		fmt.Print(openapi.Target)
 		os.Exit(0)
 	}
+
+	doBanner()
 
 	if config.Parse() {
 		log.Print("configuration load complete")
@@ -50,4 +65,16 @@ func main() {
 	}()
 
 	serve()
+}
+
+func doBanner() {
+	if stat, err := os.Stdin.Stat(); err == nil {
+		if (stat.Mode() & os.ModeCharDevice) != 0 {
+			var hostname string
+			if hostname, err = os.Hostname(); err != nil {
+				return
+			}
+			fmt.Printf(banner, openapi.Target, hostname, os.Getpid())
+		}
+	}
 }
