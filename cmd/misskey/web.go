@@ -100,10 +100,13 @@ func prepareAssets() (fs.FS, []byte) {
 }
 
 func serveStatic() func(context *gin.Context) {
-	// FIXME: handle the not-so-static stuff
 	public, indexHTML := prepareAssets()
 	if public != nil && indexHTML != nil {
 		return func(context *gin.Context) {
+			if context.Request.Method != http.MethodPost {
+				context.String(http.StatusNotFound, "Not Found")
+				return
+			}
 			p := context.Request.URL.Path
 			if !strings.HasPrefix(p, "/") {
 				p = "/" + p
