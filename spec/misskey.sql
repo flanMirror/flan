@@ -151,23 +151,25 @@ ALTER TYPE public.user_profile_ffvisibility_enum OWNER TO misskey;
 --
 -- Name: user_profile_mutingnotificationtypes_enum; Type: TYPE; Schema: public; Owner: misskey
 --
+-- this type has been temporarily disabled, until sqlboiler implements
+-- support for enum arrays.
 
-CREATE TYPE public.user_profile_mutingnotificationtypes_enum AS ENUM (
-    'follow',
-    'mention',
-    'reply',
-    'renote',
-    'quote',
-    'reaction',
-    'pollVote',
-    'receiveFollowRequest',
-    'followRequestAccepted',
-    'groupInvited',
-    'app'
-);
-
-
-ALTER TYPE public.user_profile_mutingnotificationtypes_enum OWNER TO misskey;
+-- CREATE TYPE public.user_profile_mutingnotificationtypes_enum AS ENUM (
+--     'follow',
+--     'mention',
+--     'reply',
+--     'renote',
+--     'quote',
+--     'reaction',
+--     'pollVote',
+--     'receiveFollowRequest',
+--     'followRequestAccepted',
+--     'groupInvited',
+--     'app'
+-- );
+--
+--
+-- ALTER TYPE public.user_profile_mutingnotificationtypes_enum OWNER TO misskey;
 
 SET default_tablespace = '';
 
@@ -3885,7 +3887,7 @@ CREATE TABLE public.user_profile (
     "injectFeaturedNote" boolean DEFAULT true NOT NULL,
     "enableWordMute" boolean DEFAULT false NOT NULL,
     "mutedWords" jsonb DEFAULT '[]'::jsonb NOT NULL,
-    "mutingNotificationTypes" public.user_profile_mutingnotificationtypes_enum[] DEFAULT '{}'::public.user_profile_mutingnotificationtypes_enum[] NOT NULL,
+--    "mutingNotificationTypes" public.user_profile_mutingnotificationtypes_enum[] DEFAULT '{}'::public.user_profile_mutingnotificationtypes_enum[] NOT NULL,
     "noCrawle" boolean DEFAULT false NOT NULL,
     "receiveAnnouncementEmail" boolean DEFAULT true NOT NULL,
     "emailNotificationTypes" jsonb DEFAULT '["follow", "receiveFollowRequest", "groupInvited"]'::jsonb NOT NULL,
@@ -4727,7 +4729,7 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 61	1597385880794	addSensitiveIndex1597385880794
 62	1597459042300	channelUnread1597459042300
 63	1597893996136	ChannelNoteIdDescIndex1597893996136
-64	1600353287890	mutingNotificationTypes1600353287890
+-- 64	1600353287890	mutingNotificationTypes1600353287890
 65	1603094348345	refineAbuseUserReport1603094348345
 66	1603095701770	refineAbuseUserReport21603095701770
 67	1603776877564	instanceThemeColor1603776877564
@@ -5061,7 +5063,7 @@ COPY public.user_pending (id, "createdAt", code, username, email, password) FROM
 -- Data for Name: user_profile; Type: TABLE DATA; Schema: public; Owner: misskey
 --
 
-COPY public.user_profile ("userId", location, birthday, description, fields, url, email, "emailVerifyCode", "emailVerified", "twoFactorTempSecret", "twoFactorSecret", "twoFactorEnabled", password, "clientData", "autoAcceptFollowed", "alwaysMarkNsfw", "carefulBot", "userHost", "securityKeysAvailable", "usePasswordLessLogin", "pinnedPageId", room, integrations, "injectFeaturedNote", "enableWordMute", "mutedWords", "mutingNotificationTypes", "noCrawle", "receiveAnnouncementEmail", "emailNotificationTypes", lang, "mutedInstances", "publicReactions", "ffVisibility") FROM stdin;
+COPY public.user_profile ("userId", location, birthday, description, fields, url, email, "emailVerifyCode", "emailVerified", "twoFactorTempSecret", "twoFactorSecret", "twoFactorEnabled", password, "clientData", "autoAcceptFollowed", "alwaysMarkNsfw", "carefulBot", "userHost", "securityKeysAvailable", "usePasswordLessLogin", "pinnedPageId", room, integrations, "injectFeaturedNote", "enableWordMute", "mutedWords", /*"mutingNotificationTypes",*/ "noCrawle", "receiveAnnouncementEmail", "emailNotificationTypes", lang, "mutedInstances", "publicReactions", "ffVisibility") FROM stdin;
 \.
 
 
