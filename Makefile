@@ -1,11 +1,11 @@
-.NOTPARALLEL: all boil build assets init-db clean-db start-db stop-db import-db sqlboiler
+.NOTPARALLEL: all boil build assets init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
 SHELL = sh
 
 PG_CTL = pg_ctl -D build/postgres/db -o "-k $$PWD/build/postgres/sock -p 3002"
 PSQL = psql -h $$PWD/build/postgres/sock -p 3002 -U $$(whoami)
 
 all: build
-boil: init-db start-db import-db sqlboiler stop-db clean-db
+boil: init-db start-db import-db sqlboiler sqlboiler-test stop-db clean-db
 
 .PHONY: build
 build:
@@ -41,4 +41,9 @@ import-db:
 
 .PHONY: sqlboiler
 sqlboiler:
-	env PSQL_HOST=$$PWD/build/postgres/sock sqlboiler -c spec/sqlboiler.toml psql
+	-env PSQL_HOST=$$PWD/build/postgres/sock sqlboiler -c sqlboiler.toml psql
+
+.PHONY: sqlboiler-test
+sqlboiler-test:
+	$(PSQL) postgres -c "alter user misskey with superuser;"
+	-env PSQL_HOST=$$PWD/build/postgres/sock go test $$PWD/db/models

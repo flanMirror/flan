@@ -1,4 +1,5 @@
 /assets/public
+/db/models
 .config
 *.conf
 *.yaml
