@@ -4,7 +4,8 @@ SHELL = sh
 PG_CTL = pg_ctl -D build/postgres/db -o "-k $$PWD/build/postgres/sock -p 3002"
 PSQL = psql -h $$PWD/build/postgres/sock -p 3002 -U $$(whoami)
 
-all: boil build
+all: build
+full: boil build
 boil: init-db start-db import-db sqlboiler sqlboiler-test stop-db clean-db
 
 .PHONY: build
