@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"random.chars.jp/git/misskey/db"
 	"time"
 )
 
@@ -13,5 +14,7 @@ func cleanup() {
 		log.Printf("error shutting down web server: %s", err)
 	}
 
-	// TODO: other cleanup stuff like database
+	if err := db.Close(); err != nil {
+		log.Printf("error closing database: %s", err)
+	}
 }

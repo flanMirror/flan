@@ -1,6 +1,7 @@
 pkgname = "models"
 output = "db/models"
 wipe = true
+add-global-variants = true
 no-tests = false
 
 [psql]

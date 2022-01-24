@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	openapi "random.chars.jp/git/misskey/api"
 	"random.chars.jp/git/misskey/config"
+	"random.chars.jp/git/misskey/db"
 	"syscall"
 )
 
@@ -44,8 +45,19 @@ func main() {
 	} else {
 		log.Print("legacy configuration file loaded, please consider converting to new format")
 	}
+
+	if err := db.Open(); err != nil {
+		log.Fatalf("error opening database: %s", err)
+	} else {
+		var version string
+		if err = db.DB.QueryRow("SHOW server_version").Scan(&version); err != nil {
+			log.Fatalf("error getting database version: %s", err)
+		} else {
+			log.Printf("connected to PostgreSQL version %s", version)
+		}
+	}
+
 	webSetup()
-	// TODO: database and stuff
 
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
