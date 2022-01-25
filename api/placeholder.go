@@ -7,6 +7,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"random.chars.jp/git/misskey/config"
 )
 
 const referenceBackendURLString = "http://localhost:3001"
@@ -42,6 +43,13 @@ func placeholder(context *gin.Context) {
 	//		context.ClientIP(), f)
 	//}
 
+	if config.Log.Verbose {
+		if context.FullPath() == "" {
+			log.Print("proxying not-found route")
+		} else {
+			log.Printf("proxying route %s", context.FullPath())
+		}
+	}
 	referenceBackendReverseProxy.ServeHTTP(context.Writer, context.Request)
 	context.Abort()
 }

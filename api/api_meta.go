@@ -3,6 +3,7 @@ package openapi
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"random.chars.jp/git/misskey/api/payload"
 )
 
 func init() {
@@ -54,8 +55,7 @@ func ping(c *gin.Context) {
 
 // serverInfo - server-info
 func serverInfo(c *gin.Context) {
-	// TODO
-	placeholder(c)
+	c.Data(http.StatusOK, gin.MIMEJSON, payload.ServerInfo.JSON())
 }
 
 // stats - stats

@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	openapi "random.chars.jp/git/misskey/api"
+	"random.chars.jp/git/misskey/api/payload"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/db"
 	"syscall"
@@ -53,6 +54,7 @@ func main() {
 		if err = db.DB.QueryRow("SHOW server_version").Scan(&version); err != nil {
 			log.Fatalf("error getting database version: %s", err)
 		} else {
+			payload.PSQL = version
 			log.Printf("connected to PostgreSQL version %s", version)
 		}
 	}
