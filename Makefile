@@ -11,10 +11,15 @@ boil: init-db start-db import-db sqlboiler sqlboiler-test stop-db clean-db
 .PHONY: build
 build:
 	go build -o build/ $$PWD/cmd/misskey
+	go build -o build/ $$PWD/cmd/prairie
 
 .PHONY: assets
 assets:
 	# TODO
+
+.PHONY: template
+template:
+	./build/prairie -w -i $$MISSKEY_ROOT
 
 .PHONY: init-db
 init-db:

@@ -37,7 +37,7 @@ func (p *Payload) Expired() bool {
 	return p.json == nil
 }
 
-func (p *Payload) JSON() []byte {
+func (p *Payload) Data() []byte {
 	if p.Expired() {
 		p.lock.Lock()
 		defer p.lock.Unlock()

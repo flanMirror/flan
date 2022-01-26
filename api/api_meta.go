@@ -55,7 +55,7 @@ func ping(c *gin.Context) {
 
 // serverInfo - server-info
 func serverInfo(c *gin.Context) {
-	c.Data(http.StatusOK, gin.MIMEJSON, payload.ServerInfo.JSON())
+	c.Data(http.StatusOK, gin.MIMEJSON, payload.ServerInfo.Data())
 }
 
 // stats - stats

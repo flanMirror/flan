@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/Joker/hpp"
 	"github.com/Joker/jade"
@@ -12,36 +13,69 @@ import (
 var (
 	misskeyRoot string
 	outputDir   string
+	workingDir  string
+	wipe        bool
 )
 
+func init() {
+	if wd, err := os.Getwd(); err != nil {
+		fmt.Println("error getting working directory:", err)
+		os.Exit(1)
+	} else {
+		workingDir = wd
+	}
+}
+
 func main() {
-	flag.StringVar(&misskeyRoot, "path", "", "path to Misskey root")
-	flag.StringVar(&outputDir, "output", "prairie", "output directory")
+	flag.StringVar(&misskeyRoot, "i", "", "path to Misskey root")
+	flag.StringVar(&outputDir, "o", "assets/template", "path to output directory")
+	flag.BoolVar(&wipe, "w", false, "wipe output directory if exists")
 	flag.Parse()
 	if misskeyRoot == "" {
-		fmt.Println("error: must specify Misskey root")
+		fmt.Println("must specify Misskey root")
 		os.Exit(1)
 	}
 
-	// create output directory
-	outputDir := fmt.Sprintf("%s/%s", os.Getenv("PWD"), outputDir)
-	_ = os.Mkdir(outputDir, 0755)
-
 	// read input directory
-	templateDir := misskeyRoot + "/packages/backend/src/server/web/views/"
+	const templateDirRelative = "packages/backend/src/server/web/views/"
+	templateDir := path.Join(misskeyRoot, templateDirRelative)
 	files, err := os.ReadDir(templateDir)
 	if err != nil {
 		fmt.Println("error while reading directory:", err)
 		os.Exit(1)
 	}
-	os.Chdir(templateDir)
+	if err = os.Chdir(templateDir); err != nil {
+		fmt.Println("error switching to template directory:", err)
+		os.Exit(1)
+	}
 
+	// create output directory
+	outputDir = path.Join(workingDir, outputDir)
+create:
+	if err := os.MkdirAll(outputDir, 0755); err != nil {
+		if !os.IsExist(err) {
+			fmt.Println("error creating output directory:", err)
+			os.Exit(1)
+		} else {
+			if !wipe {
+				fmt.Println("directory already exists and wipe is not set")
+				os.Exit(1)
+			} else {
+				if err = os.RemoveAll(outputDir); err != nil {
+					fmt.Println("error wiping output dir:", err)
+					os.Exit(1)
+				} else {
+					goto create
+				}
+			}
+		}
+	}
 
 	for _, file := range files {
 		fmt.Println("translating", file.Name())
 
 		// read Pug file
-		content, err := os.ReadFile(templateDir + file.Name())
+		content, err := os.ReadFile(file.Name())
 		if err != nil {
 			fmt.Println("error while reading file:", err)
 			os.Exit(1)
@@ -58,8 +92,7 @@ func main() {
 		filename := file.Name()[:len(file.Name())-3] + "tmpl"
 
 		// write to file
-		err = os.WriteFile(outputDir+"/"+filename, []byte(hpp.PrPrint(tmpl)), 0644)
-		if err != nil {
+		if err = os.WriteFile(outputDir+"/"+filename, []byte(hpp.PrPrint(tmpl)), 0644); err != nil {
 			fmt.Println("error while writing file:", err)
 			os.Exit(1)
 		}
