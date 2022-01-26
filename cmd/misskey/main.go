@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -10,6 +11,7 @@ import (
 	"random.chars.jp/git/misskey/api/payload"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/db"
+	"strings"
 	"syscall"
 )
 
@@ -26,18 +28,8 @@ const banner = `
 --- %s (PID: %d) ---
 `
 
-var target bool
-
-func init() {
-	flag.BoolVar(&target, "target", false, "display targeted misskey version")
-}
-
 func main() {
 	flag.Parse()
-	if target {
-		fmt.Print(openapi.Target)
-		os.Exit(0)
-	}
 
 	doBanner()
 
@@ -47,6 +39,21 @@ func main() {
 		log.Print("legacy configuration file loaded, please consider converting to new format")
 	}
 
+	db.Cache = db.NewRedisClient()
+	if info, err := db.Cache.Info(context.Background(), "server").Result(); err != nil {
+		log.Fatalf("error getting redis info: %s", err)
+	} else {
+		if f := strings.SplitN(info, "redis_version:", 2); len(f) == 2 {
+			if f = strings.SplitN(f[1], "\r\n", 2); len(f) == 2 {
+				payload.Redis = f[0]
+				log.Printf("connected to Redis version %s", f[0])
+			} else {
+				log.Fatal("error getting Redis line ending")
+			}
+		} else {
+			log.Fatal("error getting redis_version field")
+		}
+	}
 	if err := db.Open(); err != nil {
 		log.Fatalf("error opening database: %s", err)
 	} else {
@@ -58,7 +65,6 @@ func main() {
 			log.Printf("connected to PostgreSQL version %s", version)
 		}
 	}
-
 	webSetup()
 
 	sig := make(chan os.Signal, 1)

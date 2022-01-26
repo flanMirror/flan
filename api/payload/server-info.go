@@ -30,7 +30,7 @@ var (
 	OS string
 	// PSQL is set in main.go
 	PSQL string
-	// Redis is TODO
+	// Redis is set in main.go
 	Redis string
 	// CPUModel is set in init
 	CPUModel string
@@ -69,7 +69,6 @@ func init() {
 	} else {
 		FSTotal = int(u.Total)
 	}
-	//FIXME: net.Interfaces()
 }
 
 var serverInfoDuration = time.Minute * 30

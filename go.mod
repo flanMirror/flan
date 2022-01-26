@@ -4,8 +4,11 @@ go 1.17
 
 require (
 	github.com/BurntSushi/toml v1.0.0
+	github.com/Joker/hpp v1.0.0
+	github.com/Joker/jade v1.1.1
 	github.com/friendsofgo/errors v0.9.2
 	github.com/gin-gonic/gin v1.7.7
+	github.com/go-redis/redis/v8 v8.11.4
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
 	github.com/lib/pq v1.10.4
 	github.com/shirou/gopsutil/v3 v3.21.12
@@ -18,8 +21,6 @@ require (
 )
 
 require (
-	github.com/Joker/hpp v1.0.0 // indirect
-	github.com/Joker/jade v1.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/ericlagergren/decimal v0.0.0-20181231230500-73749d4874d5 // indirect
@@ -29,7 +30,6 @@ require (
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
-	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
