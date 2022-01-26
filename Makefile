@@ -10,7 +10,7 @@ PUBLIC = $(ASSETS)/public
 ASSETS_URL = https://cronut.cafe/~rand/misskey/assets-$(TARGET).tar.gz
 
 all: build
-full: boil build
+full: boil assets build
 boil: init-db start-db import-db sqlboiler sqlboiler-test stop-db clean-db
 assets: static template assets-package
 
