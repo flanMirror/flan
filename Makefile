@@ -36,7 +36,9 @@ static: .PHONY
 	# manifest TODO
 
 assets-package: .PHONY
-	# TODO
+	cd cmd/misskey/assets/
+	tar -zcvf ../../../build/assets-$(TARGET).tar.gz public/ template/
+	cd ../../../
 
 template: .PHONY
 	./build/prairie -w -o $(ASSETS)/template -i $$MISSKEY_ROOT
