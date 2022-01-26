@@ -14,6 +14,11 @@ func cleanup() {
 		log.Printf("error shutting down web server: %s", err)
 	}
 
+	if db.Cache != nil {
+		if err := db.Cache.Close(); err != nil {
+			log.Printf("error closing redis: %s", err)
+		}
+	}
 	if err := db.Close(); err != nil {
 		log.Printf("error closing database: %s", err)
 	}

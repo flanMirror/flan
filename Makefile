@@ -1,25 +1,47 @@
-.NOTPARALLEL: all boil build assets init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
+# not sure if this is still necessary but accidentally running them parallel can definitely cause a huge mess
+.NOTPARALLEL: all full boil assets build static assets-package template init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
 SHELL = sh
 
+TARGET = $(shell ./build/misskey target)
 PG_CTL = pg_ctl -D build/postgres/db -o "-k $$PWD/build/postgres/sock -p 3002"
 PSQL = psql -h $$PWD/build/postgres/sock -p 3002 -U $$(whoami)
+ASSETS = cmd/misskey/assets
+STATIC = $(ASSETS)/static
 
 all: build
 full: boil build
 boil: init-db start-db import-db sqlboiler sqlboiler-test stop-db clean-db
+assets: static template assets-package
 
 .PHONY: build
 build:
 	go build -o build/ $$PWD/cmd/misskey
 	go build -o build/ $$PWD/cmd/prairie
 
-.PHONY: assets
-assets:
+.PHONY: static
+static:
+	rm -rf $(STATIC)
+	mkdir $(STATIC)
+
+	# general files
+	cp -r $$MISSKEY_ROOT/packages/backend/assets $(STATIC)/static-assets
+	cp -r $$MISSKEY_ROOT/packages/client/assets $(STATIC)/client-assets
+	cp -r $$MISSKEY_ROOT/built/_client_dist_ $(STATIC)/assets
+
+	# special cases
+	cp $$MISSKEY_ROOT/packages/backend/assets/apple-touch-icon.png $(STATIC)
+	cp $$MISSKEY_ROOT/packages/backend/assets/robots.txt $(STATIC)
+	cp $$MISSKEY_ROOT/built/_client_dist_/sw.$(TARGET).js $(STATIC)/sw.js
+	cp -r $$MISSKEY_ROOT/packages/client/node_modules/@discordapp/twemoji/dist/svg $(STATIC)/twemoji
+	# manifest TODO
+
+.PHONY: assets-package
+assets-package:
 	# TODO
 
 .PHONY: template
 template:
-	./build/prairie -w -i $$MISSKEY_ROOT
+	./build/prairie -w -o $(ASSETS)/template -i $$MISSKEY_ROOT
 
 .PHONY: init-db
 init-db:
