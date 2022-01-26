@@ -1,5 +1,5 @@
 # not sure if this is still necessary but accidentally running them parallel can definitely cause a huge mess
-.NOTPARALLEL: all full boil assets build static assets-package template init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
+.NOTPARALLEL: all full boil assets build static assets-package assets-download template init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
 SHELL = sh
 
 TARGET != ./build/misskey target
@@ -7,6 +7,7 @@ PG_CTL = pg_ctl -D build/postgres/db -o "-k $$PWD/build/postgres/sock -p 3002"
 PSQL = psql -h $$PWD/build/postgres/sock -p 3002 -U $$(whoami)
 ASSETS = cmd/misskey/assets
 PUBLIC = $(ASSETS)/public
+ASSETS_URL = https://cronut.cafe/~rand/misskey/assets-$(TARGET).tar.gz
 
 all: build
 full: boil build
@@ -37,6 +38,14 @@ static: .PHONY
 
 assets-package: .PHONY
 	tar -zcvf build/assets-$(TARGET).tar.gz -C cmd/misskey/assets/ .
+
+assets-download: .PHONY
+	rm -rf $(ASSETS)/public $(ASSETS)/template
+	if type fetch >/dev/null 2>/dev/null; then fetch -o build/assets $(ASSETS_URL); \
+elif type curl >/dev/null 2>/dev/null; then curl $(ASSETS_URL) > build/assets; \
+elif type wget >/dev/null 2>/dev/null; then wget -o build/assets $(ASSETS_URL) ; fi
+	tar -zxvf build/assets -C cmd/misskey/assets
+	rm build/assets
 
 template: .PHONY
 	./build/prairie -w -o $(ASSETS)/template -i $$MISSKEY_ROOT
