@@ -65,6 +65,7 @@ func main() {
 			log.Printf("connected to PostgreSQL version %s", version)
 		}
 	}
+	populate()
 	webSetup()
 
 	sig := make(chan os.Signal, 1)

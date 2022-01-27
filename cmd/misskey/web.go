@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"github.com/gin-gonic/gin"
-	"io"
 	"io/fs"
 	"log"
 	"net"
@@ -50,6 +49,7 @@ func webSetup() {
 		router.Use(recovery())
 	}
 	router.NoRoute(serveStatic())
+	routesSetup()
 	apiGroup := router.Group("/api/")
 	openapi.RegisterRoutes(apiGroup)
 
@@ -75,38 +75,23 @@ func webSetup() {
 	server.Handler = router
 }
 
-func prepareAssets() (fs.FS, []byte) {
+func prepareAssets() fs.FS {
 	if public, err := fs.Sub(assets, "assets/public"); err != nil {
 		log.Print("compiled without static assets, not serving")
-		return nil, nil
+		return nil
 	} else {
-		var (
-			indexHTML []byte
-			file      fs.File
-		)
-		if file, err = public.Open("index.html"); err != nil {
-			log.Print("bundled assets do not have index.html")
-			return public, nil
-		} else {
-			if indexHTML, err = io.ReadAll(file); err != nil {
-				log.Fatalf("error reading bundled index.html: %s", err)
-			}
-			if err = file.Close(); err != nil {
-				log.Printf("error closing bundled index.html: %s", err)
-			}
-			return public, indexHTML
-		}
+		return public
 	}
 }
 
 func serveStatic() func(context *gin.Context) {
-	public, indexHTML := prepareAssets()
-	if public != nil && indexHTML != nil {
+	if public := prepareAssets(); public != nil {
 		return func(context *gin.Context) {
-			if context.Request.Method != http.MethodPost {
+			if context.Request.Method != http.MethodGet {
 				context.String(http.StatusNotFound, "Not Found")
 				return
 			}
+
 			p := context.Request.URL.Path
 			if !strings.HasPrefix(p, "/") {
 				p = "/" + p
@@ -114,16 +99,18 @@ func serveStatic() func(context *gin.Context) {
 			p = path.Clean(p)
 
 			if s, err := fs.Stat(public, p); err != nil || s.IsDir() {
-				context.Data(http.StatusOK, gin.MIMEHTML, indexHTML)
+				openapi.Placeholder(context)
 				return
 			}
 
+			setNoFrame(context)
 			context.FileFromFS(p, http.FS(public))
 		}
 	} else {
 		//return func(context *gin.Context) {
 		//	context.Data(http.StatusNoContent, gin.MIMEHTML, nil)
 		//}
+		log.Print("got nil public, starting reverse proxy catch-all")
 		return func(context *gin.Context) {
 			// FIXME
 			openapi.Placeholder(context)
@@ -137,4 +124,8 @@ func serve() {
 	} else {
 		log.Printf("error serve: %s", err)
 	}
+}
+
+func setNoFrame(context *gin.Context) {
+	context.Header("X-Frame-Options", "DENY")
 }
