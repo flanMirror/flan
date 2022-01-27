@@ -34,7 +34,6 @@ static: .PHONY
 	cp $$MISSKEY_ROOT/packages/backend/assets/robots.txt $(PUBLIC)
 	cp $$MISSKEY_ROOT/built/_client_dist_/sw.$(TARGET).js $(PUBLIC)/sw.js
 	cp -r $$MISSKEY_ROOT/packages/client/node_modules/@discordapp/twemoji/dist/svg $(PUBLIC)/twemoji
-	# manifest TODO
 
 assets-package: .PHONY
 	tar -zcvf build/assets-$(TARGET).tar.gz -C cmd/misskey/assets/ .
@@ -72,8 +71,13 @@ import-db: .PHONY
 sqlboiler: .PHONY
 	-go install github.com/volatiletech/sqlboiler/v4@latest
 	-go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
-	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler -c sqlboiler.toml psql
+	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler --no-tests -c sqlboiler.toml psql
+
+	# misskey has database things named *_test and that would upset the go compiler so we rename them here
+	for f in db/models/*_test.go; do mv -- "$$f" "$${f%_test.go}_test_misskey.go"; done
 
 sqlboiler-test: .PHONY
 	$(PSQL) postgres -c "alter user misskey with superuser;"
-	-env PSQL_HOST=$$PWD/build/postgres/sock go test $$PWD/db/models
+	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler -o build/sql-test -c sqlboiler.toml psql
+	-env PSQL_HOST=$$PWD/build/postgres/sock go test $$PWD/build/sql-test
+	rm -rf build/sql-test
