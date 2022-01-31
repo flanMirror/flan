@@ -74,6 +74,8 @@ sqlboiler: .PHONY
 	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler --no-tests -c sqlboiler.toml psql
 
 	# misskey has database things named *_test and that would upset the go compiler so we rename them here
+	# we create a dummy file so boiling from the new version would work
+	echo "package models" > db/models/dummy_test.go
 	for f in db/models/*_test.go; do mv -- "$$f" "$${f%_test.go}_test_misskey.go"; done
 
 sqlboiler-test: .PHONY
