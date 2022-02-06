@@ -73,7 +73,7 @@ func main() {
 			log.Printf("connected to PostgreSQL version %s", version)
 		}
 	}
-	populate()
+	populateDBCache()
 	webSetup()
 
 	sig := make(chan os.Signal, 1)

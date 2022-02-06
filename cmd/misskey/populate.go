@@ -4,9 +4,9 @@ import (
 	"random.chars.jp/git/misskey/db"
 )
 
-// populate is called once database connection is established.
-// it populates some payloads that are relatively constant.
-func populate() {
+// populateDBCache is called once database connection is established
+// it populates some payload caches that are unchanging for the most part
+func populateDBCache() {
 	// expire some eager loading expiring items to populate structs behind them
 
 	// order is important for these initial expirations

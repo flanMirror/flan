@@ -1,10 +1,8 @@
 /cmd/misskey/assets/public
 /cmd/misskey/assets/template
 /db/models
-.config
+/.config
 *.conf
-*.yaml
-*.yml
 
 /build
 /TODO
