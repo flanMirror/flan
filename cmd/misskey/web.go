@@ -92,6 +92,8 @@ func serveStatic() func(context *gin.Context) {
 				return
 			}
 
+			// TODO: set cache
+
 			p := context.Request.URL.Path
 			if !strings.HasPrefix(p, "/") {
 				p = "/" + p

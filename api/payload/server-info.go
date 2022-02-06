@@ -16,11 +16,13 @@ import (
 // Node is not what we're using
 const Node = "false"
 
-// NetInterface is insane and completely unnecessary and relies on too much platform specific stuff,
-// so I set it to whatever I have on my FreeBSD workstation. If anyone knows of a good reason to properly
-// populate this and a cross-platform way to fetch it, do let me know. The parsing route thing in upstream
-// is absolutely insane and caused me to explode for hours and end up using a very ugly workaround for it,
-// so I wish to not do that in this implementation as it is meant to address flaws as well.
+// NetInterface is insane and completely unnecessary and relies on too much
+// platform specific stuff, so I set it to whatever I have on my FreeBSD
+// workstation. If anyone knows of a good reason to properly populate this
+// and a cross-platform way to fetch it, do let me know. The parsing route
+// thing in upstream is absolutely insane and caused me to explode for hours
+// and end up using a very ugly workaround for it, so I wish to not do that
+// in this implementation as it is meant to address flaws as well.
 const NetInterface = "igb0"
 
 var (
@@ -36,7 +38,8 @@ var (
 	CPUModel string
 	// CPUCores is set in init
 	CPUCores int
-	// MemTotal is set in init (for some insane reason there is no allocated, only total)
+	// MemTotal is set in init (for some insane reason there is no allocated,
+	// only total)
 	MemTotal int
 	// FSTotal is set in init
 	FSTotal int

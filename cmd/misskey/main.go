@@ -7,10 +7,10 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	openapi "random.chars.jp/git/misskey/api"
 	"random.chars.jp/git/misskey/api/payload"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/spec"
 	"strings"
 	"syscall"
 )
@@ -27,6 +27,14 @@ const banner = `
 
 --- %s (PID: %d) ---
 `
+
+var _ = func() interface{} {
+	if len(os.Args) == 2 && os.Args[1] == "target" {
+		fmt.Print(spec.Target)
+		os.Exit(0)
+	}
+	return nil
+}()
 
 func main() {
 	flag.Parse()
@@ -95,7 +103,7 @@ func doBanner() {
 			if hostname, err = os.Hostname(); err != nil {
 				return
 			}
-			fmt.Printf(banner, openapi.Target, hostname, os.Getpid())
+			fmt.Printf(banner, spec.Target, hostname, os.Getpid())
 		}
 	}
 }

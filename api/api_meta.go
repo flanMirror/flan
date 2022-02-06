@@ -43,8 +43,25 @@ func getOnlineUsersCount(c *gin.Context) {
 
 // meta - meta
 func meta(c *gin.Context) {
-	// TODO
-	placeholder(c)
+	p := struct {
+		Detail *bool `json:"detail,omitempty"`
+	}{}
+	if c.Bind(&p) != nil {
+		c.String(http.StatusBadRequest, "Bad Request")
+		return
+	}
+
+	detail := true
+	if p.Detail != nil {
+		detail = *p.Detail
+	}
+
+	if !detail {
+		c.Data(http.StatusOK, gin.MIMEJSON, payload.Meta.Data())
+	} else {
+		// TODO: admin
+		c.Data(http.StatusOK, gin.MIMEJSON, payload.MetaDetail.Data())
+	}
 }
 
 // ping - ping

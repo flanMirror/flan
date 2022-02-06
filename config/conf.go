@@ -5,6 +5,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"log"
 	"os"
+	"strings"
 )
 
 var (
@@ -13,6 +14,10 @@ var (
 	Web      webConf
 	Proxy    *proxyConf
 	External externalConf
+)
+
+var (
+	HTTPS bool
 )
 
 const ConfDefaultPath = "misskey.conf"
@@ -117,6 +122,11 @@ func Parse() bool {
 		Web = Config.Web
 		Proxy = Config.Proxy
 		External = Config.External
+
+		/* misskey upstream checks whether the https section in config file is set for this
+		which is absolutely insane since no sane person would run anything like that as root,
+		this is clearly a bug, so we're doing it the proper way here */
+		HTTPS = strings.HasPrefix(Web.URL, "https://")
 	}()
 	if loaded {
 		panic("attempting config parse after loaded set")

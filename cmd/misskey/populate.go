@@ -1,22 +1,19 @@
 package main
 
 import (
-	"context"
-	"log"
-	"random.chars.jp/git/misskey/api/payload"
 	"random.chars.jp/git/misskey/db"
 )
 
 // populate is called once database connection is established.
 // it populates some payloads that are relatively constant.
 func populate() {
-	if meta, err := db.FetchMeta(context.Background()); err != nil {
-		log.Printf("error fetching meta: %s", err)
-	} else {
-		if meta.Name.Valid {
-			payload.ManifestUpdate(meta.Name.String)
-		} else {
-			payload.ManifestUpdate("")
-		}
-	}
+	// expire some eager loading expiring items to populate structs behind them
+
+	// order is important for these initial expirations
+	// see db/meta.go for further explanation
+	db.LocalUserCount.Expire()
+	db.Meta.Expire()
+	db.Ads.Expire()
+	db.Emojis.Expire()
+	db.ProxyAccount.Expire()
 }
