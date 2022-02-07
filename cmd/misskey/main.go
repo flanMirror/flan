@@ -28,10 +28,18 @@ const banner = `
 --- %s (PID: %d) ---
 `
 
+var noBanner bool
+
+func init() {
+	flag.BoolVar(&noBanner, "nobanner", false, "disable displaying of the banner")
+}
+
 func main() {
 	flag.Parse()
 
-	doBanner()
+	if !noBanner {
+		doBanner()
+	}
 
 	if config.Parse() {
 		log.Print("configuration load complete")
