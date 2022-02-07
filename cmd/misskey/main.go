@@ -28,14 +28,6 @@ const banner = `
 --- %s (PID: %d) ---
 `
 
-var _ = func() interface{} {
-	if len(os.Args) == 2 && os.Args[1] == "target" {
-		fmt.Print(spec.Target)
-		os.Exit(0)
-	}
-	return nil
-}()
-
 func main() {
 	flag.Parse()
 
