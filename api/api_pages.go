@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -17,43 +15,43 @@ func init() {
 }
 
 // pagesCreate - pages/create
-func pagesCreate(c *gin.Context) {
+func pagesCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pagesDelete - pages/delete
-func pagesDelete(c *gin.Context) {
+func pagesDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pagesFeatured - pages/featured
-func pagesFeatured(c *gin.Context) {
+func pagesFeatured(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pagesLike - pages/like
-func pagesLike(c *gin.Context) {
+func pagesLike(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pagesShow - pages/show
-func pagesShow(c *gin.Context) {
+func pagesShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pagesUnlike - pages/unlike
-func pagesUnlike(c *gin.Context) {
+func pagesUnlike(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pagesUpdate - pages/update
-func pagesUpdate(c *gin.Context) {
+func pagesUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

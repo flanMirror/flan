@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -15,37 +14,37 @@ func init() {
 }
 
 // gamesReversiGames - games/reversi/games
-func gamesReversiGames(c *gin.Context) {
+func gamesReversiGames(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // gamesReversiGamesShow - games/reversi/games/show
-func gamesReversiGamesShow(c *gin.Context) {
+func gamesReversiGamesShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // gamesReversiGamesSurrender - games/reversi/games/surrender
-func gamesReversiGamesSurrender(c *gin.Context) {
+func gamesReversiGamesSurrender(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // gamesReversiInvitations - games/reversi/invitations
-func gamesReversiInvitations(c *gin.Context) {
+func gamesReversiInvitations(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // gamesReversiMatch - games/reversi/match
-func gamesReversiMatch(c *gin.Context) {
+func gamesReversiMatch(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // gamesReversiMatchCancel - games/reversi/match/cancel
-func gamesReversiMatchCancel(c *gin.Context) {
+func gamesReversiMatchCancel(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

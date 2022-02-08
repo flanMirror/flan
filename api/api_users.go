@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -28,115 +27,115 @@ func init() {
 }
 
 // emailAddressAvailable - email-address/available
-func emailAddressAvailable(c *gin.Context) {
+func emailAddressAvailable(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // pinnedUsers - pinned-users
-func pinnedUsers(c *gin.Context) {
+func pinnedUsers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usernameAvailable - username/available
-func usernameAvailable(c *gin.Context) {
+func usernameAvailable(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // users - users
-func users(c *gin.Context) {
+func users(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersClips - users/clips
-func usersClips(c *gin.Context) {
+func usersClips(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersFollowers - users/followers
-func usersFollowers(c *gin.Context) {
+func usersFollowers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersFollowing - users/following
-func usersFollowing(c *gin.Context) {
+func usersFollowing(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGalleryPosts - users/gallery/posts
-func usersGalleryPosts(c *gin.Context) {
+func usersGalleryPosts(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGetFrequentlyRepliedusers - users/get-frequently-replied-users
-func usersGetFrequentlyRepliedusers(c *gin.Context) {
+func usersGetFrequentlyRepliedusers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersNotes - users/notes
-func usersNotes(c *gin.Context) {
+func usersNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersPages - users/pages
-func usersPages(c *gin.Context) {
+func usersPages(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersReactions - users/reactions
-func usersReactions(c *gin.Context) {
+func usersReactions(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersRecommendation - users/recommendation
-func usersRecommendation(c *gin.Context) {
+func usersRecommendation(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersRelation - users/relation
-func usersRelation(c *gin.Context) {
+func usersRelation(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersReportAbuse - users/report-abuse
-func usersReportAbuse(c *gin.Context) {
+func usersReportAbuse(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersSearch - users/search
-func usersSearch(c *gin.Context) {
+func usersSearch(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersSearchByUsernameAndHost - users/search-by-username-and-host
-func usersSearchByUsernameAndHost(c *gin.Context) {
+func usersSearchByUsernameAndHost(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersShow - users/show
-func usersShow(c *gin.Context) {
+func usersShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersStats - users/stats
-func usersStats(c *gin.Context) {
+func usersStats(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

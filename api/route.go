@@ -7,24 +7,15 @@ import (
 
 var routes []route
 
+type handlerFunc func(context Context)
 type route struct {
 	Method  string
 	Pattern string
-	Handler gin.HandlerFunc
+	Handler handlerFunc
 }
 
 func (r route) register() {
 	routes = append(routes, r)
-}
-
-func init() {
-	route{
-		Method:  http.MethodGet,
-		Pattern: "",
-		Handler: func(context *gin.Context) {
-			context.String(http.StatusOK, "Hello from Go :3")
-		},
-	}.register()
 }
 
 // RegisterRoutes registers API routes to a router group.
@@ -32,15 +23,15 @@ func RegisterRoutes(router *gin.RouterGroup) {
 	for _, r := range routes {
 		switch r.Method {
 		case http.MethodGet:
-			router.GET(r.Pattern, r.Handler)
+			router.GET(r.Pattern, newWrap(r))
 		case http.MethodPost:
-			router.POST(r.Pattern, r.Handler)
+			router.POST(r.Pattern, newWrap(r))
 		case http.MethodPut:
-			router.PUT(r.Pattern, r.Handler)
+			router.PUT(r.Pattern, newWrap(r))
 		case http.MethodPatch:
-			router.PATCH(r.Pattern, r.Handler)
+			router.PATCH(r.Pattern, newWrap(r))
 		case http.MethodDelete:
-			router.DELETE(r.Pattern, r.Handler)
+			router.DELETE(r.Pattern, newWrap(r))
 		}
 	}
 }

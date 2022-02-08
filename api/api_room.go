@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -11,13 +10,13 @@ func init() {
 }
 
 // roomShow - room/show
-func roomShow(c *gin.Context) {
+func roomShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // roomUpdate - room/update
-func roomUpdate(c *gin.Context) {
+func roomUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

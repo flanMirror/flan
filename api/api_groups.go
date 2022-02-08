@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -22,73 +20,73 @@ func init() {
 }
 
 // usersGroupsCreate - users/groups/create
-func usersGroupsCreate(c *gin.Context) {
+func usersGroupsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsDelete - users/groups/delete
-func usersGroupsDelete(c *gin.Context) {
+func usersGroupsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsInvitationsAccept - users/groups/invitations/accept
-func usersGroupsInvitationsAccept(c *gin.Context) {
+func usersGroupsInvitationsAccept(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsInvitationsReject - users/groups/invitations/reject
-func usersGroupsInvitationsReject(c *gin.Context) {
+func usersGroupsInvitationsReject(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsInvite - users/groups/invite
-func usersGroupsInvite(c *gin.Context) {
+func usersGroupsInvite(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsJoined - users/groups/joined
-func usersGroupsJoined(c *gin.Context) {
+func usersGroupsJoined(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsLeave - users/groups/leave
-func usersGroupsLeave(c *gin.Context) {
+func usersGroupsLeave(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsOwned - users/groups/owned
-func usersGroupsOwned(c *gin.Context) {
+func usersGroupsOwned(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsPull - users/groups/pull
-func usersGroupsPull(c *gin.Context) {
+func usersGroupsPull(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsShow - users/groups/show
-func usersGroupsShow(c *gin.Context) {
+func usersGroupsShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsTransfer - users/groups/transfer
-func usersGroupsTransfer(c *gin.Context) {
+func usersGroupsTransfer(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersGroupsUpdate - users/groups/update
-func usersGroupsUpdate(c *gin.Context) {
+func usersGroupsUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

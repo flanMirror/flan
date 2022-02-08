@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -18,55 +17,55 @@ func init() {
 }
 
 // galleryFeatured - gallery/featured
-func galleryFeatured(c *gin.Context) {
+func galleryFeatured(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPopular - gallery/popular
-func galleryPopular(c *gin.Context) {
+func galleryPopular(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPosts - gallery/posts
-func galleryPosts(c *gin.Context) {
+func galleryPosts(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPostsCreate - gallery/posts/create
-func galleryPostsCreate(c *gin.Context) {
+func galleryPostsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPostsDelete - gallery/posts/delete
-func galleryPostsDelete(c *gin.Context) {
+func galleryPostsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPostsLike - gallery/posts/like
-func galleryPostsLike(c *gin.Context) {
+func galleryPostsLike(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPostsShow - gallery/posts/show
-func galleryPostsShow(c *gin.Context) {
+func galleryPostsShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPostsUnlike - gallery/posts/unlike
-func galleryPostsUnlike(c *gin.Context) {
+func galleryPostsUnlike(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // galleryPostsUpdate - gallery/posts/update
-func galleryPostsUpdate(c *gin.Context) {
+func galleryPostsUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

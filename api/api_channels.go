@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -18,49 +16,49 @@ func init() {
 }
 
 // channelsCreate - channels/create
-func channelsCreate(c *gin.Context) {
+func channelsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsFeatured - channels/featured
-func channelsFeatured(c *gin.Context) {
+func channelsFeatured(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsFollow - channels/follow
-func channelsFollow(c *gin.Context) {
+func channelsFollow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsFollowed - channels/followed
-func channelsFollowed(c *gin.Context) {
+func channelsFollowed(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsOwned - channels/owned
-func channelsOwned(c *gin.Context) {
+func channelsOwned(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsShow - channels/show
-func channelsShow(c *gin.Context) {
+func channelsShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsUnfollow - channels/unfollow
-func channelsUnfollow(c *gin.Context) {
+func channelsUnfollow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // channelsUpdate - channels/update
-func channelsUpdate(c *gin.Context) {
+func channelsUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

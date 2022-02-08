@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -14,31 +13,31 @@ func init() {
 }
 
 // hashtagsList - hashtags/list
-func hashtagsList(c *gin.Context) {
+func hashtagsList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // hashtagsSearch - hashtags/search
-func hashtagsSearch(c *gin.Context) {
+func hashtagsSearch(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // hashtagsShow - hashtags/show
-func hashtagsShow(c *gin.Context) {
+func hashtagsShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // hashtagsTrend - hashtags/trend
-func hashtagsTrend(c *gin.Context) {
+func hashtagsTrend(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // hashtagsUsers - hashtags/users
-func hashtagsUsers(c *gin.Context) {
+func hashtagsUsers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

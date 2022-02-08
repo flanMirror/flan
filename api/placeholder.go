@@ -32,9 +32,9 @@ func init() {
 }
 
 // placeholder is the function called by unimplemented API endpoints
-func placeholder(context *gin.Context) {
-	if context.GetHeader("X-Forwarded-For") != "" {
-		context.String(http.StatusBadRequest, "X-Forwarded-For is set")
+func placeholder(ctx Context) {
+	if ctx.GetHeader("X-Forwarded-For") != "" {
+		ctx.String(http.StatusBadRequest, "X-Forwarded-For is set")
 		return
 	}
 	//if f, ok := context.Request.Header["X-Forwarded-For"]; ok {
@@ -44,17 +44,17 @@ func placeholder(context *gin.Context) {
 	//}
 
 	if config.Log.Verbose {
-		if context.FullPath() == "" {
+		if ctx.FullPath() == "" {
 			log.Print("proxying not-found route")
 		} else {
-			log.Printf("proxying route %s", context.FullPath())
+			log.Printf("proxying route %s", ctx.FullPath())
 		}
 	}
-	referenceBackendReverseProxy.ServeHTTP(context.Writer, context.Request)
-	context.Abort()
+	referenceBackendReverseProxy.ServeHTTP(ctx.Writer(), ctx.Request())
+	ctx.Abort()
 }
 
 // Placeholder is the function called by unimplemented web routes
-func Placeholder(context *gin.Context) {
-	placeholder(context)
+func Placeholder(ctx *gin.Context) {
+	placeholder(&ginContext{Context: ctx})
 }

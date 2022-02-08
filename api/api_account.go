@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -35,157 +34,157 @@ func init() {
 }
 
 // blockingCreate - blocking/create
-func blockingCreate(c *gin.Context) {
+func blockingCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // blockingDelete - blocking/delete
-func blockingDelete(c *gin.Context) {
+func blockingDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // blockingList - blocking/list
-func blockingList(c *gin.Context) {
+func blockingList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // clipsAddNote - clips/add-note
-func clipsAddNote(c *gin.Context) {
+func clipsAddNote(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // clipsNotes - clips/notes
-func clipsNotes(c *gin.Context) {
+func clipsNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // i - i
-func i(c *gin.Context) {
+func i(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iFavorites - i/favorites
-func iFavorites(c *gin.Context) {
+func iFavorites(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iGalleryLikes - i/gallery/likes
-func iGalleryLikes(c *gin.Context) {
+func iGalleryLikes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iGalleryPosts - i/gallery/posts
-func iGalleryPosts(c *gin.Context) {
+func iGalleryPosts(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iGetWordMutedNotesCount - i/get-word-muted-notes-count
-func iGetWordMutedNotesCount(c *gin.Context) {
+func iGetWordMutedNotesCount(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iNotifications - i/notifications
-func iNotifications(c *gin.Context) {
+func iNotifications(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iPageLikes - i/page-likes
-func iPageLikes(c *gin.Context) {
+func iPageLikes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iPages - i/pages
-func iPages(c *gin.Context) {
+func iPages(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iPin - i/pin
-func iPin(c *gin.Context) {
+func iPin(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iReadAllMessagingMessages - i/read-all-messaging-messages
-func iReadAllMessagingMessages(c *gin.Context) {
+func iReadAllMessagingMessages(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iReadAllUnreadNotes - i/read-all-unread-notes
-func iReadAllUnreadNotes(c *gin.Context) {
+func iReadAllUnreadNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iReadAnnouncement - i/read-announcement
-func iReadAnnouncement(c *gin.Context) {
+func iReadAnnouncement(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iUnpin - i/unpin
-func iUnpin(c *gin.Context) {
+func iUnpin(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iUpdate - i/update
-func iUpdate(c *gin.Context) {
+func iUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // iUserGroupInvites - i/user-group-invites
-func iUserGroupInvites(c *gin.Context) {
+func iUserGroupInvites(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // muteCreate - mute/create
-func muteCreate(c *gin.Context) {
+func muteCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // muteDelete - mute/delete
-func muteDelete(c *gin.Context) {
+func muteDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // muteList - mute/list
-func muteList(c *gin.Context) {
+func muteList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // myApps - my/apps
-func myApps(c *gin.Context) {
+func myApps(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // swRegister - sw/register
-func swRegister(c *gin.Context) {
+func swRegister(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // swUnregister - sw/unregister
-func swUnregister(c *gin.Context) {
+func swUnregister(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

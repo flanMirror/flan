@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -16,37 +14,37 @@ func init() {
 }
 
 // clipsCreate - clips/create
-func clipsCreate(c *gin.Context) {
+func clipsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // clipsDelete - clips/delete
-func clipsDelete(c *gin.Context) {
+func clipsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // clipsList - clips/list
-func clipsList(c *gin.Context) {
+func clipsList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // clipsShow - clips/show
-func clipsShow(c *gin.Context) {
+func clipsShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // clipsUpdate - clips/update
-func clipsUpdate(c *gin.Context) {
+func clipsUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesClips - notes/clips
-func notesClips(c *gin.Context) {
+func notesClips(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

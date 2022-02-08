@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -15,31 +13,31 @@ func init() {
 }
 
 // messagingHistory - messaging/history
-func messagingHistory(c *gin.Context) {
+func messagingHistory(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // messagingMessages - messaging/messages
-func messagingMessages(c *gin.Context) {
+func messagingMessages(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // messagingMessagesCreate - messaging/messages/create
-func messagingMessagesCreate(c *gin.Context) {
+func messagingMessagesCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // messagingMessagesDelete - messaging/messages/delete
-func messagingMessagesDelete(c *gin.Context) {
+func messagingMessagesDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // messagingMessagesRead - messaging/messages/read
-func messagingMessagesRead(c *gin.Context) {
+func messagingMessagesRead(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

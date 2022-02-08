@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -13,19 +11,19 @@ func init() {
 }
 
 // notificationsCreate - notifications/create
-func notificationsCreate(c *gin.Context) {
+func notificationsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notificationsMarkAllAsRead - notifications/mark-all-as-read
-func notificationsMarkAllAsRead(c *gin.Context) {
+func notificationsMarkAllAsRead(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notificationsRead - notifications/read
-func notificationsRead(c *gin.Context) {
+func notificationsRead(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -12,19 +11,19 @@ func init() {
 }
 
 // authSessionGenerate - auth/session/generate
-func authSessionGenerate(c *gin.Context) {
+func authSessionGenerate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // authSessionShow - auth/session/show
-func authSessionShow(c *gin.Context) {
+func authSessionShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // authSessionUserkey - auth/session/userkey
-func authSessionUserkey(c *gin.Context) {
+func authSessionUserkey(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

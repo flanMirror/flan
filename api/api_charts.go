@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -22,73 +20,73 @@ func init() {
 }
 
 // chartsActiveUsers - charts/active-users
-func chartsActiveUsers(c *gin.Context) {
+func chartsActiveUsers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsDrive - charts/drive
-func chartsDrive(c *gin.Context) {
+func chartsDrive(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsFederation - charts/federation
-func chartsFederation(c *gin.Context) {
+func chartsFederation(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsHashtag - charts/hashtag
-func chartsHashtag(c *gin.Context) {
+func chartsHashtag(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsInstance - charts/instance
-func chartsInstance(c *gin.Context) {
+func chartsInstance(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsNetwork - charts/network
-func chartsNetwork(c *gin.Context) {
+func chartsNetwork(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsNotes - charts/notes
-func chartsNotes(c *gin.Context) {
+func chartsNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsUserDrive - charts/user/drive
-func chartsUserDrive(c *gin.Context) {
+func chartsUserDrive(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsUserFollowing - charts/user/following
-func chartsUserFollowing(c *gin.Context) {
+func chartsUserFollowing(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsUserNotes - charts/user/notes
-func chartsUserNotes(c *gin.Context) {
+func chartsUserNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsUserReactions - charts/user/reactions
-func chartsUserReactions(c *gin.Context) {
+func chartsUserReactions(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // chartsUsers - charts/users
-func chartsUsers(c *gin.Context) {
+func chartsUsers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

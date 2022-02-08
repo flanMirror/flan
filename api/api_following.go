@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -16,43 +15,43 @@ func init() {
 }
 
 // followingCreate - following/create
-func followingCreate(c *gin.Context) {
+func followingCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // followingDelete - following/delete
-func followingDelete(c *gin.Context) {
+func followingDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // followingInvalidate - following/invalidate
-func followingInvalidate(c *gin.Context) {
+func followingInvalidate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // followingRequestsAccept - following/requests/accept
-func followingRequestsAccept(c *gin.Context) {
+func followingRequestsAccept(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // followingRequestsCancel - following/requests/cancel
-func followingRequestsCancel(c *gin.Context) {
+func followingRequestsCancel(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // followingRequestsList - following/requests/list
-func followingRequestsList(c *gin.Context) {
+func followingRequestsList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // followingRequestsReject - following/requests/reject
-func followingRequestsReject(c *gin.Context) {
+func followingRequestsReject(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

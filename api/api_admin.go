@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -64,331 +63,331 @@ func init() {
 }
 
 // adminAbuseUserReports - admin/abuse-user-reports
-func adminAbuseUserReports(c *gin.Context) {
+func adminAbuseUserReports(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAccountsCreate - admin/accounts/create
-func adminAccountsCreate(c *gin.Context) {
+func adminAccountsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAccountsDelete - admin/accounts/delete
-func adminAccountsDelete(c *gin.Context) {
+func adminAccountsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAdCreate - admin/ad/create
-func adminAdCreate(c *gin.Context) {
+func adminAdCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAdDelete - admin/ad/delete
-func adminAdDelete(c *gin.Context) {
+func adminAdDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAdList - admin/ad/list
-func adminAdList(c *gin.Context) {
+func adminAdList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAdUpdate - admin/ad/update
-func adminAdUpdate(c *gin.Context) {
+func adminAdUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAnnouncementsCreate - admin/announcements/create
-func adminAnnouncementsCreate(c *gin.Context) {
+func adminAnnouncementsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAnnouncementsDelete - admin/announcements/delete
-func adminAnnouncementsDelete(c *gin.Context) {
+func adminAnnouncementsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAnnouncementsList - admin/announcements/list
-func adminAnnouncementsList(c *gin.Context) {
+func adminAnnouncementsList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminAnnouncementsUpdate - admin/announcements/update
-func adminAnnouncementsUpdate(c *gin.Context) {
+func adminAnnouncementsUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminDeleteAllFilesOfAUser - admin/delete-all-files-of-a-user
-func adminDeleteAllFilesOfAUser(c *gin.Context) {
+func adminDeleteAllFilesOfAUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminDeleteLogs - admin/delete-logs
-func adminDeleteLogs(c *gin.Context) {
+func adminDeleteLogs(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminDriveCleanRemoteFiles - admin/drive/clean-remote-files
-func adminDriveCleanRemoteFiles(c *gin.Context) {
+func adminDriveCleanRemoteFiles(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminDriveCleanup - admin/drive/cleanup
-func adminDriveCleanup(c *gin.Context) {
+func adminDriveCleanup(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminDriveFiles - admin/drive/files
-func adminDriveFiles(c *gin.Context) {
+func adminDriveFiles(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminDriveShowFile - admin/drive/show-file
-func adminDriveShowFile(c *gin.Context) {
+func adminDriveShowFile(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminEmojiAdd - admin/emoji/add
-func adminEmojiAdd(c *gin.Context) {
+func adminEmojiAdd(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminEmojiCopy - admin/emoji/copy
-func adminEmojiCopy(c *gin.Context) {
+func adminEmojiCopy(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminEmojiList - admin/emoji/list
-func adminEmojiList(c *gin.Context) {
+func adminEmojiList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminEmojiListRemote - admin/emoji/list-remote
-func adminEmojiListRemote(c *gin.Context) {
+func adminEmojiListRemote(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminEmojiRemove - admin/emoji/remove
-func adminEmojiRemove(c *gin.Context) {
+func adminEmojiRemove(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminEmojiUpdate - admin/emoji/update
-func adminEmojiUpdate(c *gin.Context) {
+func adminEmojiUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminFederationDeleteAllFiles - admin/federation/delete-all-files
-func adminFederationDeleteAllFiles(c *gin.Context) {
+func adminFederationDeleteAllFiles(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminFederationRefreshRemoteInstanceMetadata - admin/federation/refresh-remote-instance-metadata
-func adminFederationRefreshRemoteInstanceMetadata(c *gin.Context) {
+func adminFederationRefreshRemoteInstanceMetadata(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminFederationRemoveAllFollowing - admin/federation/remove-all-following
-func adminFederationRemoveAllFollowing(c *gin.Context) {
+func adminFederationRemoveAllFollowing(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminFederationUpdateInstance - admin/federation/update-instance
-func adminFederationUpdateInstance(c *gin.Context) {
+func adminFederationUpdateInstance(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminGetIndexStats - admin/get-index-stats
-func adminGetIndexStats(c *gin.Context) {
+func adminGetIndexStats(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminGetTableStats - admin/get-table-stats
-func adminGetTableStats(c *gin.Context) {
+func adminGetTableStats(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminInvite - admin/invite
-func adminInvite(c *gin.Context) {
+func adminInvite(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminModeratorsAdd - admin/moderators/add
-func adminModeratorsAdd(c *gin.Context) {
+func adminModeratorsAdd(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminModeratorsRemove - admin/moderators/remove
-func adminModeratorsRemove(c *gin.Context) {
+func adminModeratorsRemove(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminPromoCreate - admin/promo/create
-func adminPromoCreate(c *gin.Context) {
+func adminPromoCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminQueueClear - admin/queue/clear
-func adminQueueClear(c *gin.Context) {
+func adminQueueClear(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminQueueDeliverDelayed - admin/queue/deliver-delayed
-func adminQueueDeliverDelayed(c *gin.Context) {
+func adminQueueDeliverDelayed(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminQueueInboxDelayed - admin/queue/inbox-delayed
-func adminQueueInboxDelayed(c *gin.Context) {
+func adminQueueInboxDelayed(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminQueueJobs - admin/queue/jobs
-func adminQueueJobs(c *gin.Context) {
+func adminQueueJobs(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminQueueStats - admin/queue/stats
-func adminQueueStats(c *gin.Context) {
+func adminQueueStats(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminRelaysAdd - admin/relays/add
-func adminRelaysAdd(c *gin.Context) {
+func adminRelaysAdd(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminRelaysList - admin/relays/list
-func adminRelaysList(c *gin.Context) {
+func adminRelaysList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminRelaysRemove - admin/relays/remove
-func adminRelaysRemove(c *gin.Context) {
+func adminRelaysRemove(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminResetPassword - admin/reset-password
-func adminResetPassword(c *gin.Context) {
+func adminResetPassword(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminResolveAbuseUserReport - admin/resolve-abuse-user-report
-func adminResolveAbuseUserReport(c *gin.Context) {
+func adminResolveAbuseUserReport(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminResyncChart - admin/resync-chart
-func adminResyncChart(c *gin.Context) {
+func adminResyncChart(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminSendEmail - admin/send-email
-func adminSendEmail(c *gin.Context) {
+func adminSendEmail(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminServerInfo - admin/server-info
-func adminServerInfo(c *gin.Context) {
+func adminServerInfo(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminShowModerationLogs - admin/show-moderation-logs
-func adminShowModerationLogs(c *gin.Context) {
+func adminShowModerationLogs(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminShowUser - admin/show-user
-func adminShowUser(c *gin.Context) {
+func adminShowUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminShowUsers - admin/show-users
-func adminShowUsers(c *gin.Context) {
+func adminShowUsers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminSilenceUser - admin/silence-user
-func adminSilenceUser(c *gin.Context) {
+func adminSilenceUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminSuspendUser - admin/suspend-user
-func adminSuspendUser(c *gin.Context) {
+func adminSuspendUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminUnsilenceUser - admin/unsilence-user
-func adminUnsilenceUser(c *gin.Context) {
+func adminUnsilenceUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminUnsuspendUser - admin/unsuspend-user
-func adminUnsuspendUser(c *gin.Context) {
+func adminUnsuspendUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminUpdateMeta - admin/update-meta
-func adminUpdateMeta(c *gin.Context) {
+func adminUpdateMeta(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // adminVacuum - admin/vacuum
-func adminVacuum(c *gin.Context) {
+func adminVacuum(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

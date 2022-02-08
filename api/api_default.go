@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -14,25 +12,25 @@ func init() {
 }
 
 // channelsPinNote - channels/pin-note
-func channelsPinNote(c *gin.Context) {
+func channelsPinNote(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // requestResetPassword - request-reset-password
-func requestResetPassword(c *gin.Context) {
+func requestResetPassword(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // resetDb - reset-db
-func resetDb(c *gin.Context) {
+func resetDb(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // resetPassword - reset-password
-func resetPassword(c *gin.Context) {
+func resetPassword(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

@@ -1,9 +1,10 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"random.chars.jp/git/misskey/api/payload"
+	"random.chars.jp/git/misskey/config"
 )
 
 func init() {
@@ -18,36 +19,39 @@ func init() {
 }
 
 // announcements - announcements
-func announcements(c *gin.Context) {
+func announcements(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // endpoint - endpoint
-func endpoint(c *gin.Context) {
+func endpoint(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // endpoints - endpoints
-func endpoints(c *gin.Context) {
+func endpoints(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // getOnlineUsersCount - get-online-users-count
-func getOnlineUsersCount(c *gin.Context) {
+func getOnlineUsersCount(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // meta - meta
-func meta(c *gin.Context) {
+func meta(ctx Context) {
 	p := struct {
-		Detail *bool `json:"detail,omitempty"`
+		Detail *bool
 	}{}
-	if c.Bind(&p) != nil {
-		c.String(http.StatusBadRequest, "Bad Request")
+	if err := ctx.Bind(&p); err != nil {
+		if config.Log.Verbose {
+			log.Printf("error parsing meta params: %s", err)
+		}
+		ctx.BadRequest()
 		return
 	}
 
@@ -57,26 +61,26 @@ func meta(c *gin.Context) {
 	}
 
 	if !detail {
-		c.Data(http.StatusOK, gin.MIMEJSON, payload.Meta.Data())
+		ctx.RawJSON(http.StatusOK, payload.Meta.Data())
 	} else {
 		// TODO: admin
-		c.Data(http.StatusOK, gin.MIMEJSON, payload.MetaDetail.Data())
+		ctx.RawJSON(http.StatusOK, payload.MetaDetail.Data())
 	}
 }
 
 // ping - ping
-func ping(c *gin.Context) {
+func ping(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // serverInfo - server-info
-func serverInfo(c *gin.Context) {
-	c.Data(http.StatusOK, gin.MIMEJSON, payload.ServerInfo.Data())
+func serverInfo(ctx Context) {
+	ctx.RawJSON(http.StatusOK, payload.ServerInfo.Data())
 }
 
 // stats - stats
-func stats(c *gin.Context) {
+func stats(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -15,37 +14,37 @@ func init() {
 }
 
 // antennasCreate - antennas/create
-func antennasCreate(c *gin.Context) {
+func antennasCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // antennasDelete - antennas/delete
-func antennasDelete(c *gin.Context) {
+func antennasDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // antennasList - antennas/list
-func antennasList(c *gin.Context) {
+func antennasList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // antennasNotes - antennas/notes
-func antennasNotes(c *gin.Context) {
+func antennasNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // antennasShow - antennas/show
-func antennasShow(c *gin.Context) {
+func antennasShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // antennasUpdate - antennas/update
-func antennasUpdate(c *gin.Context) {
+func antennasUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -18,55 +17,55 @@ func init() {
 }
 
 // apGet - ap/get
-func apGet(c *gin.Context) {
+func apGet(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // apShow - ap/show
-func apShow(c *gin.Context) {
+func apShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationDns - federation/dns
-func federationDns(c *gin.Context) {
+func federationDns(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationFollowers - federation/followers
-func federationFollowers(c *gin.Context) {
+func federationFollowers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationFollowing - federation/following
-func federationFollowing(c *gin.Context) {
+func federationFollowing(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationInstances - federation/instances
-func federationInstances(c *gin.Context) {
+func federationInstances(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationShowInstance - federation/show-instance
-func federationShowInstance(c *gin.Context) {
+func federationShowInstance(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationUpdateRemoteUser - federation/update-remote-user
-func federationUpdateRemoteUser(c *gin.Context) {
+func federationUpdateRemoteUser(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // federationUsers - federation/users
-func federationUsers(c *gin.Context) {
+func federationUsers(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

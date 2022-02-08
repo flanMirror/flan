@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -12,13 +10,13 @@ func init() {
 }
 
 // notesReactionsCreate - notes/reactions/create
-func notesReactionsCreate(c *gin.Context) {
+func notesReactionsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesReactionsDelete - notes/reactions/delete
-func notesReactionsDelete(c *gin.Context) {
+func notesReactionsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

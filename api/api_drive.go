@@ -1,7 +1,6 @@
 package openapi
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -27,109 +26,109 @@ func init() {
 }
 
 // drive - drive
-func drive(c *gin.Context) {
+func drive(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFiles - drive/files
-func driveFiles(c *gin.Context) {
+func driveFiles(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesAttachedNotes - drive/files/attached-notes
-func driveFilesAttachedNotes(c *gin.Context) {
+func driveFilesAttachedNotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesCheckExistence - drive/files/check-existence
-func driveFilesCheckExistence(c *gin.Context) {
+func driveFilesCheckExistence(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesCreate - drive/files/create
-func driveFilesCreate(c *gin.Context) {
+func driveFilesCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesDelete - drive/files/delete
-func driveFilesDelete(c *gin.Context) {
+func driveFilesDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesFind - drive/files/find
-func driveFilesFind(c *gin.Context) {
+func driveFilesFind(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesFindByHash - drive/files/find-by-hash
-func driveFilesFindByHash(c *gin.Context) {
+func driveFilesFindByHash(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesShow - drive/files/show
-func driveFilesShow(c *gin.Context) {
+func driveFilesShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesUpdate - drive/files/update
-func driveFilesUpdate(c *gin.Context) {
+func driveFilesUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFilesUploadFromUrl - drive/files/upload-from-url
-func driveFilesUploadFromUrl(c *gin.Context) {
+func driveFilesUploadFromUrl(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFolders - drive/folders
-func driveFolders(c *gin.Context) {
+func driveFolders(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFoldersCreate - drive/folders/create
-func driveFoldersCreate(c *gin.Context) {
+func driveFoldersCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFoldersDelete - drive/folders/delete
-func driveFoldersDelete(c *gin.Context) {
+func driveFoldersDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFoldersFind - drive/folders/find
-func driveFoldersFind(c *gin.Context) {
+func driveFoldersFind(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFoldersShow - drive/folders/show
-func driveFoldersShow(c *gin.Context) {
+func driveFoldersShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveFoldersUpdate - drive/folders/update
-func driveFoldersUpdate(c *gin.Context) {
+func driveFoldersUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // driveStream - drive/stream
-func driveStream(c *gin.Context) {
+func driveStream(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

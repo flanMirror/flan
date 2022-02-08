@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -41,187 +39,187 @@ func init() {
 }
 
 // channelsTimeline - channels/timeline
-func channelsTimeline(c *gin.Context) {
+func channelsTimeline(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notes - notes
-func notes(c *gin.Context) {
+func notes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesChildren - notes/children
-func notesChildren(c *gin.Context) {
+func notesChildren(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesConversation - notes/conversation
-func notesConversation(c *gin.Context) {
+func notesConversation(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesCreate - notes/create
-func notesCreate(c *gin.Context) {
+func notesCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesDelete - notes/delete
-func notesDelete(c *gin.Context) {
+func notesDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesFavoritesCreate - notes/favorites/create
-func notesFavoritesCreate(c *gin.Context) {
+func notesFavoritesCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesFavoritesDelete - notes/favorites/delete
-func notesFavoritesDelete(c *gin.Context) {
+func notesFavoritesDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesFeatured - notes/featured
-func notesFeatured(c *gin.Context) {
+func notesFeatured(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesGlobalTimeline - notes/global-timeline
-func notesGlobalTimeline(c *gin.Context) {
+func notesGlobalTimeline(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesHybridTimeline - notes/hybrid-timeline
-func notesHybridTimeline(c *gin.Context) {
+func notesHybridTimeline(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesLocalTimeline - notes/local-timeline
-func notesLocalTimeline(c *gin.Context) {
+func notesLocalTimeline(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesMentions - notes/mentions
-func notesMentions(c *gin.Context) {
+func notesMentions(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesPollsRecommendation - notes/polls/recommendation
-func notesPollsRecommendation(c *gin.Context) {
+func notesPollsRecommendation(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesPollsVote - notes/polls/vote
-func notesPollsVote(c *gin.Context) {
+func notesPollsVote(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesReactions - notes/reactions
-func notesReactions(c *gin.Context) {
+func notesReactions(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesRenotes - notes/renotes
-func notesRenotes(c *gin.Context) {
+func notesRenotes(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesReplies - notes/replies
-func notesReplies(c *gin.Context) {
+func notesReplies(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesSearch - notes/search
-func notesSearch(c *gin.Context) {
+func notesSearch(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesSearchByTag - notes/search-by-tag
-func notesSearchByTag(c *gin.Context) {
+func notesSearchByTag(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesShow - notes/show
-func notesShow(c *gin.Context) {
+func notesShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesState - notes/state
-func notesState(c *gin.Context) {
+func notesState(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesThreadMutingCreate - notes/thread-muting/create
-func notesThreadMutingCreate(c *gin.Context) {
+func notesThreadMutingCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesThreadMutingDelete - notes/thread-muting/delete
-func notesThreadMutingDelete(c *gin.Context) {
+func notesThreadMutingDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesTimeline - notes/timeline
-func notesTimeline(c *gin.Context) {
+func notesTimeline(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesTranslate - notes/translate
-func notesTranslate(c *gin.Context) {
+func notesTranslate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesUnrenote - notes/unrenote
-func notesUnrenote(c *gin.Context) {
+func notesUnrenote(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesUserListTimeline - notes/user-list-timeline
-func notesUserListTimeline(c *gin.Context) {
+func notesUserListTimeline(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesWatchingCreate - notes/watching/create
-func notesWatchingCreate(c *gin.Context) {
+func notesWatchingCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // notesWatchingDelete - notes/watching/delete
-func notesWatchingDelete(c *gin.Context) {
+func notesWatchingDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // promoRead - promo/read
-func promoRead(c *gin.Context) {
+func promoRead(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }

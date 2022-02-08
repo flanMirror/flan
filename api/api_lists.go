@@ -2,8 +2,6 @@ package openapi
 
 import (
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -17,43 +15,43 @@ func init() {
 }
 
 // usersListsCreate - users/lists/create
-func usersListsCreate(c *gin.Context) {
+func usersListsCreate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersListsDelete - users/lists/delete
-func usersListsDelete(c *gin.Context) {
+func usersListsDelete(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersListsList - users/lists/list
-func usersListsList(c *gin.Context) {
+func usersListsList(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersListsPull - users/lists/pull
-func usersListsPull(c *gin.Context) {
+func usersListsPull(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersListsPush - users/lists/push
-func usersListsPush(c *gin.Context) {
+func usersListsPush(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersListsShow - users/lists/show
-func usersListsShow(c *gin.Context) {
+func usersListsShow(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
 
 // usersListsUpdate - users/lists/update
-func usersListsUpdate(c *gin.Context) {
+func usersListsUpdate(ctx Context) {
 	// TODO
-	placeholder(c)
+	placeholder(ctx)
 }
