@@ -2,24 +2,39 @@ package openapi
 
 import (
 	"context"
+	"database/sql"
 	"github.com/friendsofgo/errors"
 	"github.com/gin-gonic/gin"
 	json "github.com/json-iterator/go"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"io"
 	"net/http"
-	"reflect"
+	"random.chars.jp/git/misskey/api/payload"
+	"random.chars.jp/git/misskey/api/structs"
+	"random.chars.jp/git/misskey/data"
+	"random.chars.jp/git/misskey/db/models"
+	"strings"
+	"time"
 )
 
-/* note: the Bind method in this does NOT use tags
+var authenticationFailure = data.New()
 
-instead, it flips the first character of the field name to lower case and indexes the ugly map
-it also doesn't support more complex data structures, variables are directly typecasted,
-this might be a problem in the future but for now I'll not worry about it
+func init() {
+	authenticationFailure.Set(structs.APIError{
+		Message: "Authentication failed. Please ensure your token is correct.",
+		Code:    "AUTHENTICATION_FAILED",
+		ID:      "b0a7f5f8-dc2f-4171-b91f-de88ad238e14",
+		Kind:    "client",
+	})
+}
 
-this is the ugliest piece of code in this entire codebase so far */
+// UglyMap is the intermediate data structure for response body handling
+type UglyMap map[string]json.RawMessage
 
 // Context carries API call context information
-// The first call to any method that accesses the response
+// The first call to any method that accesses the response body
 // (Bind, User, etc.) is not safe for concurrent use
 type Context interface {
 	Request() *http.Request
@@ -32,18 +47,18 @@ type Context interface {
 	RawJSON(code int, data []byte)
 	String(code int, str string)
 	BadRequest()
+	InternalServerError()
 
-	UglyMap() (map[string]interface{}, error)
-	Bind(obj interface{}) error
-	// TODO: auth method
+	UglyMap() (UglyMap, error)
+	BindKey(key string, obj interface{}) (bool, error)
+	Authenticate() (*models.User, *models.App, bool, error)
 
 	Abort()
 	context.Context
 }
 
 type ginContext struct {
-	intermediate map[string]interface{}
-	// TODO: store auth info
+	intermediate UglyMap
 
 	route route
 	*gin.Context
@@ -68,7 +83,7 @@ func (ctx *ginContext) populateUglyMap() error {
 	d.UseNumber()
 	err := d.Decode(&ctx.intermediate)
 	if err == io.EOF {
-		ctx.intermediate = make(map[string]interface{})
+		ctx.intermediate = make(UglyMap)
 		return nil
 	}
 	return err
@@ -87,6 +102,11 @@ func (ctx *ginContext) BadRequest() {
 	ctx.Abort()
 }
 
+func (ctx *ginContext) InternalServerError() {
+	ctx.RawJSON(http.StatusInternalServerError, payload.InternalServerError.Data())
+	ctx.Abort()
+}
+
 // ensureUglyMap ensures the ugly map is populated
 // NOT safe for concurrent use on first access
 func (ctx *ginContext) ensureUglyMap() error {
@@ -97,7 +117,7 @@ func (ctx *ginContext) ensureUglyMap() error {
 	return nil
 }
 
-func (ctx *ginContext) UglyMap() (map[string]interface{}, error) {
+func (ctx *ginContext) UglyMap() (UglyMap, error) {
 	if err := ctx.ensureUglyMap(); err != nil {
 		return nil, err
 	}
@@ -105,39 +125,75 @@ func (ctx *ginContext) UglyMap() (map[string]interface{}, error) {
 	return ctx.intermediate, nil
 }
 
-func (ctx *ginContext) Bind(obj interface{}) error {
+func (ctx *ginContext) BindKey(key string, obj interface{}) (bool, error) {
 	if err := ctx.ensureUglyMap(); err != nil {
-		return err
+		return false, err
 	}
-	return bindMap(obj, ctx.intermediate)
+
+	if msg, ok := ctx.intermediate[key]; !ok {
+		return false, nil
+	} else {
+		return true, json.Unmarshal(msg, obj)
+	}
 }
 
-// bindMap accepts a struct and unmarshal intermediate map into it
-func bindMap(obj interface{}, intermediate map[string]interface{}) error {
-	v := reflect.ValueOf(obj).Elem()
-	t := reflect.TypeOf(obj).Elem()
-	for i := 0; i < v.NumField(); i++ {
-		name := []byte(t.Field(i).Name)
-		name[0] ^= 0x20
+func (ctx *ginContext) Authenticate() (*models.User, *models.App, bool, error) {
+	var token string
+	if ok, err := ctx.BindKey("i", &token); err != nil || !ok {
+		return nil, nil, true, err
+	}
 
-		if data, ok := intermediate[string(name)]; ok {
-			field := v.Field(i)
-			if !field.IsValid() || !field.CanSet() {
-				return errors.New("cannot set field " + string(name))
+	// upstream has is-native-token.ts with a function that checks token length equals to 16
+	if len(token) == 16 {
+		if user, err := models.Users(qm.Where("token = ?", token)).OneG(ctx); err != nil {
+			if err == sql.ErrNoRows {
+				ctx.RawJSON(http.StatusForbidden, authenticationFailure.Data())
+				return nil, nil, false, nil
 			}
-			value := reflect.ValueOf(data)
-			if field.Type() == value.Type() {
-				field.Set(value)
-			} else if reflect.PtrTo(value.Type()) == field.Type() {
-				ptr := reflect.New(value.Type())
-				ptr.Elem().Set(value)
-				field.Set(ptr)
+			return nil, nil, false, err
+		} else {
+			return user, nil, true, nil
+		}
+	} else {
+		if accessToken, err := models.AccessTokens(
+			qm.Where("(hash = ?) or (token = ?)", strings.ToLower(token), token),
+		).OneG(ctx); err != nil {
+			if err == sql.ErrNoRows {
+				ctx.RawJSON(http.StatusForbidden, authenticationFailure.Data())
+				return nil, nil, false, nil
+			}
+			return nil, nil, false, err
+		} else {
+			accessToken.LastUsedAt = null.TimeFrom(time.Now())
+			if _, err = accessToken.UpdateG(ctx, boil.Infer()); err != nil {
+				return nil, nil, false, err
+			}
+
+			var (
+				user *models.User
+				app  *models.App
+			)
+			if user, err = accessToken.UserIdUser().OneG(ctx); err != nil {
+				return nil, nil, false, err
+			}
+
+			if accessToken.AppId.Valid {
+				if app, err = accessToken.AppIdApp().OneG(ctx); err != nil {
+					return nil, nil, false, err
+				} else if app == nil {
+					return nil, nil, false, errors.New("app not found")
+				}
+				return user, &models.App{ID: accessToken.ID, Permission: app.Permission}, true, nil
 			} else {
-				return errors.New("type difference on field " + string(name) +
-					", field " + field.Type().String() +
-					", value " + value.Type().String())
+				return user, &models.App{
+					ID:          accessToken.ID,
+					CreatedAt:   accessToken.CreatedAt,
+					UserId:      null.StringFrom(accessToken.UserId),
+					Name:        accessToken.Name.String,
+					Description: accessToken.Description.String,
+					Permission:  accessToken.Permission,
+				}, true, nil
 			}
 		}
 	}
-	return nil
 }

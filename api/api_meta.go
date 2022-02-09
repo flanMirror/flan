@@ -44,27 +44,35 @@ func getOnlineUsersCount(ctx Context) {
 
 // meta - meta
 func meta(ctx Context) {
-	p := struct {
-		Detail *bool
-	}{}
-	if err := ctx.Bind(&p); err != nil {
+	var detail bool
+
+	if ok, err := ctx.BindKey("detail", &detail); err != nil {
 		if config.Log.Verbose {
-			log.Printf("error parsing meta params: %s", err)
+			log.Printf("error binding to detail field: %s", err)
 		}
 		ctx.BadRequest()
 		return
-	}
-
-	detail := true
-	if p.Detail != nil {
-		detail = *p.Detail
+	} else {
+		if !ok {
+			detail = true
+		}
 	}
 
 	if !detail {
 		ctx.RawJSON(http.StatusOK, payload.Meta.Data())
 	} else {
-		// TODO: admin
-		ctx.RawJSON(http.StatusOK, payload.MetaDetail.Data())
+		if user, _, ok, err := ctx.Authenticate(); err != nil {
+			log.Printf("error authenticating: %s", err)
+			ctx.InternalServerError()
+			return
+		} else if !ok {
+			ctx.Abort()
+			return
+		} else if user == nil || !user.IsAdmin {
+			ctx.RawJSON(http.StatusOK, payload.MetaDetail.Data())
+		} else {
+			ctx.RawJSON(http.StatusOK, payload.MetaAdmin.Data())
+		}
 	}
 }
 
