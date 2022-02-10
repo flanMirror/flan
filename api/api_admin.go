@@ -2,6 +2,8 @@ package openapi
 
 import (
 	"net/http"
+	"random.chars.jp/git/misskey/api/payload"
+	"random.chars.jp/git/misskey/db/models"
 )
 
 func init() {
@@ -334,8 +336,14 @@ func adminSendEmail(ctx Context) {
 
 // adminServerInfo - admin/server-info
 func adminServerInfo(ctx Context) {
-	// TODO
-	placeholder(ctx)
+	ctx.RequireCredential(func(ctx Context, user *models.User) {
+		if !user.IsModerator && !user.IsAdmin {
+			ctx.RawJSON(http.StatusForbidden, payload.AccessDeniedNotModerator.Data())
+			return
+		} else {
+			ctx.RawJSON(http.StatusOK, payload.AdminServerInfo.Data())
+		}
+	})
 }
 
 // adminShowModerationLogs - admin/show-moderation-logs

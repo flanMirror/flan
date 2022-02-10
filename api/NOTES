@@ -1,0 +1,10 @@
+in API handlers:
+if endpoint is declared as secure and (user != nil && token == nil) is not satisfied the handler must abort with payload.AccessDenied
+if endpoint requires file and no file is uploaded the handler must abort with payload.FileRequired
+if endpoint requires credential and user is nil the handler must abort with payload.CredentialRequired
+if endpoint has kind defined and access token is not nil and permission does not include kind the handler must abort with payload.AppLackingPermission
+if endpoint requires credential and has limit defined and the user is not admin and not moderator the handler must handle rate limiting // TODO: handle this in the wrapper
+and finally, I do not understand when payload.NoSuchEndpoint is returned, if any of you know please fix it or tell me
+
+more information will be added as we reach deeper into the original codebase
+good luck, and thanks for working on this mess with me

@@ -66,7 +66,6 @@ func meta(ctx Context) {
 			ctx.InternalServerError()
 			return
 		} else if !ok {
-			ctx.Abort()
 			return
 		} else if user == nil || !user.IsAdmin {
 			ctx.RawJSON(http.StatusOK, payload.MetaDetail.Data())

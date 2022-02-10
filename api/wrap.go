@@ -10,6 +10,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"io"
+	"log"
 	"net/http"
 	"random.chars.jp/git/misskey/api/payload"
 	"random.chars.jp/git/misskey/api/structs"
@@ -37,22 +38,42 @@ type UglyMap map[string]json.RawMessage
 // The first call to any method that accesses the response body
 // (Bind, User, etc.) is not safe for concurrent use
 type Context interface {
+	// Request returns pointer to the API call's http.Request
 	Request() *http.Request
+	// Writer returns response writer of the API call
 	Writer() http.ResponseWriter
 
+	// FullPath returns full path of matched route or empty string if not found
 	FullPath() string
+	// GetHeader gets the value of a header
 	GetHeader(key string) string
+	// BindHeader binds the headers to a struct
 	BindHeader(obj interface{}) error
+	// JSON sends marshalled JSON payload from obj
 	JSON(code int, obj interface{})
+	// RawJSON sends bytes with JSON mime type
 	RawJSON(code int, data []byte)
+	// String sends string as plaintext
 	String(code int, str string)
+	// BadRequest sends bad request and aborts
 	BadRequest()
+	// InternalServerError sends zero value of structs.APIError and aborts
 	InternalServerError()
 
+	// UglyMap returns intermediate ugly map for response body parsing
 	UglyMap() (UglyMap, error)
+	// BindKey binds to key of response body
 	BindKey(key string, obj interface{}) (bool, error)
-	Authenticate() (*models.User, *models.App, bool, error)
+	// Authenticate authenticates using response body
+	// the boolean is true when key does not exist or authentication is not successful
+	// and false when key exists but does not match
+	Authenticate() (*models.User, *models.AccessToken, bool, error)
+	// MustAuthenticate ensures authentication for required credential endpoints
+	MustAuthenticate() (*models.User, *models.AccessToken, bool, error)
+	// RequireCredential wraps a function that requires credential
+	RequireCredential(handler func(ctx Context, user *models.User))
 
+	// Abort prevents pending middleware from being called
 	Abort()
 	context.Context
 }
@@ -137,7 +158,7 @@ func (ctx *ginContext) BindKey(key string, obj interface{}) (bool, error) {
 	}
 }
 
-func (ctx *ginContext) Authenticate() (*models.User, *models.App, bool, error) {
+func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, error) {
 	var token string
 	if ok, err := ctx.BindKey("i", &token); err != nil || !ok {
 		return nil, nil, true, err
@@ -148,6 +169,7 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.App, bool, error) {
 		if user, err := models.Users(qm.Where("token = ?", token)).OneG(ctx); err != nil {
 			if err == sql.ErrNoRows {
 				ctx.RawJSON(http.StatusForbidden, authenticationFailure.Data())
+				ctx.Abort()
 				return nil, nil, false, nil
 			}
 			return nil, nil, false, err
@@ -160,6 +182,7 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.App, bool, error) {
 		).OneG(ctx); err != nil {
 			if err == sql.ErrNoRows {
 				ctx.RawJSON(http.StatusForbidden, authenticationFailure.Data())
+				ctx.Abort()
 				return nil, nil, false, nil
 			}
 			return nil, nil, false, err
@@ -183,17 +206,32 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.App, bool, error) {
 				} else if app == nil {
 					return nil, nil, false, errors.New("app not found")
 				}
-				return user, &models.App{ID: accessToken.ID, Permission: app.Permission}, true, nil
+				return user, &models.AccessToken{ID: accessToken.ID, Permission: app.Permission}, true, nil
 			} else {
-				return user, &models.App{
-					ID:          accessToken.ID,
-					CreatedAt:   accessToken.CreatedAt,
-					UserId:      null.StringFrom(accessToken.UserId),
-					Name:        accessToken.Name.String,
-					Description: accessToken.Description.String,
-					Permission:  accessToken.Permission,
-				}, true, nil
+				return user, accessToken, true, nil
 			}
 		}
+	}
+}
+
+func (ctx *ginContext) MustAuthenticate() (*models.User, *models.AccessToken, bool, error) {
+	// see api/NOTES for why this is done the way it is done
+	user, accessToken, ok, err := ctx.Authenticate()
+	if ok && err == nil && user == nil {
+		ctx.RawJSON(http.StatusUnauthorized, payload.CredentialRequired.Data())
+		ctx.Abort()
+	}
+	return user, accessToken, ok, err
+}
+
+func (ctx *ginContext) RequireCredential(handler func(ctx Context, user *models.User)) {
+	if user, _, ok, err := ctx.MustAuthenticate(); err != nil {
+		log.Printf("error authenticating: %s", err)
+		ctx.InternalServerError()
+		return
+	} else if !ok || user == nil {
+		return
+	} else {
+		handler(ctx, user)
 	}
 }
