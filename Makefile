@@ -16,8 +16,8 @@ assets: static template assets-package
 .PHONY:
 
 build: .PHONY
-	go build -o build/ $$PWD/cmd/misskey
-	go build -o build/ $$PWD/cmd/prairie
+	go build -trimpath -ldflags "-s -w" -o build/ $$PWD/cmd/misskey
+	go build -trimpath -o build/ $$PWD/cmd/prairie
 
 static: .PHONY
 	rm -rf $(PUBLIC)

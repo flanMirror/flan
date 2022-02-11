@@ -121,44 +121,44 @@ func populateMeta(metum *models.Metum, meta structs.Meta) {
 	}
 	MetaDetail.Set(meta)
 
-	meta.UseStarForReactionFallback = &metum.UseStarForReactionFallback
-	// TODO: need to test if this becomes nil after authentication is ready
-	meta.PinnedUsers = metum.PinnedUsers
-	meta.HiddenTags = metum.HiddenTags
-	meta.BlockedHosts = metum.BlockedHosts
-	meta.HCaptchaSecretKey = metum.HcaptchaSecretKey.Ptr()
-	meta.RecaptchaSecretKey = metum.RecaptchaSecretKey.Ptr()
-	meta.ProxyAccountID = metum.ProxyAccountId.Ptr()
-	meta.TwitterConsumerKey = metum.TwitterConsumerKey.Ptr()
-	meta.TwitterConsumerSecret = metum.TwitterConsumerSecret.Ptr()
-	meta.GithubClientID = metum.GithubClientId.Ptr()
-	meta.GithubClientSecret = metum.GithubClientSecret.Ptr()
-	meta.DiscordClientID = metum.DiscordClientId.Ptr()
-	meta.DiscordClientSecret = metum.DiscordClientSecret.Ptr()
-	meta.SummalyProxy = metum.SummalyProxy.Ptr()
-	meta.Email = metum.Email.Ptr()
-	meta.SmtpSecure = &metum.SmtpSecure
-	meta.SmtpHost = metum.SmtpHost.Ptr()
-	meta.SmtpPort = metum.SmtpPort.Ptr()
-	meta.SmtpUser = metum.SmtpUser.Ptr()
-	meta.SmtpPass = metum.SmtpPass.Ptr()
-	meta.SwPrivateKey = metum.SwPrivateKey.Ptr()
-	meta.UseObjectStorage = &metum.UseObjectStorage
-	meta.ObjectStorageBaseURL = metum.ObjectStorageBaseUrl.Ptr()
-	meta.ObjectStorageBucket = metum.ObjectStorageBucket.Ptr()
-	meta.ObjectStoragePrefix = metum.ObjectStoragePrefix.Ptr()
-	meta.ObjectStorageEndpoint = metum.ObjectStorageEndpoint.Ptr()
-	meta.ObjectStorageRegion = metum.ObjectStorageRegion.Ptr()
-	meta.ObjectStoragePort = metum.ObjectStoragePort.Ptr()
-	meta.ObjectStorageAccessKey = metum.ObjectStorageAccessKey.Ptr()
-	meta.ObjectStorageSecretKey = metum.ObjectStorageSecretKey.Ptr()
-	meta.ObjectStorageUseSSL = &metum.ObjectStorageUseSSL
-	meta.ObjectStorageUseProxy = &metum.ObjectStorageUseProxy
-	meta.ObjectStorageSetPublicRead = &metum.ObjectStorageSetPublicRead
-	meta.ObjectStorageS3ForcePathStyle = &metum.ObjectStorageS3ForcePathStyle
-	meta.DeeplAuthKey = metum.DeeplAuthKey.Ptr()
-	meta.DeeplIsPro = &metum.DeeplIsPro
-	MetaAdmin.Set(meta)
+	metaAdmin := structs.MetaAdmin{Meta: meta}
+	metaAdmin.UseStarForReactionFallback = metum.UseStarForReactionFallback
+	metaAdmin.PinnedUsers = metum.PinnedUsers
+	metaAdmin.HiddenTags = metum.HiddenTags
+	metaAdmin.BlockedHosts = metum.BlockedHosts
+	metaAdmin.HCaptchaSecretKey = metum.HcaptchaSecretKey
+	metaAdmin.RecaptchaSecretKey = metum.RecaptchaSecretKey
+	metaAdmin.ProxyAccountID = metum.ProxyAccountId
+	metaAdmin.TwitterConsumerKey = metum.TwitterConsumerKey
+	metaAdmin.TwitterConsumerSecret = metum.TwitterConsumerSecret
+	metaAdmin.GithubClientID = metum.GithubClientId
+	metaAdmin.GithubClientSecret = metum.GithubClientSecret
+	metaAdmin.DiscordClientID = metum.DiscordClientId
+	metaAdmin.DiscordClientSecret = metum.DiscordClientSecret
+	metaAdmin.SummalyProxy = metum.SummalyProxy
+	metaAdmin.Email = metum.Email
+	metaAdmin.SmtpSecure = metum.SmtpSecure
+	metaAdmin.SmtpHost = metum.SmtpHost
+	metaAdmin.SmtpPort = metum.SmtpPort
+	metaAdmin.SmtpUser = metum.SmtpUser
+	metaAdmin.SmtpPass = metum.SmtpPass
+	metaAdmin.SwPrivateKey = metum.SwPrivateKey
+	metaAdmin.UseObjectStorage = metum.UseObjectStorage
+	metaAdmin.ObjectStorageBaseURL = metum.ObjectStorageBaseUrl
+	metaAdmin.ObjectStorageBucket = metum.ObjectStorageBucket
+	metaAdmin.ObjectStoragePrefix = metum.ObjectStoragePrefix
+	metaAdmin.ObjectStorageEndpoint = metum.ObjectStorageEndpoint
+	metaAdmin.ObjectStorageRegion = metum.ObjectStorageRegion
+	metaAdmin.ObjectStoragePort = metum.ObjectStoragePort
+	metaAdmin.ObjectStorageAccessKey = metum.ObjectStorageAccessKey
+	metaAdmin.ObjectStorageSecretKey = metum.ObjectStorageSecretKey
+	metaAdmin.ObjectStorageUseSSL = metum.ObjectStorageUseSSL
+	metaAdmin.ObjectStorageUseProxy = metum.ObjectStorageUseProxy
+	metaAdmin.ObjectStorageSetPublicRead = metum.ObjectStorageSetPublicRead
+	metaAdmin.ObjectStorageS3ForcePathStyle = metum.ObjectStorageS3ForcePathStyle
+	metaAdmin.DeeplAuthKey = metum.DeeplAuthKey
+	metaAdmin.DeeplIsPro = metum.DeeplIsPro
+	MetaAdmin.Set(metaAdmin)
 }
 
 func getMetum() *models.Metum {
