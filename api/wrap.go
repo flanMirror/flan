@@ -31,6 +31,19 @@ func init() {
 	})
 }
 
+/* the only reason this is the way it is, is due to authentication data being sent as part of the request body alongside
+all the parameters, which makes it almost impossible to have well-defined data structures and handle them reasonably
+transparently without wasting a parse one way or another, and since upstream basically accesses the fields on-demand
+and the models in documentation are mostly bullshit, this is actually not so bad
+
+if you want to get rid of this ugliness, the only way is to go through syuilo, either make him accept my API design or
+make him learn and do proper API design, and from what I've seen, that's not going to happen any time soon, and I bet
+it won't happen before Go gets some form of generics, and maybe that'll make this code less ugly
+
+until that happens, or someone figures out a better way of doing this, this is the way it will be
+
+good luck */
+
 // UglyMap is the intermediate data structure for response body handling
 type UglyMap map[string]json.RawMessage
 
