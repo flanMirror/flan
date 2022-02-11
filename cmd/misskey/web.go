@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
-	openapi "random.chars.jp/git/misskey/api"
+	"random.chars.jp/git/misskey/api"
 	"random.chars.jp/git/misskey/config"
 	"strconv"
 	"strings"
@@ -51,7 +51,7 @@ func webSetup() {
 	router.NoRoute(serveStatic())
 	routesSetup()
 	apiGroup := router.Group("/api/")
-	openapi.RegisterRoutes(apiGroup)
+	api.RegisterRoutes(apiGroup)
 
 	if config.Web.Port < 0 {
 		if l, err := net.Listen("unix", config.Web.Host); err != nil {
@@ -101,7 +101,7 @@ func serveStatic() func(context *gin.Context) {
 			p = path.Clean(p)
 
 			if s, err := fs.Stat(public, p); err != nil || s.IsDir() {
-				openapi.Placeholder(context)
+				api.Placeholder(context)
 				return
 			}
 
@@ -115,7 +115,7 @@ func serveStatic() func(context *gin.Context) {
 		log.Print("got nil public, starting reverse proxy catch-all")
 		return func(context *gin.Context) {
 			// FIXME
-			openapi.Placeholder(context)
+			api.Placeholder(context)
 		}
 	}
 }
