@@ -17,13 +17,11 @@ import (
 const Node = "false"
 
 // NetInterface is insane and completely unnecessary and relies on too much
-// platform specific stuff, so I set it to whatever I have on my FreeBSD
-// workstation. If anyone knows of a good reason to properly populate this
-// and a cross-platform way to fetch it, do let me know. The parsing route
-// thing in upstream is absolutely insane and caused me to explode for hours
-// and end up using a very ugly workaround for it, so I wish to not do that
-// in this implementation as it is meant to address flaws as well.
-const NetInterface = "igb0"
+// platform specific stuff, if anyone knows of a good reason to properly
+// populate this and a cross-platform way to fetch it, please let me know,
+// and until that happens, this will have this hardcoded value to avoid
+// confusion
+const NetInterface = "NOT IMPLEMENTED"
 
 var (
 	// Hostname is set in init
