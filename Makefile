@@ -32,6 +32,7 @@ static: .PHONY
 	cp $$MISSKEY_ROOT/packages/backend/assets/apple-touch-icon.png $(PUBLIC)
 	cp $$MISSKEY_ROOT/packages/backend/assets/robots.txt $(PUBLIC)
 	cp $$MISSKEY_ROOT/built/_client_dist_/sw.$$($(TARGET_CMD)).js $(PUBLIC)/sw.js
+	cp $$MISSKEY_ROOT/packages/backend/assets/favicon.ico $(PUBLIC)/favicon.ico
 	cp -r $$MISSKEY_ROOT/packages/client/node_modules/@discordapp/twemoji/dist/svg $(PUBLIC)/twemoji
 
 assets-package: .PHONY
