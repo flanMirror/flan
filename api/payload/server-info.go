@@ -83,7 +83,7 @@ var (
 		info.Redis = Redis
 		info.Net = &struct {
 			Interface string `json:"interface"`
-		}{Interface: NetInterface}
+		}{NetInterface}
 		return info
 	})
 	ServerInfo = data.NewExpire(serverInfoDuration, serverInfoRefresh)
