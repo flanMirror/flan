@@ -12,4 +12,3 @@ no-tests = false
   pass = ""
   schema = "public"
   blacklist = []
-

@@ -5,6 +5,7 @@
 *.conf
 
 /build
+target/
 /TODO
 *.swp
 .idea/
