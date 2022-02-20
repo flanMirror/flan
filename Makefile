@@ -17,13 +17,10 @@ assets: static template assets-package
 
 build: .PHONY
 	go build -trimpath -ldflags "-s -w" -o build/ $$PWD/cmd/misskey
-	mvn -f cmd/prairie/deps/pug4j install
-	mvn -f cmd/prairie/pom.xml package
-	cp cmd/prairie/target/prairie.jar build/
+	go build -trimpath -o build/ $$PWD/cmd/prairie
 
 clean: .PHONY
 	rm -rf build
-	mvn -f cmd/prairie/pom.xml clean
 
 static: .PHONY
 	rm -rf $(PUBLIC)
@@ -78,7 +75,7 @@ import-db: .PHONY
 sqlboiler: .PHONY
 	-go install github.com/volatiletech/sqlboiler/v4@latest
 	-go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
-	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler --no-tests -c sqlboiler.toml psql
+	-env PATH=$$PATH:$$(go env GOPATH)/bin PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler --no-tests -c sqlboiler.toml psql
 
 	# misskey has database things named *_test and that would upset the go compiler so we rename them here
 	# we create a dummy file so boiling from the new version would work
@@ -87,6 +84,6 @@ sqlboiler: .PHONY
 
 sqlboiler-test: .PHONY
 	$(PSQL) postgres -c "alter user misskey with superuser;"
-	-env PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler -o build/sql-test -c sqlboiler.toml psql
+	-env PATH=$$PATH:$$(go env GOPATH)/bin PSQL_HOST=$$PWD/build/postgres/sock $$(go env GOPATH)/bin/sqlboiler -o build/sql-test -c sqlboiler.toml psql
 	-env PSQL_HOST=$$PWD/build/postgres/sock go test $$PWD/build/sql-test
 	rm -rf build/sql-test
