@@ -6,8 +6,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/Joker/hpp"
 	"github.com/Joker/jade"
+	"github.com/tdewolff/minify/v2/html"
+	"github.com/tdewolff/minify/v2/minify"
 )
 
 var (
@@ -71,6 +72,8 @@ create:
 		}
 	}
 
+	html.DefaultMinifier.KeepComments = true
+
 	for _, file := range files {
 		fmt.Println("translating", file.Name())
 
@@ -91,8 +94,14 @@ create:
 		// .pug -> .tmpl
 		filename := file.Name()[:len(file.Name())-3] + "tmpl"
 
+		// minify
+		min, err := minify.HTML(tmpl)
+		if err != nil {
+			fmt.Println("error minifying", filename+":", err)
+		}
+
 		// write to file
-		if err = os.WriteFile(outputDir+"/"+filename, []byte(hpp.PrPrint(tmpl)), 0644); err != nil {
+		if err = os.WriteFile(outputDir+"/"+filename, []byte(min), 0644); err != nil {
 			fmt.Println("error while writing file:", err)
 			os.Exit(1)
 		}

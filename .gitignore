@@ -6,6 +6,6 @@
 
 /build
 target/
-/TODO
+/w
 *.swp
 .idea/

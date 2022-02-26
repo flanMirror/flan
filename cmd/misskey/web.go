@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"io/fs"
 	"log"
 	"net"
@@ -48,6 +49,14 @@ func webSetup() {
 	} else {
 		router.Use(recovery())
 	}
+
+	if templates, err := template.ParseFS(assets, "assets/template/*.tmpl"); err != nil {
+		log.Fatalf("error parsing built-in templates: %s", err)
+	} else {
+		log.Printf("%d built-in templates present", len(templates.Templates()))
+		router.SetHTMLTemplate(templates)
+	}
+
 	router.NoRoute(serveStatic())
 	routesSetup()
 	apiGroup := router.Group("/api/")

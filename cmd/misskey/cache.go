@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"random.chars.jp/git/misskey/data"
 )
 
 const (
@@ -10,6 +11,7 @@ const (
 
 var (
 	apiDoc []byte
+	base   data.P
 )
 
 func init() {

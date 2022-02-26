@@ -52,6 +52,7 @@ assets-download: .PHONY
 
 template: .PHONY
 	./build/prairie -w -o $(ASSETS)/template -i $$MISSKEY_ROOT
+	patch --posix -d cmd/misskey/assets/template/ < cmd/misskey/patch/template.patch
 
 init-db: .PHONY
 	mkdir -p build/postgres/db

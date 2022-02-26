@@ -1,3 +1,1 @@
-export environment variable `MISSKEY_ROOT` to
-point to a deployed misskey root when using the
-asset packaging
+generate assets before building
