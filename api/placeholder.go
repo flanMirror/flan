@@ -7,7 +7,6 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
-	"random.chars.jp/git/misskey/config"
 )
 
 const referenceBackendURLString = "http://localhost:3001"
@@ -37,19 +36,8 @@ func placeholder(ctx Context) {
 		ctx.String(http.StatusBadRequest, "X-Forwarded-For is set")
 		return
 	}
-	//if f, ok := context.Request.Header["X-Forwarded-For"]; ok {
-	//	delete(context.Request.Header, "X-Forwarded-For")
-	//	log.Printf("deleted X-Forwarded-For in placeholder proxying from %s with content %s",
-	//		context.ClientIP(), f)
-	//}
 
-	if config.Log.Verbose {
-		if ctx.FullPath() == "" {
-			log.Print("proxying not-found route")
-		} else {
-			log.Printf("proxying route %s", ctx.FullPath())
-		}
-	}
+	ctx.(*ginContext).Context.Set("proxy", true)
 	referenceBackendReverseProxy.ServeHTTP(ctx.Writer(), ctx.Request())
 	ctx.Abort()
 }

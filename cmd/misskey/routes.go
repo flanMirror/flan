@@ -22,10 +22,11 @@ func routesSetup() {
 		context.Data(http.StatusOK, gin.MIMEJSON, spec.JSON())
 	})
 
-	router.GET("/streaming", func(context *gin.Context) {
-		context.Header("Cache-Control", "private, max-age=0")
-		context.Data(http.StatusServiceUnavailable,
-			"text/plain; charset=utf-8",
-			[]byte("Service Unavailable"))
-	})
+	// FIXME: uncomment this after proper websocket middleware is implemented
+	//router.GET("/streaming", func(context *gin.Context) {
+	//	context.Header("Cache-Control", "private, max-age=0")
+	//	context.Data(http.StatusServiceUnavailable,
+	//		"text/plain; charset=utf-8",
+	//		[]byte("Service Unavailable"))
+	//})
 }

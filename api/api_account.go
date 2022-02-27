@@ -5,6 +5,7 @@ import (
 )
 
 func init() {
+	route{http.MethodPost, "signin", signin}.register()
 	route{http.MethodPost, "blocking/create", blockingCreate}.register()
 	route{http.MethodPost, "blocking/delete", blockingDelete}.register()
 	route{http.MethodPost, "blocking/list", blockingList}.register()
@@ -31,6 +32,12 @@ func init() {
 	route{http.MethodPost, "my/apps", myApps}.register()
 	route{http.MethodPost, "sw/register", swRegister}.register()
 	route{http.MethodPost, "sw/unregister", swUnregister}.register()
+}
+
+// signin - signin
+func signin(ctx Context) {
+	// TODO
+	placeholder(ctx)
 }
 
 // blockingCreate - blocking/create

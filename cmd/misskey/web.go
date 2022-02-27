@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"io/fs"
@@ -14,6 +15,7 @@ import (
 	"random.chars.jp/git/misskey/config"
 	"strconv"
 	"strings"
+	"time"
 )
 
 //go:embed assets
@@ -44,7 +46,28 @@ func webSetup() {
 		log.Fatalf("error setting trusted proxies: %s", err)
 	}
 	if config.Log.Verbose {
-		router.Use(gin.Logger())
+		router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+			if param.Latency > time.Minute {
+				param.Latency = param.Latency - param.Latency%time.Second
+			}
+
+			prefix := ""
+			if param.Keys != nil {
+				if _, ok := param.Keys["proxy"]; ok {
+					prefix = "(proxy) "
+				}
+			}
+
+			return fmt.Sprintf("%s %3d | %-5s | %13v | %15s | %s%#v\n%s",
+				param.TimeStamp.Format("2006/01/02 15:04:05"),
+				param.StatusCode,
+				param.Method,
+				param.Latency,
+				param.ClientIP,
+				prefix, param.Path,
+				param.ErrorMessage,
+			)
+		}))
 		router.Use(gin.Recovery())
 	} else {
 		router.Use(recovery())
@@ -57,6 +80,11 @@ func webSetup() {
 		router.SetHTMLTemplate(templates)
 	}
 
+	if config.Web.HSTS && config.HTTPS {
+		router.Use(func(context *gin.Context) {
+			context.Header("strict-transport-security", "max-age=15552000; preload")
+		})
+	}
 	router.NoRoute(serveStatic())
 	routesSetup()
 	apiGroup := router.Group("/api/")
@@ -101,8 +129,6 @@ func serveStatic() func(context *gin.Context) {
 				return
 			}
 
-			// TODO: set cache
-
 			p := context.Request.URL.Path
 			if !strings.HasPrefix(p, "/") {
 				p = "/" + p
@@ -115,16 +141,26 @@ func serveStatic() func(context *gin.Context) {
 			}
 
 			setNoFrame(context)
+
+			// headers for specific paths
+			if strings.HasPrefix(p, "/assets/") ||
+				strings.HasPrefix(p, "/static-assets/") ||
+				strings.HasPrefix(p, "/client-assets/") {
+				// 7 days
+				context.Header("Cache-Control", "max-age=604800")
+			}
+			if strings.HasPrefix(p, "/twemoji/") {
+				// 30 days
+				context.Header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'")
+				context.Header("Cache-Control", "max-age=2592000")
+			}
+
 			context.FileFromFS(p, http.FS(public))
 		}
 	} else {
-		//return func(context *gin.Context) {
-		//	context.Data(http.StatusNoContent, gin.MIMEHTML, nil)
-		//}
-		log.Print("got nil public, starting reverse proxy catch-all")
+		log.Print("no public bundled, not serving")
 		return func(context *gin.Context) {
-			// FIXME
-			api.Placeholder(context)
+			context.Data(http.StatusNoContent, gin.MIMEHTML, nil)
 		}
 	}
 }
