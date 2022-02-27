@@ -2,9 +2,10 @@ package data
 
 import (
 	"log"
-	"random.chars.jp/git/misskey/config"
 	"runtime"
 	"sync"
+
+	"random.chars.jp/git/misskey/config"
 )
 
 type Eager struct {

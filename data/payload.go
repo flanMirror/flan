@@ -3,8 +3,9 @@ package data
 import (
 	"encoding/json"
 	"log"
-	"random.chars.jp/git/misskey/config"
 	"sync"
+
+	"random.chars.jp/git/misskey/config"
 )
 
 // New returns pointer to a new default Payload.

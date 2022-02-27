@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/gin-gonic/gin"
 )
 
 func recovery() gin.HandlerFunc {

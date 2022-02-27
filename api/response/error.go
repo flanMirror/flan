@@ -1,4 +1,4 @@
-package structs
+package response
 
 // APIError is the struct returned on API error,
 // zero value should be payload.InternalServerError,

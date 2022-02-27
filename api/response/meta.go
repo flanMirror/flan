@@ -1,4 +1,4 @@
-package structs
+package response
 
 import "github.com/volatiletech/null/v8"
 

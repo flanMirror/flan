@@ -2,7 +2,8 @@ package api
 
 import (
 	"net/http"
-	"random.chars.jp/git/misskey/api/payload"
+
+	"random.chars.jp/git/misskey/data/payload"
 	"random.chars.jp/git/misskey/db/models"
 )
 

@@ -1,4 +1,4 @@
-package structs
+package response
 
 type Manifest struct {
 	ShortName       string              `json:"short_name"`

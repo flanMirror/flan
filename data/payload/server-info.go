@@ -1,16 +1,17 @@
 package payload
 
 import (
+	"log"
+	"os"
+	"runtime"
+	"time"
+
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
-	"log"
-	"os"
-	"random.chars.jp/git/misskey/api/structs"
+	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data"
-	"runtime"
-	"time"
 )
 
 // Node is not what we're using
@@ -76,7 +77,7 @@ var serverInfoDuration = time.Minute * 30
 
 var (
 	AdminServerInfo = data.NewExpire(serverInfoDuration, func() interface{} {
-		info := serverInfoRefresh().(structs.ServerInfo)
+		info := serverInfoRefresh().(response.ServerInfo)
 		info.OS = OS
 		info.Node = Node
 		info.PSQL = PSQL
@@ -90,7 +91,7 @@ var (
 )
 
 func serverInfoRefresh() interface{} {
-	info := structs.ServerInfo{
+	info := response.ServerInfo{
 		Machine: Hostname,
 	}
 	info.CPU.Model = CPUModel

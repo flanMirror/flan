@@ -2,7 +2,7 @@ package payload
 
 import (
 	"github.com/volatiletech/null/v8"
-	"random.chars.jp/git/misskey/api/structs"
+	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/db"
@@ -35,7 +35,7 @@ func init() {
 	db.Meta.Register(func(data interface{}) {
 		metum := data.(*models.Metum)
 
-		populateMeta(metum, structs.Meta{
+		populateMeta(metum, response.Meta{
 			MaintainerName:  metum.MaintainerName,
 			MaintainerEmail: metum.MaintainerEmail,
 
@@ -84,7 +84,7 @@ func init() {
 	})
 }
 
-func populateMeta(metum *models.Metum, meta structs.Meta) {
+func populateMeta(metum *models.Metum, meta response.Meta) {
 	Meta.Set(meta)
 
 	meta.PinnedPages = metum.PinnedPages
@@ -104,7 +104,7 @@ func populateMeta(metum *models.Metum, meta structs.Meta) {
 		n := null.NewString("", false)
 		meta.ProxyAccountName = &n
 	}
-	meta.Features = &structs.MetaFeatures{
+	meta.Features = &response.MetaFeatures{
 		Registration:           !metum.DisableRegistration,
 		LocalTimeLine:          !metum.DisableLocalTimeline,
 		GlobalTimeLine:         !metum.DisableGlobalTimeline,
@@ -121,7 +121,7 @@ func populateMeta(metum *models.Metum, meta structs.Meta) {
 	}
 	MetaDetail.Set(meta)
 
-	metaAdmin := structs.MetaAdmin{Meta: meta}
+	metaAdmin := response.MetaAdmin{Meta: meta}
 	metaAdmin.UseStarForReactionFallback = metum.UseStarForReactionFallback
 	metaAdmin.PinnedUsers = metum.PinnedUsers
 	metaAdmin.HiddenTags = metum.HiddenTags
@@ -179,7 +179,7 @@ func refreshMeta() {
 	if m := Meta.Get(); m == nil {
 		return
 	} else {
-		populateMeta(metum, m.(structs.Meta))
+		populateMeta(metum, m.(response.Meta))
 	}
 }
 
@@ -192,9 +192,9 @@ func populateAds(ads models.AdSlice) {
 	if m := Meta.Get(); m == nil {
 		return
 	} else {
-		payload := make([]structs.MetaAd, len(ads))
+		payload := make([]response.MetaAd, len(ads))
 		for i, ad := range ads {
-			payload[i] = structs.MetaAd{
+			payload[i] = response.MetaAd{
 				ID:       ad.ID,
 				ImageURL: ad.ImageUrl,
 				Place:    ad.Place,
@@ -203,7 +203,7 @@ func populateAds(ads models.AdSlice) {
 			}
 		}
 
-		meta := m.(structs.Meta)
+		meta := m.(response.Meta)
 		meta.Ads = payload
 		populateMeta(metum, meta)
 	}
@@ -218,9 +218,9 @@ func populateEmojis(emojis models.EmojiSlice) {
 	if m := Meta.Get(); m == nil {
 		return
 	} else {
-		payload := make([]structs.MetaEmoji, len(emojis))
+		payload := make([]response.MetaEmoji, len(emojis))
 		for i, emoji := range emojis {
-			payload[i] = structs.MetaEmoji{
+			payload[i] = response.MetaEmoji{
 				ID:       emoji.ID,
 				Aliases:  emoji.Aliases,
 				Name:     emoji.Name,
@@ -230,7 +230,7 @@ func populateEmojis(emojis models.EmojiSlice) {
 			}
 		}
 
-		meta := m.(structs.Meta)
+		meta := m.(response.Meta)
 		meta.Emojis = payload
 		populateMeta(metum, meta)
 	}

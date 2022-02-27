@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+
 	"random.chars.jp/git/misskey/data"
 )
 

@@ -3,8 +3,9 @@ package api
 import (
 	"log"
 	"net/http"
-	"random.chars.jp/git/misskey/api/payload"
+
 	"random.chars.jp/git/misskey/config"
+	"random.chars.jp/git/misskey/data/payload"
 )
 
 func init() {

@@ -2,10 +2,11 @@ package config
 
 import (
 	"flag"
-	"github.com/BurntSushi/toml"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/BurntSushi/toml"
 )
 
 var (

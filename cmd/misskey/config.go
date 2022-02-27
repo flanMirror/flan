@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	"random.chars.jp/git/misskey/config"
 )
 

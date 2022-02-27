@@ -7,12 +7,13 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"random.chars.jp/git/misskey/api/payload"
-	"random.chars.jp/git/misskey/config"
-	"random.chars.jp/git/misskey/db"
-	"random.chars.jp/git/misskey/spec"
 	"strings"
 	"syscall"
+
+	"random.chars.jp/git/misskey/config"
+	"random.chars.jp/git/misskey/data/payload"
+	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/spec"
 )
 
 const banner = `

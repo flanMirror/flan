@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"log"
-	"random.chars.jp/git/misskey/db"
 	"time"
+
+	"random.chars.jp/git/misskey/db"
 )
 
 func cleanup() {

@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"html/template"
 	"io/fs"
 	"log"
@@ -11,11 +10,13 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"random.chars.jp/git/misskey/api"
-	"random.chars.jp/git/misskey/config"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"random.chars.jp/git/misskey/api"
+	"random.chars.jp/git/misskey/config"
 )
 
 //go:embed assets
@@ -130,12 +131,11 @@ func serveStatic() func(context *gin.Context) {
 			}
 
 			p := context.Request.URL.Path
-			if !strings.HasPrefix(p, "/") {
-				p = "/" + p
-			}
+			p = strings.TrimPrefix(p, "/")
 			p = path.Clean(p)
 
 			if s, err := fs.Stat(public, p); err != nil || s.IsDir() {
+				// FIXME: replace with catch-all index.html
 				api.Placeholder(context)
 				return
 			}

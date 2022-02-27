@@ -2,6 +2,14 @@ package data
 
 import "time"
 
+func NewExpire(d time.Duration, refresh func() interface{}) P {
+	return &ExpiringPayload{
+		duration: d,
+		refresh:  refresh,
+		Payload:  &Payload{get: refresh},
+	}
+}
+
 type ExpiringPayload struct {
 	current  time.Time
 	duration time.Duration
@@ -26,12 +34,4 @@ func (e *ExpiringPayload) Expired() bool {
 		return true
 	}
 	return false
-}
-
-func NewExpire(d time.Duration, refresh func() interface{}) P {
-	return &ExpiringPayload{
-		duration: d,
-		refresh:  refresh,
-		Payload:  &Payload{get: refresh},
-	}
 }

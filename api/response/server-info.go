@@ -1,4 +1,4 @@
-package structs
+package response
 
 type ServerInfo struct {
 	Machine string `json:"machine"`

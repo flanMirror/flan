@@ -1,7 +1,7 @@
 package payload
 
 import (
-	"random.chars.jp/git/misskey/api/structs"
+	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/db"
 	"random.chars.jp/git/misskey/db/models"
@@ -18,5 +18,5 @@ func init() {
 // ManifestUpdate updates Manifest payload with new name.
 // Must be called after instance name change.
 func ManifestUpdate(name string) {
-	Manifest.Set(structs.NewManifest(name))
+	Manifest.Set(response.NewManifest(name))
 }

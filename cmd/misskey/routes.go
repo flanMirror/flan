@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"random.chars.jp/git/misskey/api/payload"
+
+	"github.com/gin-gonic/gin"
+	"random.chars.jp/git/misskey/data/payload"
 	"random.chars.jp/git/misskey/spec"
 )
 
