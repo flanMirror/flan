@@ -3,6 +3,7 @@ package config
 import (
 	"flag"
 	"log"
+	"net/url"
 	"os"
 	"strings"
 
@@ -19,9 +20,14 @@ var (
 
 var (
 	HTTPS bool
+	URL   string
 )
 
 const ConfDefaultPath = "misskey.conf"
+
+type urlWrap struct {
+	*url.URL
+}
 
 type conf struct {
 	Log      logConf      `toml:"log"`
@@ -40,7 +46,7 @@ type logConf struct {
 
 type systemConf struct {
 	IDGeneration string `toml:"id_generation"`
-	// TODO: map these
+	// TODO: evaluate whether this is necessary considering go has built-in concurrency
 	//ClusterLimit          int    `yaml:"clusterLimit"`
 	//DeliverJobConcurrency int    `yaml:"deliverJobConcurrency"`
 	//InboxJobConcurrency   int    `yaml:"inboxJobConcurrency"`
@@ -54,7 +60,7 @@ type systemConf struct {
 }
 
 type webConf struct {
-	URL                 string   `toml:"url"`
+	URL                 *url.URL `toml:"url"`
 	Host                string   `toml:"host"`
 	Port                int      `toml:"port"`
 	ForwardedByClientIP bool     `toml:"proxy"`
@@ -127,7 +133,10 @@ func Parse() bool {
 		/* misskey upstream checks whether the https section in config file is set for this
 		which is absolutely insane since no sane person would run anything like that as root,
 		this is clearly a bug, so we're doing it the proper way here */
-		HTTPS = strings.HasPrefix(Web.URL, "https://")
+		HTTPS = Web.URL.Scheme == "https"
+
+		// necessary to avoid having two /
+		URL = strings.TrimSuffix(Config.Web.URL.String(), "/")
 	}()
 	if loaded {
 		panic("attempting config parse after loaded set")
@@ -154,6 +163,11 @@ func Parse() bool {
 			log.Printf("unused key in configuration file: %s", key.String())
 		}
 	}
+
+	if Config.Web.URL == nil {
+		log.Fatalf("no URL specified")
+	}
+
 	return true
 }
 
@@ -171,7 +185,7 @@ var defConf = conf{
 		SignToActivityPubGet: true,
 	},
 	Web: webConf{
-		URL:                 "",
+		URL:                 nil,
 		Host:                "127.0.0.1",
 		Port:                3000,
 		ForwardedByClientIP: true,

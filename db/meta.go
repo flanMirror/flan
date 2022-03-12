@@ -31,7 +31,7 @@ var (
 	Ads = data.NewEager(func() interface{} {
 		if ads, err := models.Ads(
 			qm.Where(
-				"\"expiresAt\" >= (? at time zone 'utc')",
+				`"expiresAt" >= (? at time zone 'utc')`,
 				time.Now().UTC().Format(TimestampFormat),
 			),
 		).AllG(context.Background()); err != nil {

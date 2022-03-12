@@ -3,27 +3,28 @@ package api
 import (
 	"context"
 	"database/sql"
+	"io"
+	"log"
+	"net/http"
+	"strings"
+	"time"
+
 	"github.com/friendsofgo/errors"
 	"github.com/gin-gonic/gin"
 	json "github.com/json-iterator/go"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"io"
-	"log"
-	"net/http"
-	"random.chars.jp/git/misskey/api/structs"
+	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/data/payload"
 	"random.chars.jp/git/misskey/db/models"
-	"strings"
-	"time"
 )
 
 var authenticationFailure = data.New()
 
 func init() {
-	authenticationFailure.Set(structs.APIError{
+	authenticationFailure.Set(response.APIError{
 		Message: "Authentication failed. Please ensure your token is correct.",
 		Code:    "AUTHENTICATION_FAILED",
 		ID:      "b0a7f5f8-dc2f-4171-b91f-de88ad238e14",

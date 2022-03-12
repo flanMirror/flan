@@ -42,7 +42,7 @@ func init() {
 			Version: spec.Target,
 
 			Name:        metum.Name.String,
-			URI:         config.Web.URL,
+			URI:         config.URL,
 			Description: metum.Description,
 			Langs:       metum.Langs,
 			TosURL:      metum.ToSUrl,

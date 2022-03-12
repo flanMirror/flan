@@ -16,7 +16,7 @@ assets: static template assets-package
 .PHONY:
 
 build: .PHONY
-	go build -trimpath -ldflags "-s -w" -o build/ $$PWD/cmd/misskey
+	go build -trimpath -ldflags "-s -w" -tags=jsoniter -o build/ $$PWD/cmd/misskey
 	go build -trimpath -o build/ $$PWD/cmd/prairie
 
 clean: .PHONY

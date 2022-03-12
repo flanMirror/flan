@@ -23,7 +23,7 @@ const banner = `
  |_|_|_|_|___|___|_,_|___|_  |
              ...but fast |___|
 
- Misskey-fast is a go implementation of Misskey %s.
+ Misskey-fast is a Go implementation of Misskey %s.
  If you like Misskey, please donate to support development. https://www.patreon.com/syuilo
 
 --- %s (PID: %d) ---

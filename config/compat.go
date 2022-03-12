@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"net/url"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -9,9 +10,19 @@ import (
 
 const confCompatDefaultPath = ".config/default.yml"
 
+func (u *urlWrap) UnmarshalYAML(unmarshal func(v interface{}) error) error {
+	var s string
+	if err := unmarshal(&s); err != nil {
+		return err
+	}
+	v, err := url.Parse(s)
+	u.URL = v
+	return err
+}
+
 type confCompat struct {
-	URL  string `yaml:"url"`
-	Port int    `yaml:"port"`
+	URL  *urlWrap `yaml:"url"`
+	Port int      `yaml:"port"`
 	DB   struct {
 		Host         string `yaml:"host"`
 		Port         int    `yaml:"port"`
@@ -84,7 +95,7 @@ func tryCompat() bool {
 			SignToActivityPubGet: c.SignToActivityPubGet,
 		},
 		Web: webConf{
-			URL:                 c.URL,
+			URL:                 c.URL.URL,
 			Host:                "127.0.0.1",
 			Port:                c.Port,
 			ForwardedByClientIP: true,

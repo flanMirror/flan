@@ -49,6 +49,39 @@ type Meta struct {
 	PinnedClipID                 *null.String  `json:"pinnedClipId,omitempty"`
 }
 
+type MetaAd struct {
+	ID       string `json:"id"`
+	URL      string `json:"url"`
+	Place    string `json:"place"`
+	Ratio    int    `json:"ratio"`
+	ImageURL string `json:"imageUrl"`
+}
+
+type MetaEmoji struct {
+	ID       string      `json:"id"`
+	Aliases  []string    `json:"aliases"`
+	Name     string      `json:"name"`
+	Category null.String `json:"category"`
+	Host     null.String `json:"host"`
+	URL      string      `json:"url"`
+}
+
+type MetaFeatures struct {
+	Registration           bool `json:"registration"`
+	LocalTimeLine          bool `json:"localTimeLine"`
+	GlobalTimeLine         bool `json:"globalTimeLine"`
+	EmailRequiredForSignup bool `json:"emailRequiredForSignup"`
+	Elasticsearch          bool `json:"elasticsearch"`
+	HCaptcha               bool `json:"hcaptcha"`
+	Recaptcha              bool `json:"recaptcha"`
+	ObjectStorage          bool `json:"objectStorage"`
+	Twitter                bool `json:"twitter"`
+	Github                 bool `json:"github"`
+	Discord                bool `json:"discord"`
+	ServiceWorker          bool `json:"serviceWorker"`
+	MiAuth                 bool `json:"miauth,omitempty"`
+}
+
 type MetaAdmin struct {
 	UseStarForReactionFallback    bool        `json:"useStarForReactionFallback"`
 	PinnedUsers                   []string    `json:"pinnedUsers"`
@@ -88,37 +121,4 @@ type MetaAdmin struct {
 	DeeplIsPro                    bool        `json:"deeplIsPro"`
 
 	Meta
-}
-
-type MetaAd struct {
-	ID       string `json:"id"`
-	URL      string `json:"url"`
-	Place    string `json:"place"`
-	Ratio    int    `json:"ratio"`
-	ImageURL string `json:"imageUrl"`
-}
-
-type MetaEmoji struct {
-	ID       string      `json:"id"`
-	Aliases  []string    `json:"aliases"`
-	Name     string      `json:"name"`
-	Category null.String `json:"category"`
-	Host     null.String `json:"host"`
-	URL      string      `json:"url"`
-}
-
-type MetaFeatures struct {
-	Registration           bool `json:"registration"`
-	LocalTimeLine          bool `json:"localTimeLine"`
-	GlobalTimeLine         bool `json:"globalTimeLine"`
-	EmailRequiredForSignup bool `json:"emailRequiredForSignup"`
-	Elasticsearch          bool `json:"elasticsearch"`
-	HCaptcha               bool `json:"hcaptcha"`
-	Recaptcha              bool `json:"recaptcha"`
-	ObjectStorage          bool `json:"objectStorage"`
-	Twitter                bool `json:"twitter"`
-	Github                 bool `json:"github"`
-	Discord                bool `json:"discord"`
-	ServiceWorker          bool `json:"serviceWorker"`
-	MiAuth                 bool `json:"miauth,omitempty"`
 }

@@ -1,0 +1,135 @@
+package pack
+
+import (
+	"context"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+	"random.chars.jp/git/misskey/config"
+	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/feed"
+)
+
+var generator = "Misskey"
+
+var ErrNoProfile = errors.New("no profile found")
+
+func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
+	link := config.URL + "/@" + user.Username
+	name := user.Username
+	if user.Name.Valid {
+		name = user.Name.String
+	}
+	author := feed.Author{
+		Link: &link,
+		Name: &name,
+	}
+
+	var profile *models.UserProfile
+	if p, err := models.UserProfiles(qm.Where(`"userId" = ?`, user.ID)).OneG(ctx); err != nil {
+		return nil, err
+	} else {
+		if p == nil {
+			return nil, ErrNoProfile
+		}
+		profile = p
+	}
+
+	// FIXME: this returns zero length slice
+	var notes models.NoteSlice
+	if n, err := models.Notes(
+		qm.Where(`"userId" = ?`, user.ID),
+		qm.Where(`"renoteId" is null`),
+		qm.Where(`visibility in ('public', 'home')`),
+
+		qm.OrderBy(`"createdAt" desc`),
+
+		qm.Limit(20),
+	).AllG(ctx); err != nil {
+		return nil, err
+	} else {
+		notes = n
+	}
+
+	var updated time.Time
+	if len(notes) > 0 {
+		updated = notes[0].CreatedAt
+	}
+
+	public := profile.FfVisibility == "public"
+	var (
+		followingCount string
+		followersCount string
+		description    string
+	)
+	if public {
+		followingCount = strconv.Itoa(user.FollowingCount)
+		followersCount = strconv.Itoa(user.FollowersCount)
+	} else {
+		followingCount = "?"
+		followersCount = "?"
+	}
+	if profile.Description.Valid {
+		description = " · " + profile.Description.String
+	}
+
+	emitter := feed.New(feed.Options{
+		ID:        link,
+		Title:     name + " (@" + user.Username + "@" + config.Web.URL.Host + ")",
+		Updated:   &updated,
+		Generator: &generator,
+		Description: s(
+			strconv.Itoa(user.NotesCount) + " Notes, " +
+				followingCount + " Following, " +
+				followersCount + " Followers" +
+				description),
+		Link:  author.Link,
+		Image: user.AvatarUrl.Ptr(),
+		FeedLinks: map[string]string{
+			"json": link + ".json",
+			"atom": link + ".atom",
+		},
+		Author:    &author,
+		Copyright: name,
+	})
+
+	emitter.Items = make([]feed.Item, len(notes))
+	for i, note := range notes {
+		var files models.DriveFileSlice
+		if len(note.FileIds) > 0 {
+			if f, err := models.DriveFiles(qm.Where("id in ?", note.FileIds)).AllG(ctx); err != nil {
+				return nil, err
+			} else {
+				files = f
+			}
+		}
+		var url *string
+		for _, file := range files {
+			if strings.HasPrefix(file.Type, "image/") {
+				// an empty string is returned to represent nil
+				if str := db.GetPublicURL(file, false, nil); str != "" {
+					url = &str
+				}
+				break
+			}
+		}
+		emitter.Items[i] = feed.Item{
+			Title:       "New note by " + name,
+			Link:        config.URL + "/notes/" + note.ID,
+			Date:        note.CreatedAt,
+			Description: note.CW.Ptr(),
+			Content:     note.Text.Ptr(),
+			Image:       url,
+		}
+	}
+
+	return emitter, nil
+}
+
+func s(str string) *string {
+	return &str
+}
