@@ -16,14 +16,16 @@ import (
 	"random.chars.jp/git/misskey/feed"
 )
 
-// TODO: fix the wrong host issue
-
 var generator = "Misskey"
 
 var ErrNoProfile = errors.New("no profile found")
 
 func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
-	link := config.URL + "/@" + user.Username
+	userRef := "@" + user.Username
+	if user.Host.Valid {
+		userRef += "@" + user.Host.String
+	}
+	link := config.URL + "/" + userRef
 	name := user.Username
 	if user.Name.Valid {
 		name = user.Name.String
@@ -82,7 +84,7 @@ func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
 
 	emitter := feed.New(feed.Options{
 		ID:        link,
-		Title:     name + " (@" + user.Username + "@" + config.Web.URL.Host + ")",
+		Title:     name + " (" + userRef + ")",
 		Updated:   &updated,
 		Generator: &generator,
 		Description: s(
