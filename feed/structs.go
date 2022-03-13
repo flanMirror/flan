@@ -5,10 +5,10 @@ import "time"
 // TODO: xml tags
 
 type Item struct {
-	Title string    `json:"title"`
-	ID    *string   `json:"id,omitempty"`
-	Link  string    `json:"link"`
-	Date  time.Time `json:"date"`
+	Title string     `json:"title"`
+	ID    *string    `json:"id,omitempty"`
+	Link  string     `json:"link"`
+	Date  *time.Time `json:"date"`
 
 	Description *string    `json:"description,omitempty"`
 	Content     *string    `json:"content,omitempty"`
@@ -24,8 +24,8 @@ type Item struct {
 	Author      []Author `json:"author,omitempty"`
 	Contributor []Author `json:"contributor,omitempty"`
 
-	Published time.Time `json:"published"`
-	Copyright *string   `json:"copyright,omitempty"`
+	Published *time.Time `json:"published"`
+	Copyright *string    `json:"copyright,omitempty"`
 
 	Extensions []Extension `json:"extensions,omitempty"`
 }

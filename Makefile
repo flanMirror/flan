@@ -1,5 +1,5 @@
 # not sure if this is still necessary but accidentally running them parallel can definitely cause a huge mess
-.NOTPARALLEL: all clean full boil assets build static assets-package assets-download template init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
+.NOTPARALLEL: all clean full boil assets build bugforbug static assets-package assets-download template init-db clean-db start-db stop-db import-db sqlboiler sqlboiler-test
 SHELL = sh
 
 TARGET_CMD = ./build/misskey target
@@ -18,6 +18,9 @@ assets: static template assets-package
 build: .PHONY
 	go build -trimpath -ldflags "-s -w" -tags=jsoniter -o build/ $$PWD/cmd/misskey
 	go build -trimpath -o build/ $$PWD/cmd/prairie
+
+bugforbug: .PHONY
+	go build -trimpath -ldflags "-s -w" -tags="jsoniter bugforbug" -o build/ $$PWD/cmd/misskey
 
 clean: .PHONY
 	rm -rf build

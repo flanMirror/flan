@@ -85,22 +85,18 @@ func notFound(ctx *gin.Context) {
 func getFeed(ctx context.Context, str string) *feed.Emitter {
 	account := acct.Parse(str)
 
-	query := models.Users()
+	var hostMod qm.QueryMod
 	if account.Host.IsLocal() {
-		query = models.Users(
-			qm.Where(`"usernameLower" = ?`, strings.ToLower(account.Username)),
-			// no host here
-			qm.Where(`"isSuspended" = false`),
-		)
+		hostMod = qm.Where("host is null")
 	} else {
-		query = models.Users(
-			qm.Where(`"usernameLower" = ?`, strings.ToLower(account.Username)),
-			qm.Where("host = ?", account.Host),
-			qm.Where(`"isSuspended" = false`),
-		)
+		hostMod = qm.Where("host = ?", account.Host)
 	}
 
-	if user, err := query.OneG(ctx); err != nil || user == nil {
+	if user, err := models.Users(
+		qm.Where(`"usernameLower" = ?`, strings.ToLower(account.Username)),
+		hostMod,
+		qm.Where(`"isSuspended" = false`),
+	).OneG(ctx); err != nil || user == nil {
 		return nil
 	} else {
 		var emitter *feed.Emitter

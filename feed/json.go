@@ -1,10 +1,10 @@
 package feed
 
 import (
-	"time"
-
 	json "github.com/json-iterator/go"
 )
+
+const RFC3339JavaScript = "2006-01-02T15:04:05.000Z07:00"
 
 type JSONFeed struct {
 	Version string `json:"version"`
@@ -167,8 +167,12 @@ func (e *Emitter) JSON() *JSONFeed {
 			feed.Items[i].Title = item.Title
 			feed.Items[i].Summary = item.Description
 			feed.Items[i].Image = item.Image
-			feed.Items[i].DateModified = item.Date.Format(time.RFC3339)
-			feed.Items[i].DatePublished = item.Published.Format(time.RFC3339)
+			if item.Date != nil {
+				feed.Items[i].DateModified = item.Date.Format(RFC3339JavaScript)
+			}
+			if item.Published != nil {
+				feed.Items[i].DatePublished = item.Published.Format(RFC3339JavaScript)
+			}
 			if len(item.Author) > 0 {
 				feed.Items[i].Author = &JSONFeedAuthor{
 					Name: item.Author[0].Name,

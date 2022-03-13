@@ -1,22 +1,20 @@
-//go:build !bugforbug
+//go:build bugforbug
 
 package pack
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/friendsofgo/errors"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/db"
 	"random.chars.jp/git/misskey/db/models"
 	"random.chars.jp/git/misskey/feed"
 )
-
-// TODO: fix the wrong host issue
 
 var generator = "Misskey"
 
