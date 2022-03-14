@@ -7,7 +7,12 @@ import (
 )
 
 const (
-	RSS2FeedDocs = "https://validator.w3.org/feed/docs/rss2.html"
+	RSS2FeedType         = "application/rss+xml"
+	RSS2FeedDocs         = "https://validator.w3.org/feed/docs/rss2.html"
+	RSS2FeedDC           = "http://purl.org/dc/elements/1.1/"
+	RSS2FeedContent      = "http://purl.org/rss/1.0/modules/content/"
+	RSS2FeedAtom         = "http://www.w3.org/2005/Atom"
+	RSS2FeedTypeCatchAll = "application/octet-stream"
 )
 
 type RSS2Feed struct {
@@ -146,7 +151,7 @@ func (e *Emitter) RSS2() *RSS2Feed {
 		feed.Channel.AtomLink = append(feed.Channel.AtomLink, RSS2FeedAtomLink{
 			Href: sanitize(atomLink),
 			Rel:  "self",
-			Type: "application/rss+xml",
+			Type: RSS2FeedType,
 		})
 	}
 	if e.Options.Hub != nil {
@@ -231,11 +236,11 @@ func (e *Emitter) RSS2() *RSS2Feed {
 	}
 
 	if feed.isContent {
-		feed.DC = "http://purl.org/dc/elements/1.1/"
-		feed.Content = "http://purl.org/rss/1.0/modules/content/"
+		feed.DC = RSS2FeedDC
+		feed.Content = RSS2FeedContent
 	}
 	if feed.isAtom {
-		feed.Atom = "http://www.w3.org/2005/Atom"
+		feed.Atom = RSS2FeedAtom
 	}
 
 	return feed
@@ -246,5 +251,5 @@ func guessType(cat string, str *string) string {
 	if len(s) > 0 {
 		return cat + s[len(s)-1]
 	}
-	return "application/octet-stream"
+	return RSS2FeedTypeCatchAll
 }

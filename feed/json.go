@@ -4,6 +4,8 @@ import (
 	json "github.com/json-iterator/go"
 )
 
+const JSONFeedVersion = "https://jsonfeed.org/version/1"
+
 type JSONFeed struct {
 	Version string `json:"version"`
 	Title   string `json:"title"`
@@ -122,8 +124,6 @@ func (t *JSONFeedItem) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(m)
 }
-
-const JSONFeedVersion = "https://jsonfeed.org/version/1"
 
 // JSON emits a JSON feed
 func (e *Emitter) JSON() *JSONFeed {
