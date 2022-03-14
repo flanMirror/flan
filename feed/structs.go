@@ -45,10 +45,10 @@ type Author struct {
 }
 
 type Category struct {
-	Name   *string `json:"name,omitempty"`
-	Domain *string `json:"domain,omitempty"`
-	Scheme *string `json:"scheme,omitempty"`
-	Term   *string `json:"term,omitempty"`
+	Name   *string `json:"name,omitempty" xml:"name,omitempty"`
+	Domain *string `json:"domain,omitempty" xml:"domain,omitempty"`
+	Scheme *string `json:"scheme,omitempty" xml:"scheme,omitempty"`
+	Term   *string `json:"term,omitempty" xml:"term,omitempty"`
 }
 
 type Options struct {
@@ -69,7 +69,7 @@ type Options struct {
 	Description *string `json:"description,omitempty"`
 	Image       *string `json:"image,omitempty"`
 	Favicon     *string `json:"favicon,omitempty"`
-	Copyright   string  `json:"copyright"`
+	Copyright   *string `json:"copyright,omitempty"`
 }
 
 type Extension struct {

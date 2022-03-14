@@ -17,6 +17,24 @@ import (
 	"random.chars.jp/git/misskey/spec"
 )
 
+const (
+	feedNone = iota
+	feedAtom1
+	feedRSS2
+	feedJSON
+)
+
+var feedStateLUT = []int{
+	// this should never be accessed
+	0,
+	// .atom
+	5,
+	// .rss
+	4,
+	// .json
+	5,
+}
+
 func routesSetup() {
 	router.GET("/manifest.json", setNoFrame, func(ctx *gin.Context) {
 		ctx.Header("Cache-Control", "max-age=300")
@@ -30,38 +48,47 @@ func routesSetup() {
 		ctx.Data(http.StatusOK, gin.MIMEJSON, spec.JSON())
 	})
 
-	// TODO: move these to the monolithic GET handler below
-	//router.GET("/@:user.atom", setNoFrame, func(ctx *gin.Context) {
-	//	emitter := getFeed(ctx, ctx.Param("user"))
-	//	if emitter == nil {
-	//		notFound(ctx)
-	//		return
-	//	}
-	//	ctx.Data(http.StatusOK, "application/atom+xml; charset=utf-8", emitter.Atom1())
-	//})
-	//router.GET("/@:user.rss", setNoFrame, func(ctx *gin.Context) {
-	//	emitter := getFeed(ctx, ctx.Param("user"))
-	//	if emitter == nil {
-	//		notFound(ctx)
-	//		return
-	//	}
-	//	ctx.Data(http.StatusOK, "application/rss+xml; charset=utf-8", emitter.RSS2())
-	//})
 	router.GET("/@:user_str", setNoFrame, func(ctx *gin.Context) {
 		user := ctx.Param("user_str")
 		segments := strings.SplitN(user, "/", 2)
 		switch len(segments) {
 		case 1:
+			feedState := feedNone
 			if strings.HasSuffix(user, ".json") {
-				user = user[:len(user)-5]
+				feedState = feedJSON
+			} else if strings.HasSuffix(user, ".rss") {
+				feedState = feedRSS2
+			} else if strings.HasSuffix(user, ".atom") {
+				feedState = feedAtom1
+			}
+
+			if feedState != feedNone {
+				user = user[:len(user)-feedStateLUT[feedState]]
 				emitter := getFeed(ctx, user)
 				if emitter == nil {
 					notFound(ctx)
 					return
 				}
-				ctx.JSON(http.StatusOK, emitter.JSON())
+				switch feedState {
+				case feedJSON:
+					ctx.Header("Content-Type", "application/json; charset=utf-8")
+					ctx.JSON(http.StatusOK, emitter.JSON())
+				case feedRSS2:
+					if data, err := emitter.RSS2().XML(); err != nil {
+						log.Printf("error generating RSS 2.0 feed for user %s: %s", user, err)
+						ctx.String(http.StatusInternalServerError, "Internal Server Error")
+						return
+					} else {
+						ctx.Data(http.StatusOK, "application/rss+xml; charset=utf-8", data)
+					}
+				case feedAtom1:
+					ctx.Header("Content-Type", "application/atom+xml; charset=utf-8")
+					ctx.XML(http.StatusOK, emitter.Atom1())
+				}
 				return
 			}
+
+			// TODO: handle user profile with no sub
 		case 2:
 			user = segments[0]
 			//sub := segments[1]

@@ -1,5 +1,22 @@
 package feed
 
+import (
+	"strings"
+)
+
+/*
+I am not going to deal with the UTC/GMT inconsistency, I don't think it matters, and I have sunk way too much time
+porting this library to Go. I hope some future programmer that has the misfortune of having to simulate the behaviour
+of the npm "feed" package find this useful, although I don't think anyone would think of looking in the reimplementation
+ of a random social media software... maybe I'll move this package to its own repository, or I move all the ported npm
+stuff to their own repository, I really don't know. writing this is driving me insane, please make it end soon
+*/
+
+const (
+	RFC3339JavaScript = "2006-01-02T15:04:05.000Z07:00"
+	DefaultGenerator  = "misskey-fast"
+)
+
 func New(opt Options) *Emitter {
 	return &Emitter{Options: opt}
 }
@@ -62,4 +79,11 @@ func (e *Emitter) AddExtensions(extensions []Extension) {
 		newExtensions[i+offset] = extensions[i]
 	}
 	e.Extensions = newExtensions
+}
+
+func sanitize(str *string) string {
+	if str == nil {
+		return ""
+	}
+	return strings.ReplaceAll(*str, "&", "&amp;")
 }

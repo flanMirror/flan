@@ -95,7 +95,7 @@ func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
 			"atom": link + ".atom",
 		},
 		Author:    &author,
-		Copyright: name,
+		Copyright: &name,
 	})
 
 	emitter.Items = make([]feed.Item, len(notes))

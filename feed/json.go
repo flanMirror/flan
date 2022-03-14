@@ -4,8 +4,6 @@ import (
 	json "github.com/json-iterator/go"
 )
 
-const RFC3339JavaScript = "2006-01-02T15:04:05.000Z07:00"
-
 type JSONFeed struct {
 	Version string `json:"version"`
 	Title   string `json:"title"`
