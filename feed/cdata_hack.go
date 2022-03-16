@@ -11,3 +11,8 @@ func cdata(str *string) *cdata_t {
 
 	return &cdata_t{Text: *str}
 }
+
+func copy_str_ptr(str *string) *string {
+	s := *str
+	return &s
+}

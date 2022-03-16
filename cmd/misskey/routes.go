@@ -82,8 +82,13 @@ func routesSetup() {
 						ctx.Data(http.StatusOK, "application/rss+xml; charset=utf-8", data)
 					}
 				case feedAtom1:
-					ctx.Header("Content-Type", "application/atom+xml; charset=utf-8")
-					ctx.XML(http.StatusOK, emitter.Atom1())
+					if data, err := emitter.Atom1().XML(); err != nil {
+						log.Printf("error generating RSS 2.0 feed for user %s: %s", user, err)
+						ctx.String(http.StatusInternalServerError, "Internal Server Error")
+						return
+					} else {
+						ctx.Data(http.StatusOK, "application/atom+xml; charset=utf-8", data)
+					}
 				}
 				return
 			}

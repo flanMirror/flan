@@ -24,7 +24,7 @@ func New(opt Options) *Emitter {
 type Emitter struct {
 	Options      Options     `json:"options"`
 	Items        []Item      `json:"items"`
-	Categories   []Category  `json:"categories"`
+	Categories   []string    `json:"categories"`
 	Contributors []Author    `json:"contributors"`
 	Extensions   []Extension `json:"extensions"`
 }
@@ -43,9 +43,9 @@ func (e *Emitter) AddItems(items []Item) {
 }
 
 // AddCategories adds an array of Category to the emitter
-func (e *Emitter) AddCategories(categories []Category) {
+func (e *Emitter) AddCategories(categories []string) {
 	offset := len(e.Categories)
-	newCategories := make([]Category, offset+len(categories))
+	newCategories := make([]string, offset+len(categories))
 	for i := 0; i < len(e.Categories); i++ {
 		newCategories[i] = e.Categories[i]
 	}

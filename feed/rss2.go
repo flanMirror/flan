@@ -37,6 +37,14 @@ func (r *RSS2Feed) XML() ([]byte, error) {
 	}
 }
 
+func (r *RSS2Feed) XMLIndent() ([]byte, error) {
+	if data, err := xml.MarshalIndent(r, "", "    "); err != nil {
+		return nil, err
+	} else {
+		return append([]byte(xml.Header), data...), nil
+	}
+}
+
 type RSS2FeedChannel struct {
 	Title         string  `xml:"title"`
 	Link          string  `xml:"link,omitempty"`
@@ -49,7 +57,7 @@ type RSS2FeedChannel struct {
 	TTL       *int               `xml:"ttl,omitempty"`
 	Image     *RSS2FeedImage     `xml:"image,omitempty"`
 	Copyright *string            `xml:"copyright,omitempty"`
-	Category  []Category         `xml:"category,omitempty"`
+	Category  []string           `xml:"category,omitempty"`
 	AtomLink  []RSS2FeedAtomLink `xml:"atom:link,omitempty"`
 
 	Item []RSS2FeedItem `xml:"item,omitempty"`
@@ -165,8 +173,7 @@ func (e *Emitter) RSS2() *RSS2Feed {
 		feed.Channel.Item = make([]RSS2FeedItem, n)
 		for i, item := range e.Items {
 			feed.Channel.Item[i].Title = cdata(&item.Title)
-			link := item.Link
-			feed.Channel.Item[i].Link = &link
+			feed.Channel.Item[i].Link = copy_str_ptr(&item.Link)
 			if item.GUID != nil {
 				feed.Channel.Item[i].GUID = item.GUID
 			} else if item.ID != nil {
@@ -223,9 +230,9 @@ func (e *Emitter) RSS2() *RSS2Feed {
 				feed.Channel.Item[i].Enclosure = &RSS2FeedEnclosure{
 					Length: 0,
 					// original library had zero value here which is "image"
-					Type: guessType("image", &item.Enclosure.URL),
+					Type: guessType("image", copy_str_ptr(&item.Enclosure.URL)),
 
-					FlattenedURL:      &item.Enclosure.URL,
+					FlattenedURL:      copy_str_ptr(&item.Enclosure.URL),
 					FlattenedType:     item.Enclosure.Type,
 					FlattenedLength:   item.Enclosure.Length,
 					FlattenedTitle:    item.Enclosure.Title,
