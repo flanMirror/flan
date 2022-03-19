@@ -8,6 +8,7 @@ import (
 	"random.chars.jp/git/misskey/config"
 )
 
+// Eager implements the EE interface
 type Eager struct {
 	fetch    func() interface{}
 	handlers []func(data interface{})
@@ -61,6 +62,8 @@ func (e *Eager) Register(handler func(data interface{})) {
 	e.handlers = append(e.handlers, handler)
 }
 
+// NewEager returns a new eagerly loading EE with fetch as the function called to eagerly load.
+// The return value of fetch would be set as the value of the EE whenever a load happens.
 func NewEager(fetch func() interface{}) EE {
 	return &Eager{
 		fetch: fetch,

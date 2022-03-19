@@ -2,6 +2,8 @@ package data
 
 import "time"
 
+// NewExpire returns a P that expires every d duration, using the return value of the refresh function
+// as the new value it holds
 func NewExpire(d time.Duration, refresh func() interface{}) P {
 	return &ExpiringPayload{
 		duration: d,
@@ -10,6 +12,7 @@ func NewExpire(d time.Duration, refresh func() interface{}) P {
 	}
 }
 
+// ExpiringPayload implements P in a periodically expiring way
 type ExpiringPayload struct {
 	current  time.Time
 	duration time.Duration

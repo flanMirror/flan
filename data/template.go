@@ -7,6 +7,7 @@ import (
 	"sync"
 )
 
+// NewTemplate returns P holding the template t, it uses data to format the template and caches the executed template
 func NewTemplate(t template.Template) P {
 	return &TemplatePayload{template: t}
 }

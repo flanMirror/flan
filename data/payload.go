@@ -8,7 +8,7 @@ import (
 	"random.chars.jp/git/misskey/config"
 )
 
-// New returns pointer to a new default Payload.
+// New returns a P implementation with no special features and lazily caches JSON response
 func New() P {
 	p := &Payload{}
 	p.get = p.Get
