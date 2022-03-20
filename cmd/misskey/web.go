@@ -139,7 +139,7 @@ func serveStatic() func(context *gin.Context) {
 			p = path.Clean(p)
 
 			if s, err := fs.Stat(public, p); err != nil || s.IsDir() {
-				ctx.Data(http.StatusOK, "text/html; charset=utf-8", baseTemplate.Data())
+				serveBase(ctx)
 				return
 			}
 

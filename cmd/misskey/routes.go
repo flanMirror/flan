@@ -50,7 +50,7 @@ func routesSetup() {
 		// get user and handle user root and sub
 		user := getUser(ctx, userStr)
 		if user == nil {
-			ctx.Next()
+			serveBase(ctx)
 			return
 		}
 
@@ -61,13 +61,13 @@ func routesSetup() {
 		metum := db.Meta.Get()
 		if metum == nil {
 			log.Println("meta cache is nil")
-			ctx.Next()
+			serveBase(ctx)
 			return
 		}
 
 		if p, err := models.FindUserProfileG(ctx, user.ID); err != nil {
 			log.Printf("error getting user profile for user %s: %s", user.ID, err)
-			ctx.Next()
+			serveBase(ctx)
 			return
 		} else {
 			profile = p
@@ -82,6 +82,10 @@ func routesSetup() {
 	//		"text/plain; charset=utf-8",
 	//		[]byte("Service Unavailable"))
 	//})
+}
+
+func serveBase(ctx *gin.Context) {
+	ctx.Data(http.StatusOK, "text/html; charset=utf-8", baseTemplate.Data())
 }
 
 func notFound(ctx *gin.Context) {
