@@ -7,20 +7,20 @@ import (
 	"sync"
 )
 
-// NewTemplate returns P holding the template t, it uses data to format the template and caches the executed template
-func NewTemplate(t template.Template) P {
-	return &TemplatePayload{template: t}
+// NewTemplate returns P holding the template t, it uses value to format the template and caches the executed template
+func NewTemplate[T any](t *template.Template) *TemplatePayload[T] {
+	return &TemplatePayload[T]{template: t}
 }
 
-type TemplatePayload struct {
-	template template.Template
-	data     interface{}
-	emitted  []byte
+type TemplatePayload[T any] struct {
+	template *template.Template
+	value    T
+	data     []byte
 	lock     sync.Mutex
 }
 
-func (t *TemplatePayload) Set(value interface{}) {
-	t.lock.Unlock()
+func (t *TemplatePayload[T]) Set(value T) {
+	t.lock.Lock()
 	defer t.lock.Unlock()
 
 	buf := bytes.NewBuffer(nil)
@@ -28,17 +28,17 @@ func (t *TemplatePayload) Set(value interface{}) {
 		log.Printf("error executing template %s: %s", t.template.Name(), err)
 		return
 	}
-	t.emitted = buf.Bytes()
+	t.data = buf.Bytes()
 }
 
-func (t *TemplatePayload) Get() interface{} {
-	return t.data
+func (t *TemplatePayload[T]) Get() T {
+	return t.value
 }
 
-func (t *TemplatePayload) Expired() bool {
+func (t *TemplatePayload[T]) Expired() bool {
 	return false
 }
 
-func (t *TemplatePayload) Data() []byte {
-	return t.emitted
+func (t *TemplatePayload[T]) Data() []byte {
+	return t.data
 }

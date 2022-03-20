@@ -74,11 +74,15 @@ func webSetup() {
 		router.Use(recovery())
 	}
 
-	if templates, err := template.ParseFS(assets, "assets/template/*.tmpl"); err != nil {
+	if templates, err := template.
+		New("all built-in templates").
+		Funcs(template.FuncMap{"str": func(str string) template.HTML { return template.HTML(str) }}).
+		ParseFS(assets, "assets/template/*.tmpl"); err != nil {
 		log.Fatalf("error parsing built-in templates: %s", err)
 	} else {
 		log.Printf("%d built-in templates present", len(templates.Templates()))
 		router.SetHTMLTemplate(templates)
+		templateSetup(templates)
 	}
 
 	if config.Web.HSTS && config.HTTPS {
@@ -124,38 +128,37 @@ func prepareAssets() fs.FS {
 
 func serveStatic() func(context *gin.Context) {
 	if public := prepareAssets(); public != nil {
-		return func(context *gin.Context) {
-			if context.Request.Method != http.MethodGet {
-				context.String(http.StatusNotFound, "Not Found")
+		return func(ctx *gin.Context) {
+			if ctx.Request.Method != http.MethodGet {
+				notFound(ctx)
 				return
 			}
 
-			p := context.Request.URL.Path
+			p := ctx.Request.URL.Path
 			p = strings.TrimPrefix(p, "/")
 			p = path.Clean(p)
 
 			if s, err := fs.Stat(public, p); err != nil || s.IsDir() {
-				// FIXME: replace with catch-all index.html
-				api.Placeholder(context)
+				ctx.Data(http.StatusOK, "text/html; charset=utf-8", baseTemplate.Data())
 				return
 			}
 
-			setNoFrame(context)
+			setNoFrame(ctx)
 
 			// headers for specific paths
 			if strings.HasPrefix(p, "/assets/") ||
 				strings.HasPrefix(p, "/static-assets/") ||
 				strings.HasPrefix(p, "/client-assets/") {
 				// 7 days
-				context.Header("Cache-Control", "max-age=604800")
+				ctx.Header("Cache-Control", "max-age=604800")
 			}
 			if strings.HasPrefix(p, "/twemoji/") {
 				// 30 days
-				context.Header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'")
-				context.Header("Cache-Control", "max-age=2592000")
+				ctx.Header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'")
+				ctx.Header("Cache-Control", "max-age=2592000")
 			}
 
-			context.FileFromFS(p, http.FS(public))
+			ctx.FileFromFS(p, http.FS(public))
 		}
 	} else {
 		log.Print("no public bundled, not serving")

@@ -7,11 +7,11 @@ import (
 	"random.chars.jp/git/misskey/db/models"
 )
 
-var Manifest = data.New()
+var Manifest = data.New[response.Manifest]()
 
 func init() {
-	db.Meta.Register(func(data interface{}) {
-		ManifestUpdate(data.(*models.Metum).Name.String)
+	db.Meta.Register(func(metum *models.Metum) {
+		ManifestUpdate(metum.Name.String)
 	})
 }
 

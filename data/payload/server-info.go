@@ -73,11 +73,11 @@ func init() {
 	}
 }
 
-var serverInfoDuration = time.Minute * 30
+var serverInfoDuration = 30 * time.Minute
 
 var (
-	AdminServerInfo = data.NewExpire(serverInfoDuration, func() interface{} {
-		info := serverInfoRefresh().(response.ServerInfo)
+	AdminServerInfo = data.NewExpire[response.ServerInfo](serverInfoDuration, func() response.ServerInfo {
+		info := serverInfoRefresh()
 		info.OS = OS
 		info.Node = Node
 		info.PSQL = PSQL
@@ -90,7 +90,7 @@ var (
 	ServerInfo = data.NewExpire(serverInfoDuration, serverInfoRefresh)
 )
 
-func serverInfoRefresh() interface{} {
+func serverInfoRefresh() response.ServerInfo {
 	info := response.ServerInfo{
 		Machine: Hostname,
 	}

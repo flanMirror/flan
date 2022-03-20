@@ -8,21 +8,23 @@ import (
 	"random.chars.jp/git/misskey/config"
 )
 
-// New returns a P implementation with no special features and lazily caches JSON response
-func New() P {
-	p := &Payload{}
+// New returns a pointer to Payload with no special features and lazily caches JSON response
+func New[T any]() *Payload[T] {
+	p := &Payload[T]{}
 	p.get = p.Get
 	return p
 }
 
-type Payload struct {
-	get   func() interface{}
-	value interface{}
+// Payload represents any caching web server payload
+type Payload[T any] struct {
+	get   func() T
+	value T
 	json  []byte
 	lock  sync.RWMutex
 }
 
-func (p *Payload) Set(v interface{}) {
+// Set sets value held by Payload
+func (p *Payload[T]) Set(v T) {
 	p.lock.Lock()
 	defer p.lock.Unlock()
 
@@ -30,15 +32,18 @@ func (p *Payload) Set(v interface{}) {
 	p.json = nil
 }
 
-func (p *Payload) Get() interface{} {
+// Get returns the value held by Payload
+func (p *Payload[T]) Get() T {
 	return p.value
 }
 
-func (p *Payload) Expired() bool {
+// Expired returns whether Payload is between expiry and next Set
+func (p *Payload[T]) Expired() bool {
 	return p.json == nil
 }
 
-func (p *Payload) Data() []byte {
+// Data returns the (cached) data generated from the value of Payload
+func (p *Payload[T]) Data() []byte {
 	if p.Expired() {
 		p.lock.Lock()
 		defer p.lock.Unlock()

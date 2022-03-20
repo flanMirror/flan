@@ -27,8 +27,7 @@ meta variant structs. after this insane initial pass is done, invalidation to an
 of these caches would work at any point onwards */
 
 var (
-	// Ads caches database entity models.AdSlice
-	Ads = data.NewEager(func() interface{} {
+	Ads = data.NewEager(func() (models.AdSlice, bool) {
 		if ads, err := models.Ads(
 			qm.Where(
 				`"expiresAt" >= (? at time zone 'utc')`,
@@ -36,63 +35,60 @@ var (
 			),
 		).AllG(context.Background()); err != nil {
 			log.Printf("error fetching ads: %s", err)
-			return nil
+			return models.AdSlice{}, false
 		} else {
-			return ads
+			return ads, true
 		}
 	})
-	// Emojis caches database entity models.EmojiSlice
-	Emojis = data.NewEager(func() interface{} {
+	Emojis = data.NewEager(func() (models.EmojiSlice, bool) {
 		if emojis, err := models.Emojis(
 			qmhelper.WhereIsNull("host"),
 			qm.OrderBy("category asc, name asc"),
 		).AllG(context.Background()); err != nil {
 			log.Printf("error fetching emojis: %s", err)
-			return nil
+			return models.EmojiSlice{}, false
 		} else {
-			return emojis
+			return emojis, true
 		}
 	})
-	// Meta caches database entity *models.Metum
-	Meta = data.NewEager(func() interface{} {
+	Meta = data.NewEager(func() (*models.Metum, bool) {
 		if m, err := fetchMeta(context.Background()); err != nil {
 			log.Printf("error fetching meta: %s", err)
-			return nil
+			return nil, false
 		} else {
-			return m
+			return m, true
 		}
 	})
-	// LocalUserCount caches int64 amount of local users
-	LocalUserCount = data.NewEager(func() interface{} {
+	LocalUserCount = data.NewEager(func() (int64, bool) {
 		if count, err := models.Users(
 			qmhelper.WhereIsNull("host"),
 		).CountG(context.Background()); err != nil {
 			log.Printf("error counting local users: %s", err)
-			return nil
+			return 0, false
 		} else {
-			return count
+			return count, true
 		}
 	})
-	// ProxyAccount caches database entity *models.User proxy account
-	ProxyAccount = data.NewEager(func() interface{} {
+	// ProxyAccount caches database entity  proxy account
+	ProxyAccount = data.NewEager(func() (*models.User, bool) {
 		var meta *models.Metum
 		if m := Meta.Get(); m == nil {
-			return nil
+			return nil, false
 		} else {
-			meta = m.(*models.Metum)
+			meta = m
 		}
 
 		if !meta.ProxyAccountId.Valid {
-			return nil
+			return nil, false
 		}
 
 		if user, err := models.Users(
 			qm.Where("id = ?", meta.ProxyAccountId.String),
 		).OneG(context.Background()); err != nil {
 			log.Printf("error fetching proxy account: %s", err)
-			return nil
+			return nil, false
 		} else {
-			return user
+			return user, true
 		}
 	})
 

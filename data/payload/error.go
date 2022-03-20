@@ -11,25 +11,25 @@ const kindZero = "client"
 
 var (
 	// InternalServerError should be sent with http.StatusInternalServerError
-	InternalServerError = data.New()
+	InternalServerError = data.New[response.APIError]()
 	// FileRequired should be sent with http.StatusBadRequest
-	FileRequired = data.New()
+	FileRequired = data.New[response.APIError]()
 	// AccessDenied should be sent with http.StatusForbidden
-	AccessDenied = data.New()
+	AccessDenied = data.New[response.APIError]()
 	// AccessDeniedNotAdmin should be sent with http.StatusForbidden
-	AccessDeniedNotAdmin = data.New()
+	AccessDeniedNotAdmin = data.New[response.APIError]()
 	// AccessDeniedNotModerator should be sent with http.StatusForbidden
-	AccessDeniedNotModerator = data.New()
+	AccessDeniedNotModerator = data.New[response.APIError]()
 	// NoSuchEndpoint should be sent with http.StatusNotFound
-	NoSuchEndpoint = data.New()
+	NoSuchEndpoint = data.New[response.APIError]()
 	// CredentialRequired should be sent with http.StatusUnauthorized
-	CredentialRequired = data.New()
+	CredentialRequired = data.New[response.APIError]()
 	// AccountSuspended should be sent with http.StatusForbidden
-	AccountSuspended = data.New()
+	AccountSuspended = data.New[response.APIError]()
 	// AppLackingPermission should be sent with http.StatusForbidden
-	AppLackingPermission = data.New()
+	AppLackingPermission = data.New[response.APIError]()
 	// RateLimitExceeded should be sent with http.StatusTooManyRequests
-	RateLimitExceeded = data.New()
+	RateLimitExceeded = data.New[response.APIError]()
 )
 
 func init() {

@@ -36,7 +36,7 @@ func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
 	}
 
 	var profile *models.UserProfile
-	if p, err := models.UserProfiles(qm.Where(`"userId" = ?`, user.ID)).OneG(ctx); err != nil {
+	if p, err := models.FindUserProfileG(ctx, user.ID); err != nil {
 		return nil, err
 	} else {
 		if p == nil {

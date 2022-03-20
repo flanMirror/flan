@@ -8,32 +8,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data/payload"
+	"random.chars.jp/git/misskey/db"
 	"random.chars.jp/git/misskey/db/models"
-	"random.chars.jp/git/misskey/db/pack"
-	"random.chars.jp/git/misskey/feed"
 	"random.chars.jp/git/misskey/sdk/acct"
 	"random.chars.jp/git/misskey/spec"
 )
-
-const (
-	feedNone = iota
-	feedAtom1
-	feedRSS2
-	feedJSON
-)
-
-var feedStateLUT = []int{
-	// this should never be accessed
-	0,
-	// .atom
-	5,
-	// .rss
-	4,
-	// .json
-	5,
-}
 
 func routesSetup() {
 	router.GET("/manifest.json", setNoFrame, func(ctx *gin.Context) {
@@ -49,56 +29,50 @@ func routesSetup() {
 	})
 
 	router.GET("/@:user_str", setNoFrame, func(ctx *gin.Context) {
-		user := ctx.Param("user_str")
-		segments := strings.SplitN(user, "/", 2)
+		var (
+			atRoot bool
+		)
+
+		userStr := ctx.Param("user_str")
+		segments := strings.SplitN(userStr, "/", 2)
 		switch len(segments) {
 		case 1:
-			feedState := feedNone
-			if strings.HasSuffix(user, ".json") {
-				feedState = feedJSON
-			} else if strings.HasSuffix(user, ".rss") {
-				feedState = feedRSS2
-			} else if strings.HasSuffix(user, ".atom") {
-				feedState = feedAtom1
-			}
-
-			if feedState != feedNone {
-				user = user[:len(user)-feedStateLUT[feedState]]
-				emitter := getFeed(ctx, user)
-				if emitter == nil {
-					notFound(ctx)
-					return
-				}
-				switch feedState {
-				case feedJSON:
-					ctx.Header("Content-Type", "application/json; charset=utf-8")
-					ctx.JSON(http.StatusOK, emitter.JSON())
-				case feedRSS2:
-					if data, err := emitter.RSS2().XML(); err != nil {
-						log.Printf("error generating RSS 2.0 feed for user %s: %s", user, err)
-						ctx.String(http.StatusInternalServerError, "Internal Server Error")
-						return
-					} else {
-						ctx.Data(http.StatusOK, "application/rss+xml; charset=utf-8", data)
-					}
-				case feedAtom1:
-					if data, err := emitter.Atom1().XML(); err != nil {
-						log.Printf("error generating RSS 2.0 feed for user %s: %s", user, err)
-						ctx.String(http.StatusInternalServerError, "Internal Server Error")
-						return
-					} else {
-						ctx.Data(http.StatusOK, "application/atom+xml; charset=utf-8", data)
-					}
-				}
+			atRoot = true
+			if feedState := getFeedState(userStr); feedState != feedNone {
+				doFeed(ctx, userStr, feedState)
 				return
 			}
-
-			// TODO: handle user profile with no sub
 		case 2:
-			user = segments[0]
-			//sub := segments[1]
-			// TODO: handle user profile and sub
+			userStr = segments[0]
+			atRoot = false
 		}
+
+		// get user and handle user root and sub
+		user := getUser(ctx, userStr)
+		if user == nil {
+			ctx.Next()
+			return
+		}
+
+		var (
+			profile *models.UserProfile
+		)
+
+		metum := db.Meta.Get()
+		if metum == nil {
+			log.Println("meta cache is nil")
+			ctx.Next()
+			return
+		}
+
+		if p, err := models.FindUserProfileG(ctx, user.ID); err != nil {
+			log.Printf("error getting user profile for user %s: %s", user.ID, err)
+			ctx.Next()
+			return
+		} else {
+			profile = p
+		}
+		ctx.HTML(http.StatusOK, "user.tmpl", getUserParameters(user, profile, atRoot))
 	})
 
 	// FIXME: uncomment this after proper websocket middleware is implemented
@@ -114,7 +88,7 @@ func notFound(ctx *gin.Context) {
 	ctx.Data(http.StatusNotFound, "text/plain", []byte("Not Found"))
 }
 
-func getFeed(ctx context.Context, str string) *feed.Emitter {
+func getUser(ctx context.Context, str string) *models.User {
 	account := acct.Parse(str)
 
 	var hostMod qm.QueryMod
@@ -131,13 +105,6 @@ func getFeed(ctx context.Context, str string) *feed.Emitter {
 	).OneG(ctx); err != nil || user == nil {
 		return nil
 	} else {
-		var emitter *feed.Emitter
-		if emitter, err = pack.Feed(ctx, user); err != nil {
-			if config.Log.Verbose {
-				log.Printf("error packing feed: %s", err)
-			}
-			return nil
-		}
-		return emitter
+		return user
 	}
 }

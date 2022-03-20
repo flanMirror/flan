@@ -11,30 +11,25 @@ import (
 )
 
 var (
-	// Meta caches structs.Meta.
-	Meta = data.New()
-	// MetaDetail caches structs.Meta with detail fields populated.
-	MetaDetail = data.New()
-	// MetaAdmin caches structs.Meta with detail and admin-only fields populated.
-	MetaAdmin = data.New()
+	Meta       = data.New[response.Meta]()
+	MetaDetail = data.New[response.Meta]()
+	MetaAdmin  = data.New[response.MetaAdmin]()
 )
 
 func init() {
-	db.Ads.Register(func(data interface{}) {
-		populateAds(data.(models.AdSlice))
+	db.Ads.Register(func(value models.AdSlice) {
+		populateAds(value)
 	})
-	db.Emojis.Register(func(data interface{}) {
-		populateEmojis(data.(models.EmojiSlice))
+	db.Emojis.Register(func(value models.EmojiSlice) {
+		populateEmojis(value)
 	})
-	db.LocalUserCount.Register(func(data interface{}) {
+	db.LocalUserCount.Register(func(_ int64) {
 		refreshMeta()
 	})
-	db.ProxyAccount.Register(func(data interface{}) {
+	db.ProxyAccount.Register(func(_ *models.User) {
 		refreshMeta()
 	})
-	db.Meta.Register(func(data interface{}) {
-		metum := data.(*models.Metum)
-
+	db.Meta.Register(func(metum *models.Metum) {
 		populateMeta(metum, response.Meta{
 			MaintainerName:  metum.MaintainerName,
 			MaintainerEmail: metum.MaintainerEmail,
@@ -91,14 +86,13 @@ func populateMeta(metum *models.Metum, meta response.Meta) {
 	meta.PinnedClipID = &metum.PinnedClipId
 	meta.CacheRemoteFiles = &metum.CacheRemoteFiles
 	meta.ProxyRemoteFiles = &metum.ProxyRemoteFiles
-	if luc, ok := db.LocalUserCount.Get().(int64); ok {
-		r := luc == 0
-		meta.RequireSetup = &r
-	}
+	r := db.LocalUserCount.Get() == 0
+	meta.RequireSetup = &r
+
 	// user packing is skipped here because it is not necessary
 	// however, keep that in mind when catching up with upstream
 	if p := db.ProxyAccount.Get(); p != nil {
-		proxyAccount := p.(*models.User)
+		proxyAccount := p
 		meta.ProxyAccountName = &proxyAccount.Name
 	} else {
 		n := null.NewString("", false)
@@ -161,77 +155,57 @@ func populateMeta(metum *models.Metum, meta response.Meta) {
 	MetaAdmin.Set(metaAdmin)
 }
 
-func getMetum() *models.Metum {
-	if m := db.Meta.Get(); m == nil {
-		return nil
-	} else {
-		return m.(*models.Metum)
-	}
-}
-
 // refreshMeta calls populateMeta if available
 func refreshMeta() {
-	metum := getMetum()
+	metum := db.Meta.Get()
 	if metum == nil {
 		return
 	}
 
-	if m := Meta.Get(); m == nil {
-		return
-	} else {
-		populateMeta(metum, m.(response.Meta))
-	}
+	populateMeta(metum, Meta.Get())
 }
 
 func populateAds(ads models.AdSlice) {
-	metum := getMetum()
+	metum := db.Meta.Get()
 	if metum == nil {
 		return
 	}
 
-	if m := Meta.Get(); m == nil {
-		return
-	} else {
-		payload := make([]response.MetaAd, len(ads))
-		for i, ad := range ads {
-			payload[i] = response.MetaAd{
-				ID:       ad.ID,
-				ImageURL: ad.ImageUrl,
-				Place:    ad.Place,
-				Ratio:    ad.Ratio,
-				URL:      ad.URL,
-			}
+	payload := make([]response.MetaAd, len(ads))
+	for i, ad := range ads {
+		payload[i] = response.MetaAd{
+			ID:       ad.ID,
+			ImageURL: ad.ImageUrl,
+			Place:    ad.Place,
+			Ratio:    ad.Ratio,
+			URL:      ad.URL,
 		}
-
-		meta := m.(response.Meta)
-		meta.Ads = payload
-		populateMeta(metum, meta)
 	}
+
+	meta := Meta.Get()
+	meta.Ads = payload
+	populateMeta(metum, meta)
 }
 
 func populateEmojis(emojis models.EmojiSlice) {
-	metum := getMetum()
+	metum := db.Meta.Get()
 	if metum == nil {
 		return
 	}
 
-	if m := Meta.Get(); m == nil {
-		return
-	} else {
-		payload := make([]response.MetaEmoji, len(emojis))
-		for i, emoji := range emojis {
-			payload[i] = response.MetaEmoji{
-				ID:       emoji.ID,
-				Aliases:  emoji.Aliases,
-				Name:     emoji.Name,
-				Category: emoji.Category,
-				Host:     emoji.Host,
-				URL:      emoji.URL,
-			}
+	payload := make([]response.MetaEmoji, len(emojis))
+	for i, emoji := range emojis {
+		payload[i] = response.MetaEmoji{
+			ID:       emoji.ID,
+			Aliases:  emoji.Aliases,
+			Name:     emoji.Name,
+			Category: emoji.Category,
+			Host:     emoji.Host,
+			URL:      emoji.URL,
 		}
-
-		meta := m.(response.Meta)
-		meta.Emojis = payload
-		populateMeta(metum, meta)
 	}
+
+	meta := Meta.Get()
+	meta.Emojis = payload
+	populateMeta(metum, meta)
 }

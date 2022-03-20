@@ -1,0 +1,40 @@
+base.tmpl
+---------
+### fields
+.instanceName
+.icon
+.iconApple
+.description
+.banner
+
+user.tmpl
+---------
+### derived from
+base.tmpl
+### fields
+.userReference
+.hasProfileDescription
+.profileDescription
+.noIndex
+.userUsername
+.userID
+.userTwitterExists
+.userTwitterScreenName
+.atRoot
+.localUser
+.url
+.userID
+.hasUserURI
+.userURI
+.hasProfileURL
+.profileURL
+.me
+.userFull
+.hasUserAvatarURL
+.userAvatarURL
+
+miscellaneous
+-------------
+none of this is documented, it's purely guesswork on my part, the ones commented as UNDOCUMENTED in code is either
+nonexistent in code or I truly cannot understand what the hell is going on. all I'm trying to say is, this stuff can
+and will be wrong, if you think something is wrong, please email me and we'll talk about it

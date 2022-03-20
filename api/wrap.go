@@ -21,7 +21,7 @@ import (
 	"random.chars.jp/git/misskey/db/models"
 )
 
-var authenticationFailure = data.New()
+var authenticationFailure = data.New[response.APIError]()
 
 func init() {
 	authenticationFailure.Set(response.APIError{
