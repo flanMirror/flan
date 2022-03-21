@@ -10,7 +10,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"random.chars.jp/git/misskey/data/payload"
 	"random.chars.jp/git/misskey/db"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 	"random.chars.jp/git/misskey/sdk/acct"
 	"random.chars.jp/git/misskey/spec"
 )
@@ -55,7 +55,7 @@ func routesSetup() {
 		}
 
 		var (
-			profile *models.UserProfile
+			profile *orm.UserProfile
 		)
 
 		metum := db.Meta.Get()
@@ -65,7 +65,7 @@ func routesSetup() {
 			return
 		}
 
-		if p, err := models.FindUserProfileG(ctx, user.ID); err != nil {
+		if p, err := orm.FindUserProfileG(ctx, user.ID); err != nil {
 			log.Printf("error getting user profile for user %s: %s", user.ID, err)
 			serveBase(ctx)
 			return
@@ -73,6 +73,18 @@ func routesSetup() {
 			profile = p
 		}
 		ctx.HTML(http.StatusOK, "user.tmpl", getUserParameters(user, profile, atRoot))
+	})
+
+	router.GET("/users/:user", func(ctx *gin.Context) {
+		if user, err := orm.Users(
+			qm.Where(`"id" = ?`, ctx.Param("user")),
+			qm.Where(`host is null`),
+			qm.Where(`"isSuspended" = false`),
+		).OneG(ctx); err != nil || user == nil {
+			notFound(ctx)
+		} else {
+			ctx.Redirect(http.StatusFound, "/@"+user.Username)
+		}
 	})
 
 	// FIXME: uncomment this after proper websocket middleware is implemented
@@ -92,7 +104,7 @@ func notFound(ctx *gin.Context) {
 	ctx.Data(http.StatusNotFound, "text/plain", []byte("Not Found"))
 }
 
-func getUser(ctx context.Context, str string) *models.User {
+func getUser(ctx context.Context, str string) *orm.User {
 	account := acct.Parse(str)
 
 	var hostMod qm.QueryMod
@@ -102,7 +114,7 @@ func getUser(ctx context.Context, str string) *models.User {
 		hostMod = qm.Where("host = ?", account.Host)
 	}
 
-	if user, err := models.Users(
+	if user, err := orm.Users(
 		qm.Where(`"usernameLower" = ?`, strings.ToLower(account.Username)),
 		hostMod,
 		qm.Where(`"isSuspended" = false`),

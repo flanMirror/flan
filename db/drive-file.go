@@ -6,7 +6,7 @@ import (
 	"github.com/volatiletech/null/v8"
 	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/config"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 )
 
 func ValidateFilename(name string) bool {
@@ -16,7 +16,7 @@ func ValidateFilename(name string) bool {
 		!strings.ContainsAny(name, "/\\")
 }
 
-func GetPublicProperties(file *models.DriveFile) (response.DriveFileProperties, error) {
+func GetPublicProperties(file *orm.DriveFile) (response.DriveFileProperties, error) {
 	var properties response.DriveFileProperties
 
 	if err := file.Properties.Unmarshal(&properties); err != nil {
@@ -36,7 +36,7 @@ func GetPublicProperties(file *models.DriveFile) (response.DriveFileProperties, 
 var imageMime = []string{"image/png", "image/apng", "image/gif", "image/jpeg", "image/webp", "image/svg+xml"}
 
 // GetPublicURL gets public URL of a drive file, thumbnail false by default, meta nil by default
-func GetPublicURL(file *models.DriveFile, thumbnail bool, meta *models.Metum) string {
+func GetPublicURL(file *orm.DriveFile, thumbnail bool, meta *orm.Metum) string {
 	if file.URI.Valid {
 		if file.UserHost.Valid && config.System.MediaProxy != "" {
 			q := map[string]string{

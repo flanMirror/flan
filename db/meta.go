@@ -9,7 +9,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
 	"random.chars.jp/git/misskey/data"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 )
 
 /* this is ridiculous, why the hell is ads and emoji sent with everything else??
@@ -27,31 +27,31 @@ meta variant structs. after this insane initial pass is done, invalidation to an
 of these caches would work at any point onwards */
 
 var (
-	Ads = data.NewEager(func() (models.AdSlice, bool) {
-		if ads, err := models.Ads(
+	Ads = data.NewEager(func() (orm.AdSlice, bool) {
+		if ads, err := orm.Ads(
 			qm.Where(
 				`"expiresAt" >= (? at time zone 'utc')`,
 				time.Now().UTC().Format(TimestampFormat),
 			),
 		).AllG(context.Background()); err != nil {
 			log.Printf("error fetching ads: %s", err)
-			return models.AdSlice{}, false
+			return orm.AdSlice{}, false
 		} else {
 			return ads, true
 		}
 	})
-	Emojis = data.NewEager(func() (models.EmojiSlice, bool) {
-		if emojis, err := models.Emojis(
+	Emojis = data.NewEager(func() (orm.EmojiSlice, bool) {
+		if emojis, err := orm.Emojis(
 			qmhelper.WhereIsNull("host"),
 			qm.OrderBy("category asc, name asc"),
 		).AllG(context.Background()); err != nil {
 			log.Printf("error fetching emojis: %s", err)
-			return models.EmojiSlice{}, false
+			return orm.EmojiSlice{}, false
 		} else {
 			return emojis, true
 		}
 	})
-	Meta = data.NewEager(func() (*models.Metum, bool) {
+	Meta = data.NewEager(func() (*orm.Metum, bool) {
 		if m, err := fetchMeta(context.Background()); err != nil {
 			log.Printf("error fetching meta: %s", err)
 			return nil, false
@@ -60,7 +60,7 @@ var (
 		}
 	})
 	LocalUserCount = data.NewEager(func() (int64, bool) {
-		if count, err := models.Users(
+		if count, err := orm.Users(
 			qmhelper.WhereIsNull("host"),
 		).CountG(context.Background()); err != nil {
 			log.Printf("error counting local users: %s", err)
@@ -70,8 +70,8 @@ var (
 		}
 	})
 	// ProxyAccount caches database entity  proxy account
-	ProxyAccount = data.NewEager(func() (*models.User, bool) {
-		var meta *models.Metum
+	ProxyAccount = data.NewEager(func() (*orm.User, bool) {
+		var meta *orm.Metum
 		if m := Meta.Get(); m == nil {
 			return nil, false
 		} else {
@@ -82,7 +82,7 @@ var (
 			return nil, false
 		}
 
-		if user, err := models.Users(
+		if user, err := orm.Users(
 			qm.Where("id = ?", meta.ProxyAccountId.String),
 		).OneG(context.Background()); err != nil {
 			log.Printf("error fetching proxy account: %s", err)
@@ -100,7 +100,7 @@ const (
 	MaxImageCommentLength = 512
 )
 
-func fetchMeta(ctx context.Context) (*models.Metum, error) {
+func fetchMeta(ctx context.Context) (*orm.Metum, error) {
 	// upstream does this because apparently some "bugs" from the past
 	// has caused multiple entries to appear
 	// reading the code it's clearly caused by a race condition which we've
@@ -109,7 +109,7 @@ func fetchMeta(ctx context.Context) (*models.Metum, error) {
 	metaLock.RLock()
 	defer metaLock.RUnlock()
 
-	if m, err := models.Meta(qm.OrderBy("id desc")).OneG(ctx); err != nil {
+	if m, err := orm.Meta(qm.OrderBy("id desc")).OneG(ctx); err != nil {
 		return nil, err
 	} else {
 		if m == nil {
@@ -119,8 +119,8 @@ func fetchMeta(ctx context.Context) (*models.Metum, error) {
 			metaLock.Lock()
 			defer metaLock.Unlock()
 			log.Print("got nil meta from database, setting defaults")
-			m = &models.Metum{ID: "x"}
-			if err = models.Meta().BindG(ctx, m); err != nil {
+			m = &orm.Metum{ID: "x"}
+			if err = orm.Meta().BindG(ctx, m); err != nil {
 				return nil, err
 			}
 		}

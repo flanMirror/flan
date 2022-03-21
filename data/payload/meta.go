@@ -6,7 +6,7 @@ import (
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/db"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 	"random.chars.jp/git/misskey/spec"
 )
 
@@ -17,19 +17,19 @@ var (
 )
 
 func init() {
-	db.Ads.Register(func(value models.AdSlice) {
+	db.Ads.Register(func(value orm.AdSlice) {
 		populateAds(value)
 	})
-	db.Emojis.Register(func(value models.EmojiSlice) {
+	db.Emojis.Register(func(value orm.EmojiSlice) {
 		populateEmojis(value)
 	})
 	db.LocalUserCount.Register(func(_ int64) {
 		refreshMeta()
 	})
-	db.ProxyAccount.Register(func(_ *models.User) {
+	db.ProxyAccount.Register(func(_ *orm.User) {
 		refreshMeta()
 	})
-	db.Meta.Register(func(metum *models.Metum) {
+	db.Meta.Register(func(metum *orm.Metum) {
 		populateMeta(metum, response.Meta{
 			MaintainerName:  metum.MaintainerName,
 			MaintainerEmail: metum.MaintainerEmail,
@@ -79,7 +79,7 @@ func init() {
 	})
 }
 
-func populateMeta(metum *models.Metum, meta response.Meta) {
+func populateMeta(metum *orm.Metum, meta response.Meta) {
 	Meta.Set(meta)
 
 	meta.PinnedPages = metum.PinnedPages
@@ -165,7 +165,7 @@ func refreshMeta() {
 	populateMeta(metum, Meta.Get())
 }
 
-func populateAds(ads models.AdSlice) {
+func populateAds(ads orm.AdSlice) {
 	metum := db.Meta.Get()
 	if metum == nil {
 		return
@@ -187,7 +187,7 @@ func populateAds(ads models.AdSlice) {
 	populateMeta(metum, meta)
 }
 
-func populateEmojis(emojis models.EmojiSlice) {
+func populateEmojis(emojis orm.EmojiSlice) {
 	metum := db.Meta.Get()
 	if metum == nil {
 		return

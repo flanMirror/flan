@@ -1,6 +1,6 @@
 /cmd/misskey/assets/public
 /cmd/misskey/assets/template
-/db/models
+/db/orm
 /.config
 *.conf
 

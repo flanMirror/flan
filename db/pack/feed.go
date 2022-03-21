@@ -12,7 +12,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/db"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 	"random.chars.jp/git/misskey/feed"
 )
 
@@ -20,7 +20,7 @@ var generator = "Misskey"
 
 var ErrNoProfile = errors.New("no profile found")
 
-func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
+func Feed(ctx context.Context, user *orm.User) (*feed.Emitter, error) {
 	userRef := "@" + user.Username
 	if user.Host.Valid {
 		userRef += "@" + user.Host.String
@@ -35,8 +35,8 @@ func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
 		Name: &name,
 	}
 
-	var profile *models.UserProfile
-	if p, err := models.FindUserProfileG(ctx, user.ID); err != nil {
+	var profile *orm.UserProfile
+	if p, err := orm.FindUserProfileG(ctx, user.ID); err != nil {
 		return nil, err
 	} else {
 		if p == nil {
@@ -45,8 +45,8 @@ func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
 		profile = p
 	}
 
-	var notes models.NoteSlice
-	if n, err := models.Notes(
+	var notes orm.NoteSlice
+	if n, err := orm.Notes(
 		qm.Where(`"userId" = ?`, user.ID),
 		qm.Where(`"renoteId" is null`),
 		qm.Where(`visibility in ('public', 'home')`),
@@ -104,9 +104,9 @@ func Feed(ctx context.Context, user *models.User) (*feed.Emitter, error) {
 
 	emitter.Items = make([]feed.Item, len(notes))
 	for i, note := range notes {
-		var files models.DriveFileSlice
+		var files orm.DriveFileSlice
 		if len(note.FileIds) > 0 {
-			if f, err := models.DriveFiles(qm.Where("id in ?", note.FileIds)).AllG(ctx); err != nil {
+			if f, err := orm.DriveFiles(qm.Where("id in ?", note.FileIds)).AllG(ctx); err != nil {
 				return nil, err
 			} else {
 				files = f

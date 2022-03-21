@@ -8,7 +8,7 @@ import (
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/db"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 	"random.chars.jp/git/misskey/spec"
 )
 
@@ -65,7 +65,7 @@ const (
 )
 
 func init() {
-	db.Meta.Register(func(metum *models.Metum) {
+	db.Meta.Register(func(metum *orm.Metum) {
 		//.instanceName - name of instance, must fall back to "Misskey" if invalid
 		//.icon         - icon URL of instance, must fall back to "/favicon.ico" if invalid
 		//.iconApple    - icon URL of instance, must fall back to "/apple-touch-icon.png" if invalid
@@ -115,7 +115,7 @@ func copyCommon(target map[string]any) {
 		value["banner"]
 }
 
-func getUserParameters(user *models.User, profile *models.UserProfile, atRoot bool) map[string]any {
+func getUserParameters(user *orm.User, profile *orm.UserProfile, atRoot bool) map[string]any {
 	//.atRoot                - whether the request is directed and the root of the user page
 	//.userReference         - reference string of the user, "$DISPLAY_NAME (@$USERNAME)" or "@$USERNAME" if display name is invalid
 	//.hasProfileDescription - whether profile.Description is valid

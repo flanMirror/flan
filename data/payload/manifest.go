@@ -4,13 +4,13 @@ import (
 	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/db"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 )
 
 var Manifest = data.New[response.Manifest]()
 
 func init() {
-	db.Meta.Register(func(metum *models.Metum) {
+	db.Meta.Register(func(metum *orm.Metum) {
 		ManifestUpdate(metum.Name.String)
 	})
 }

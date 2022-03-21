@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"random.chars.jp/git/misskey/data/payload"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 )
 
 func init() {
@@ -337,7 +337,7 @@ func adminSendEmail(ctx Context) {
 
 // adminServerInfo - admin/server-info
 func adminServerInfo(ctx Context) {
-	ctx.RequireCredential(func(ctx Context, user *models.User) {
+	ctx.RequireCredential(func(ctx Context, user *orm.User) {
 		if !user.IsModerator && !user.IsAdmin {
 			ctx.RawJSON(http.StatusForbidden, payload.AccessDeniedNotModerator.Data())
 			return

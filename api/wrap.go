@@ -18,7 +18,7 @@ import (
 	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/data/payload"
-	"random.chars.jp/git/misskey/db/models"
+	"random.chars.jp/git/misskey/db/orm"
 )
 
 var authenticationFailure = data.New[response.APIError]()
@@ -81,11 +81,11 @@ type Context interface {
 	// Authenticate authenticates using response body
 	// the boolean is true when key does not exist or authentication is not successful
 	// and false when key exists but does not match
-	Authenticate() (*models.User, *models.AccessToken, bool, error)
+	Authenticate() (*orm.User, *orm.AccessToken, bool, error)
 	// MustAuthenticate ensures authentication for required credential endpoints
-	MustAuthenticate() (*models.User, *models.AccessToken, bool, error)
+	MustAuthenticate() (*orm.User, *orm.AccessToken, bool, error)
 	// RequireCredential wraps a function that requires credential
-	RequireCredential(handler func(ctx Context, user *models.User))
+	RequireCredential(handler func(ctx Context, user *orm.User))
 
 	// Abort prevents pending middleware from being called
 	Abort()
@@ -172,7 +172,7 @@ func (ctx *ginContext) BindKey(key string, obj interface{}) (bool, error) {
 	}
 }
 
-func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, error) {
+func (ctx *ginContext) Authenticate() (*orm.User, *orm.AccessToken, bool, error) {
 	var token string
 	if ok, err := ctx.BindKey("i", &token); err != nil || !ok {
 		return nil, nil, true, err
@@ -180,7 +180,7 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, 
 
 	// upstream has is-native-token.ts with a function that checks token length equals to 16
 	if len(token) == 16 {
-		if user, err := models.Users(qm.Where("token = ?", token)).OneG(ctx); err != nil {
+		if user, err := orm.Users(qm.Where("token = ?", token)).OneG(ctx); err != nil {
 			if err == sql.ErrNoRows {
 				ctx.RawJSON(http.StatusForbidden, authenticationFailure.Data())
 				ctx.Abort()
@@ -191,7 +191,7 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, 
 			return user, nil, true, nil
 		}
 	} else {
-		if accessToken, err := models.AccessTokens(
+		if accessToken, err := orm.AccessTokens(
 			qm.Where("(hash = ?) or (token = ?)", strings.ToLower(token), token),
 		).OneG(ctx); err != nil {
 			if err == sql.ErrNoRows {
@@ -207,8 +207,8 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, 
 			}
 
 			var (
-				user *models.User
-				app  *models.App
+				user *orm.User
+				app  *orm.App
 			)
 			if user, err = accessToken.UserIdUser().OneG(ctx); err != nil {
 				return nil, nil, false, err
@@ -220,7 +220,7 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, 
 				} else if app == nil {
 					return nil, nil, false, errors.New("app not found")
 				}
-				return user, &models.AccessToken{ID: accessToken.ID, Permission: app.Permission}, true, nil
+				return user, &orm.AccessToken{ID: accessToken.ID, Permission: app.Permission}, true, nil
 			} else {
 				return user, accessToken, true, nil
 			}
@@ -228,7 +228,7 @@ func (ctx *ginContext) Authenticate() (*models.User, *models.AccessToken, bool, 
 	}
 }
 
-func (ctx *ginContext) MustAuthenticate() (*models.User, *models.AccessToken, bool, error) {
+func (ctx *ginContext) MustAuthenticate() (*orm.User, *orm.AccessToken, bool, error) {
 	// see api/NOTES for why this is done the way it is done
 	user, accessToken, ok, err := ctx.Authenticate()
 	if ok && err == nil && user == nil {
@@ -238,7 +238,7 @@ func (ctx *ginContext) MustAuthenticate() (*models.User, *models.AccessToken, bo
 	return user, accessToken, ok, err
 }
 
-func (ctx *ginContext) RequireCredential(handler func(ctx Context, user *models.User)) {
+func (ctx *ginContext) RequireCredential(handler func(ctx Context, user *orm.User)) {
 	if user, _, ok, err := ctx.MustAuthenticate(); err != nil {
 		log.Printf("error authenticating: %s", err)
 		ctx.InternalServerError()

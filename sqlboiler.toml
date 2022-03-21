@@ -1,5 +1,5 @@
-pkgname = "models"
-output = "db/models"
+pkgname = "orm"
+output = "db/orm"
 wipe = true
 add-global-variants = true
 no-tests = false
