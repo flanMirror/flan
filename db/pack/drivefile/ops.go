@@ -1,4 +1,4 @@
-package db
+package drivefile
 
 import (
 	"strings"
@@ -7,6 +7,7 @@ import (
 	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/db/orm"
+	"random.chars.jp/git/misskey/prelude"
 )
 
 func ValidateFilename(name string) bool {
@@ -45,7 +46,7 @@ func GetPublicURL(file *orm.DriveFile, thumbnail bool, meta *orm.Metum) string {
 			if thumbnail {
 				q["thumbnail"] = "1"
 			}
-			return AppendQuery(config.System.MediaProxy, Query(q))
+			return prelude.AppendQuery(config.System.MediaProxy, prelude.Query(q))
 		}
 
 		if file.IsLink && meta != nil && meta.ProxyRemoteFiles {

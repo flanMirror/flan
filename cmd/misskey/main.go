@@ -13,6 +13,7 @@ import (
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data/payload"
 	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/redis"
 	"random.chars.jp/git/misskey/spec"
 )
 
@@ -48,8 +49,8 @@ func main() {
 		log.Print("legacy configuration file loaded, please consider converting to new format")
 	}
 
-	db.Cache = db.NewRedisClient()
-	if info, err := db.Cache.Info(context.Background(), "server").Result(); err != nil {
+	redis.Instance = redis.New()
+	if info, err := redis.Instance.Info(context.Background(), "server").Result(); err != nil {
 		log.Fatalf("error getting redis info: %s", err)
 	} else {
 		if f := strings.SplitN(info, "redis_version:", 2); len(f) == 2 {

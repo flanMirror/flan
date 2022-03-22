@@ -1,7 +1,7 @@
 package main
 
 import (
-	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/cache"
 )
 
 // populateDBCache is called once database connection is established
@@ -11,9 +11,9 @@ func populateDBCache() {
 
 	// order is important for these initial expirations
 	// see db/meta.go for further explanation
-	db.LocalUserCount.Expire()
-	db.Meta.Expire()
-	db.Ads.Expire()
-	db.Emojis.Expire()
-	db.ProxyAccount.Expire()
+	cache.LocalUserCount.Expire()
+	cache.Meta.Expire()
+	cache.Ads.Expire()
+	cache.Emojis.Expire()
+	cache.ProxyAccount.Expire()
 }

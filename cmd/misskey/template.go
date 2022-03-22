@@ -7,8 +7,9 @@ import (
 
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data"
-	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/cache"
 	"random.chars.jp/git/misskey/db/orm"
+	"random.chars.jp/git/misskey/db/raw"
 	"random.chars.jp/git/misskey/spec"
 )
 
@@ -65,7 +66,7 @@ const (
 )
 
 func init() {
-	db.Meta.Register(func(metum *orm.Metum) {
+	cache.Meta.Register(func(metum *orm.Metum) {
 		//.instanceName - name of instance, must fall back to "Misskey" if invalid
 		//.icon         - icon URL of instance, must fall back to "/favicon.ico" if invalid
 		//.iconApple    - icon URL of instance, must fall back to "/apple-touch-icon.png" if invalid
@@ -174,7 +175,7 @@ func getUserParameters(user *orm.User, profile *orm.UserProfile, atRoot bool) ma
 	value["profileURL"] = profile.URL.String
 
 	var me []string
-	var fields data.ProfileFields
+	var fields raw.ProfileFields
 	if err := profile.Fields.Unmarshal(&fields); err == nil {
 		for _, field := range fields {
 			if strings.HasPrefix(field.Value, "https:") ||

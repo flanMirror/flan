@@ -11,10 +11,13 @@ import (
 	"github.com/friendsofgo/errors"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"random.chars.jp/git/misskey/config"
-	"random.chars.jp/git/misskey/db"
 	"random.chars.jp/git/misskey/db/orm"
+	"random.chars.jp/git/misskey/db/pack/drivefile"
+	"random.chars.jp/git/misskey/db/qhelper"
 	"random.chars.jp/git/misskey/feed"
 )
+
+/* this fixes the bug where remote users would be treated as local users with their name */
 
 var generator = "Misskey"
 
@@ -47,9 +50,9 @@ func Feed(ctx context.Context, user *orm.User) (*feed.Emitter, error) {
 
 	var notes orm.NoteSlice
 	if n, err := orm.Notes(
-		qm.Where(`"userId" = ?`, user.ID),
-		qm.Where(`"renoteId" is null`),
-		qm.Where(`visibility in ('public', 'home')`),
+		qhelper.UserID(user.ID),
+		qhelper.NotRenote,
+		qhelper.PubliclyAvailable,
 
 		qm.OrderBy(`"createdAt" desc`),
 
@@ -116,7 +119,7 @@ func Feed(ctx context.Context, user *orm.User) (*feed.Emitter, error) {
 		for _, file := range files {
 			if strings.HasPrefix(file.Type, "image/") {
 				// an empty string is returned to represent nil
-				if str := db.GetPublicURL(file, false, nil); str != "" {
+				if str := drivefile.GetPublicURL(file, false, nil); str != "" {
 					url = &str
 				}
 				break

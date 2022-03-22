@@ -1,10 +1,8 @@
-//go:build !bugforbug
+//go:build bugforbug
 
 package response
 
 import "random.chars.jp/git/misskey/db/orm"
-
-// this fixes the nonsensical behaviour where icon does not change
 
 type Manifest struct {
 	ShortName       string              `json:"short_name"`
@@ -64,16 +62,9 @@ func NewManifest(metum *orm.Metum) Manifest {
 		},
 	}
 
-	// FIXME: new version added colours, please remember that when catching up!
-
 	if metum.Name.Valid {
 		m.ShortName = metum.Name.String
 		m.Name = metum.Name.String
-	}
-	if metum.IconUrl.Valid {
-		// FIXME: scale the images
-		m.Icons[0].Src = metum.IconUrl.String
-		m.Icons[1].Src = metum.IconUrl.String
 	}
 	return m
 }

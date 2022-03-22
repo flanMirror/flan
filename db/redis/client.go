@@ -1,4 +1,4 @@
-package db
+package redis
 
 import (
 	"context"
@@ -9,7 +9,37 @@ import (
 	"random.chars.jp/git/misskey/config"
 )
 
-var Cache Redis
+var Instance Redis
+
+// New returns pointer to a new Client with the parameters
+// specified in the config file.
+func New() Redis {
+	c := redis.NewClient(&redis.Options{
+		Addr: fmt.Sprintf("%s:%d",
+			config.External.Redis.Host,
+			config.External.Redis.Port),
+		DB:       config.External.Redis.DB,
+		Password: config.External.Redis.Password,
+	})
+
+	if config.External.Redis.Prefix == "" {
+		return &Client{c}
+	} else {
+		return &PrefixedRedisClient{c, config.External.Redis.Prefix}
+	}
+}
+
+type Client struct {
+	*redis.Client
+}
+
+func (r *Client) WithTimeout(timeout time.Duration) Redis {
+	return &Client{r.Client.WithTimeout(timeout)}
+}
+
+func (r *Client) WithContext(ctx context.Context) Redis {
+	return &Client{r.Client.WithContext(ctx)}
+}
 
 type Redis interface {
 	Del(ctx context.Context, keys ...string) *redis.IntCmd
@@ -223,34 +253,4 @@ type Redis interface {
 	Save(ctx context.Context) *redis.StatusCmd
 	Shutdown(ctx context.Context) *redis.StatusCmd
 	Close() error
-}
-
-type RedisClient struct {
-	*redis.Client
-}
-
-func (r *RedisClient) WithTimeout(timeout time.Duration) Redis {
-	return &RedisClient{r.Client.WithTimeout(timeout)}
-}
-
-func (r *RedisClient) WithContext(ctx context.Context) Redis {
-	return &RedisClient{r.Client.WithContext(ctx)}
-}
-
-// NewRedisClient returns a new Redis client with the parameters
-// specified in the config file.
-func NewRedisClient() Redis {
-	c := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%d",
-			config.External.Redis.Host,
-			config.External.Redis.Port),
-		DB:       config.External.Redis.DB,
-		Password: config.External.Redis.Password,
-	})
-
-	if config.External.Redis.Prefix == "" {
-		return &RedisClient{c}
-	} else {
-		return &PrefixedRedisClient{c, config.External.Redis.Prefix}
-	}
 }

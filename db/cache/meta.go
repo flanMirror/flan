@@ -1,4 +1,4 @@
-package db
+package cache
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qmhelper"
 	"random.chars.jp/git/misskey/data"
 	"random.chars.jp/git/misskey/db/orm"
+	"random.chars.jp/git/misskey/db/qhelper"
 )
 
 /* this is ridiculous, why the hell is ads and emoji sent with everything else??
@@ -27,12 +28,12 @@ meta variant structs. after this insane initial pass is done, invalidation to an
 of these caches would work at any point onwards */
 
 var (
+	// Ads caches ads as part of the meta response
+	// and is invalidated when
+	// TODO
 	Ads = data.NewEager(func() (orm.AdSlice, bool) {
 		if ads, err := orm.Ads(
-			qm.Where(
-				`"expiresAt" >= (? at time zone 'utc')`,
-				time.Now().UTC().Format(TimestampFormat),
-			),
+			qhelper.ExpiresAt(time.Now()),
 		).AllG(context.Background()); err != nil {
 			log.Printf("error fetching ads: %s", err)
 			return orm.AdSlice{}, false
@@ -40,6 +41,9 @@ var (
 			return ads, true
 		}
 	})
+	// Emojis caches emojis as part of the meta response
+	// and is invalidated when
+	// TODO
 	Emojis = data.NewEager(func() (orm.EmojiSlice, bool) {
 		if emojis, err := orm.Emojis(
 			qmhelper.WhereIsNull("host"),
@@ -51,6 +55,9 @@ var (
 			return emojis, true
 		}
 	})
+	// Meta caches the instance metadata
+	// and is invalidated when
+	// TODO
 	Meta = data.NewEager(func() (*orm.Metum, bool) {
 		if m, err := fetchMeta(context.Background()); err != nil {
 			log.Printf("error fetching meta: %s", err)
@@ -59,6 +66,9 @@ var (
 			return m, true
 		}
 	})
+	// LocalUserCount caches the local user count
+	// and is invalidated when
+	// a local user is created or destroyed
 	LocalUserCount = data.NewEager(func() (int64, bool) {
 		if count, err := orm.Users(
 			qmhelper.WhereIsNull("host"),
@@ -69,7 +79,9 @@ var (
 			return count, true
 		}
 	})
-	// ProxyAccount caches database entity  proxy account
+	// ProxyAccount caches the proxy account
+	// and is invalidated when
+	// the proxy account is set or unset
 	ProxyAccount = data.NewEager(func() (*orm.User, bool) {
 		var meta *orm.Metum
 		if m := Meta.Get(); m == nil {
@@ -82,9 +94,8 @@ var (
 			return nil, false
 		}
 
-		if user, err := orm.Users(
-			qm.Where("id = ?", meta.ProxyAccountId.String),
-		).OneG(context.Background()); err != nil {
+		if user, err := orm.FindUserG(context.Background(),
+			meta.ProxyAccountId.String); err != nil {
 			log.Printf("error fetching proxy account: %s", err)
 			return nil, false
 		} else {
@@ -109,7 +120,9 @@ func fetchMeta(ctx context.Context) (*orm.Metum, error) {
 	metaLock.RLock()
 	defer metaLock.RUnlock()
 
-	if m, err := orm.Meta(qm.OrderBy("id desc")).OneG(ctx); err != nil {
+	if m, err := orm.Meta(
+		qm.OrderBy("id desc"),
+	).OneG(ctx); err != nil {
 		return nil, err
 	} else {
 		if m == nil {

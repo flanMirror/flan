@@ -11,8 +11,8 @@ import (
 
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"random.chars.jp/git/misskey/config"
-	"random.chars.jp/git/misskey/db"
 	"random.chars.jp/git/misskey/db/orm"
+	"random.chars.jp/git/misskey/db/pack/drivefile"
 	"random.chars.jp/git/misskey/feed"
 )
 
@@ -112,7 +112,7 @@ func Feed(ctx context.Context, user *orm.User) (*feed.Emitter, error) {
 		for _, file := range files {
 			if strings.HasPrefix(file.Type, "image/") {
 				// an empty string is returned to represent nil
-				if str := db.GetPublicURL(file, false, nil); str != "" {
+				if str := drivefile.GetPublicURL(file, false, nil); str != "" {
 					url = &str
 				}
 				break

@@ -12,6 +12,7 @@ import (
 
 var DB *sql.DB
 
+// Open connects to the postgresql database and sets it as the global executor
 func Open() error {
 	sslMode := "disable"
 	if config.External.Postgres.SSL {
@@ -36,6 +37,7 @@ func Open() error {
 	return nil
 }
 
+// Close closes the database connection
 func Close() error {
 	if DB != nil {
 		return DB.Close()

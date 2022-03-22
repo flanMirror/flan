@@ -76,8 +76,10 @@ func init() {
 var serverInfoDuration = 30 * time.Minute
 
 var (
+	// AdminServerInfo caches the response of admin/server-info
+	// and is invalidated every 30 minutes
 	AdminServerInfo = data.NewExpire[response.ServerInfo](serverInfoDuration, func() response.ServerInfo {
-		info := serverInfoRefresh()
+		info := serverInfoFetch()
 		info.OS = OS
 		info.Node = Node
 		info.PSQL = PSQL
@@ -87,10 +89,14 @@ var (
 		}{NetInterface}
 		return info
 	})
-	ServerInfo = data.NewExpire(serverInfoDuration, serverInfoRefresh)
+	// ServerInfo caches the response of server-info
+	// and is invalidated every 30 minutes
+	ServerInfo = data.NewExpire(serverInfoDuration, serverInfoFetch)
 )
 
-func serverInfoRefresh() response.ServerInfo {
+// serverInfoFetch fetches server-info response
+// with admin/server-info populated inline
+func serverInfoFetch() response.ServerInfo {
 	info := response.ServerInfo{
 		Machine: Hostname,
 	}

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/redis"
 )
 
 func cleanup() {
@@ -15,8 +16,8 @@ func cleanup() {
 		log.Printf("error shutting down web server: %s", err)
 	}
 
-	if db.Cache != nil {
-		if err := db.Cache.Close(); err != nil {
+	if redis.Instance != nil {
+		if err := redis.Instance.Close(); err != nil {
 			log.Printf("error closing redis: %s", err)
 		}
 	}

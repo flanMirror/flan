@@ -1,4 +1,4 @@
-package data
+package raw
 
 type ProfileFields []ProfileField
 

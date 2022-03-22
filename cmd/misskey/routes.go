@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"random.chars.jp/git/misskey/data/payload"
-	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/cache"
 	"random.chars.jp/git/misskey/db/orm"
+	"random.chars.jp/git/misskey/db/qhelper"
 	"random.chars.jp/git/misskey/sdk/acct"
 	"random.chars.jp/git/misskey/spec"
 )
@@ -58,7 +58,7 @@ func routesSetup() {
 			profile *orm.UserProfile
 		)
 
-		metum := db.Meta.Get()
+		metum := cache.Meta.Get()
 		if metum == nil {
 			log.Println("meta cache is nil")
 			serveBase(ctx)
@@ -77,9 +77,9 @@ func routesSetup() {
 
 	router.GET("/users/:user", func(ctx *gin.Context) {
 		if user, err := orm.Users(
-			qm.Where(`"id" = ?`, ctx.Param("user")),
-			qm.Where(`host is null`),
-			qm.Where(`"isSuspended" = false`),
+			qhelper.IDString(ctx.Param("user")),
+			qhelper.LocalHost,
+			qhelper.NotSuspended,
 		).OneG(ctx); err != nil || user == nil {
 			notFound(ctx)
 		} else {
@@ -107,17 +107,10 @@ func notFound(ctx *gin.Context) {
 func getUser(ctx context.Context, str string) *orm.User {
 	account := acct.Parse(str)
 
-	var hostMod qm.QueryMod
-	if account.Host.IsLocal() {
-		hostMod = qm.Where("host is null")
-	} else {
-		hostMod = qm.Where("host = ?", account.Host)
-	}
-
 	if user, err := orm.Users(
-		qm.Where(`"usernameLower" = ?`, strings.ToLower(account.Username)),
-		hostMod,
-		qm.Where(`"isSuspended" = false`),
+		qhelper.UsernameLower(account.Username),
+		qhelper.Host(account.Host),
+		qhelper.NotSuspended,
 	).OneG(ctx); err != nil || user == nil {
 		return nil
 	} else {

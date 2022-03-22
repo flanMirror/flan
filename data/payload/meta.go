@@ -5,31 +5,40 @@ import (
 	"random.chars.jp/git/misskey/api/response"
 	"random.chars.jp/git/misskey/config"
 	"random.chars.jp/git/misskey/data"
-	"random.chars.jp/git/misskey/db"
+	"random.chars.jp/git/misskey/db/cache"
 	"random.chars.jp/git/misskey/db/orm"
 	"random.chars.jp/git/misskey/spec"
 )
 
 var (
-	Meta       = data.New[response.Meta]()
+	// Meta caches the response of meta
+	// and is updated when
+	// db.Meta is invalidated, using the populateMeta function
+	Meta = data.New[response.Meta]()
+	// MetaDetail caches the response of meta when detail is requested, with an unprivileged context
+	// and is updated when
+	// Meta is updated, using the populateMeta function
 	MetaDetail = data.New[response.Meta]()
-	MetaAdmin  = data.New[response.MetaAdmin]()
+	// MetaAdmin caches the response of meta when detail is requested, with a privileged context
+	// and is updated when
+	// Meta is updated, using the populateMeta function
+	MetaAdmin = data.New[response.MetaAdmin]()
 )
 
 func init() {
-	db.Ads.Register(func(value orm.AdSlice) {
+	cache.Ads.Register(func(value orm.AdSlice) {
 		populateAds(value)
 	})
-	db.Emojis.Register(func(value orm.EmojiSlice) {
+	cache.Emojis.Register(func(value orm.EmojiSlice) {
 		populateEmojis(value)
 	})
-	db.LocalUserCount.Register(func(_ int64) {
+	cache.LocalUserCount.Register(func(_ int64) {
 		refreshMeta()
 	})
-	db.ProxyAccount.Register(func(_ *orm.User) {
+	cache.ProxyAccount.Register(func(_ *orm.User) {
 		refreshMeta()
 	})
-	db.Meta.Register(func(metum *orm.Metum) {
+	cache.Meta.Register(func(metum *orm.Metum) {
 		populateMeta(metum, response.Meta{
 			MaintainerName:  metum.MaintainerName,
 			MaintainerEmail: metum.MaintainerEmail,
@@ -86,12 +95,12 @@ func populateMeta(metum *orm.Metum, meta response.Meta) {
 	meta.PinnedClipID = &metum.PinnedClipId
 	meta.CacheRemoteFiles = &metum.CacheRemoteFiles
 	meta.ProxyRemoteFiles = &metum.ProxyRemoteFiles
-	r := db.LocalUserCount.Get() == 0
+	r := cache.LocalUserCount.Get() == 0
 	meta.RequireSetup = &r
 
 	// user packing is skipped here because it is not necessary
 	// however, keep that in mind when catching up with upstream
-	if p := db.ProxyAccount.Get(); p != nil {
+	if p := cache.ProxyAccount.Get(); p != nil {
 		proxyAccount := p
 		meta.ProxyAccountName = &proxyAccount.Name
 	} else {
@@ -157,7 +166,7 @@ func populateMeta(metum *orm.Metum, meta response.Meta) {
 
 // refreshMeta calls populateMeta if available
 func refreshMeta() {
-	metum := db.Meta.Get()
+	metum := cache.Meta.Get()
 	if metum == nil {
 		return
 	}
@@ -166,7 +175,7 @@ func refreshMeta() {
 }
 
 func populateAds(ads orm.AdSlice) {
-	metum := db.Meta.Get()
+	metum := cache.Meta.Get()
 	if metum == nil {
 		return
 	}
@@ -188,7 +197,7 @@ func populateAds(ads orm.AdSlice) {
 }
 
 func populateEmojis(emojis orm.EmojiSlice) {
-	metum := db.Meta.Get()
+	metum := cache.Meta.Get()
 	if metum == nil {
 		return
 	}

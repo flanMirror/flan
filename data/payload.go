@@ -10,21 +10,37 @@ import (
 
 // New returns a pointer to Payload with no special features and lazily caches JSON response
 func New[T any]() *Payload[T] {
-	p := &Payload[T]{}
+	p := &Payload[T]{immutable: false}
 	p.get = p.Get
 	return p
 }
 
 // Payload represents any caching web server payload
 type Payload[T any] struct {
-	get   func() T
-	value T
-	json  []byte
-	lock  sync.RWMutex
+	immutable bool
+	get       func() T
+	value     T
+	json      []byte
+	lock      sync.RWMutex
 }
 
-// Set sets value held by Payload
+// checkImmutable panics if p is immutable
+func (p *Payload[T]) checkImmutable() {
+	if p.immutable {
+		panic("attempting to mutate an immutable payload")
+	}
+}
+
+// SetImmutable sets p as immutable
+func (p *Payload[T]) SetImmutable() {
+	p.checkImmutable()
+	p.immutable = true
+}
+
+// Set sets value held by Payload, cannot be used on am immutable payload
 func (p *Payload[T]) Set(v T) {
+	p.checkImmutable()
+
 	p.lock.Lock()
 	defer p.lock.Unlock()
 
