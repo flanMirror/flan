@@ -1,37 +1,56 @@
+# Sets
+
+common
+------
+.instanceName - name of instance, must fall back to "Misskey" if invalid
+.icon         - icon URL of instance, must fall back to "/favicon.ico" if invalid
+.iconApple    - icon URL of instance, must fall back to "/apple-touch-icon.png" if invalid
+.description  - instance description, must fall back to "✨🌎✨ A interplanetary communication platform ✨🚀✨" if invalid
+.banner       - banner URL of instance, does not appear to have any form of fallback
+
+user
+----
+.noIndex               - true if user is a remote user or has profile.noCrawle set
+.localUser             - true if user.Host is invalid
+.userReference         - reference string of the user, "$DISPLAY_NAME (@$USERNAME)" or "@$USERNAME" if display name is invalid
+.userFull              - full user mention string without @ prefix
+.userUsername          - value of user.Username
+.userID                - value of user.ID
+.userTwitterExists     - Deprecated, upstream forgot to remove it from templates
+.userTwitterScreenName - Deprecated, upstream forgot to remove it from templates
+.hasUserAvatarURL      - whether user.AvatarUrl is valid
+.userAvatarURL         - value of user.AvatarUrl
+.hasUserURI            - whether user.URI is valid
+.userURI               - value of user.URI
+
+profile
+-------
+.hasProfileDescription - whether profile.Description is valid
+.profileDescription    - value of profile.Description
+.hasProfileURL         - whether profile.URL is valid
+.profileURL            - value of profile.URL
+.me                    - http(s) URLs in fields
+
+note
+----
+TODO
+
+# Templates
+
 base.tmpl
 ---------
-### fields
-.instanceName
-.icon
-.iconApple
-.description
-.banner
+### contains set(s)
+common
 
 user.tmpl
 ---------
-### derived from
-base.tmpl
+### contains sets
+common
+user
+profile
 ### fields
-.userReference
-.hasProfileDescription
-.profileDescription
-.noIndex
-.userUsername
-.userID
-.userTwitterExists
-.userTwitterScreenName
-.atRoot
-.localUser
-.url
-.userID
-.hasUserURI
-.userURI
-.hasProfileURL
-.profileURL
-.me
-.userFull
-.hasUserAvatarURL
-.userAvatarURL
+.atRoot                - whether the request is directed and the root of the user page
+.url                   - value of config.URL
 
 miscellaneous
 -------------
