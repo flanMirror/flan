@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/http/fcgi"
 	"os"
 	"path"
 	"strconv"
@@ -169,10 +170,18 @@ func serveStatic() func(context *gin.Context) {
 }
 
 func serve() {
-	if err := server.Serve(listener); err == http.ErrServerClosed {
-		log.Printf("web server closed")
+	if config.Web.FastCGI {
+		// serve using fcgi
+		if err := fcgi.Serve(listener, server.Handler); err != nil {
+			log.Printf("error serve: %s", err)
+		}
 	} else {
-		log.Printf("error serve: %s", err)
+		// serve using http server
+		if err := server.Serve(listener); err == http.ErrServerClosed {
+			log.Print("web server closed")
+		} else {
+			log.Printf("error serve: %s", err)
+		}
 	}
 }
 

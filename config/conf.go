@@ -3,6 +3,7 @@ package config
 import (
 	"flag"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -63,6 +64,7 @@ type webConf struct {
 	URL                 *url.URL `toml:"url"`
 	Host                string   `toml:"host"`
 	Port                int      `toml:"port"`
+	FastCGI             bool     `toml:"fcgi"`
 	ForwardedByClientIP bool     `toml:"proxy"`
 	TrustedProxies      []string `json:"trusted_proxies"`
 	HSTS                bool     `toml:"hsts"`
@@ -168,6 +170,24 @@ func Parse() bool {
 		log.Fatalf("no URL specified")
 	}
 
+	// set up proxies here for the default http client
+	if Proxy.Address != "" {
+		if u, err := url.Parse(Proxy.Address); err != nil {
+			log.Fatalf("proxy address present but invalid: %s", err)
+		} else {
+			bypass := make(map[string]bool, len(Proxy.BypassHosts))
+			for _, host := range Proxy.BypassHosts {
+				bypass[host] = true
+			}
+			http.DefaultClient.Transport = &http.Transport{Proxy: func(req *http.Request) (*url.URL, error) {
+				if bypass[req.Host] {
+					return nil, nil
+				}
+				return u, nil
+			}}
+		}
+	}
+
 	return true
 }
 
@@ -188,6 +208,7 @@ var defConf = conf{
 		URL:                 nil,
 		Host:                "127.0.0.1",
 		Port:                3000,
+		FastCGI:             true,
 		ForwardedByClientIP: true,
 		TrustedProxies:      []string{"127.0.0.1/32", "172.16.0.0/12", "10.0.0.0/8"},
 		HSTS:                false,

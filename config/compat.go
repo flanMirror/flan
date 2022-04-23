@@ -98,6 +98,7 @@ func tryCompat() bool {
 			URL:                 c.URL.URL,
 			Host:                "127.0.0.1",
 			Port:                c.Port,
+			FastCGI:             false,
 			ForwardedByClientIP: true,
 			TrustedProxies:      c.AllowedPrivateNetworks,
 			HSTS:                !c.DisableHSTS,
