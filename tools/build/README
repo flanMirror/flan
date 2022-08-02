@@ -1,0 +1,15 @@
+every tool found in this directory has to be ran under the root of the worktree
+
+before running these, please make sure you have have the following installed on your system:
+- Go compiler at least version go1.18
+- postgresql server
+- postgresql client
+before running assets.sh, make sure to compile the program first and have it available in the build directory
+
+to build this from a fresh worktree, run these in this exact order:
+- gen-orm.sh
+- build.sh
+- assets-download.sh || assets.sh [misskey_root]
+- build.sh
+
+the scripts were written for FreeBSD's sh, without using any features not available in the POSIX.1 specification, therefore these scripts should be ran on a sane, POSIX-compliant shell

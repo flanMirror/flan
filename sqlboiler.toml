@@ -6,7 +6,6 @@ no-tests = false
 
 [psql]
   dbname = "misskey"
-  #host = "/usr/home/rand/dev/misskey/build/postgres/sock"
   port = 3002
   user = "misskey"
   pass = ""
